@@ -29,11 +29,15 @@ def _atomic_write(path: Path, content: bytes, mode: int, *, private_parent: bool
     descriptor, raw_temp = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
     temp_path = Path(raw_temp)
     try:
-        os.fchmod(descriptor, mode)
+        if hasattr(os, "fchmod"):
+            os.fchmod(descriptor, mode)
         with os.fdopen(descriptor, "wb") as handle:
             handle.write(content)
             handle.flush()
             os.fsync(handle.fileno())
+        if not hasattr(os, "fchmod"):
+            with suppress(OSError):
+                temp_path.chmod(mode)
         os.replace(temp_path, path)
     finally:
         temp_path.unlink(missing_ok=True)
