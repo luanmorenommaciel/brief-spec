@@ -84,9 +84,7 @@ def main_command() -> int:
         with zipfile.ZipFile(root / "delivery.zip") as archive:
             bundled_name = "brief.pdf" if args.renderer == "pdf" else "brief.mp3"
             if args.renderer == "pdf" and artifact.read_bytes() != archive.read(bundled_name):
-                raise RuntimeError(
-                    "repeated canonical pdf rendering was not byte-identical"
-                )
+                raise RuntimeError("repeated canonical pdf rendering was not byte-identical")
         return main(
             [
                 "verify",
