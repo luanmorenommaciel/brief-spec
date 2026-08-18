@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import html
 import json
+import os
 import re
 import stat
 import subprocess
@@ -358,9 +359,12 @@ def _zip_datetime(value: str) -> tuple[int, int, int, int, int, int]:
 
 
 def deterministic_zip(files: dict[str, bytes], created_at: str) -> bytes:
-    with tempfile.NamedTemporaryFile(prefix="brief-spec-chronicle-", suffix=".zip") as handle:
+    descriptor, temporary = tempfile.mkstemp(prefix="brief-spec-chronicle-", suffix=".zip")
+    temp_path = Path(temporary)
+    try:
+        os.close(descriptor)
         with zipfile.ZipFile(
-            handle.name, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
+            temp_path, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
         ) as archive:
             for name in sorted(files):
                 info = zipfile.ZipInfo(name, date_time=_zip_datetime(created_at))
@@ -368,7 +372,9 @@ def deterministic_zip(files: dict[str, bytes], created_at: str) -> bytes:
                 info.external_attr = 0o100644 << 16
                 info.compress_type = zipfile.ZIP_DEFLATED
                 archive.writestr(info, files[name])
-        return Path(handle.name).read_bytes()
+        return temp_path.read_bytes()
+    finally:
+        temp_path.unlink(missing_ok=True)
 
 
 def export_snapshot(
