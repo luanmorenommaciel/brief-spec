@@ -493,11 +493,15 @@ def atomic_external_write(path: Path, content: bytes, *, force: bool = False) ->
     descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
     temp = Path(temporary)
     try:
-        os.fchmod(descriptor, 0o644)
+        if hasattr(os, "fchmod"):
+            os.fchmod(descriptor, 0o644)
         with os.fdopen(descriptor, "wb") as handle:
             handle.write(content)
             handle.flush()
             os.fsync(handle.fileno())
+        if not hasattr(os, "fchmod"):
+            with suppress(OSError):
+                temp.chmod(0o644)
         os.replace(temp, path)
     finally:
         temp.unlink(missing_ok=True)
