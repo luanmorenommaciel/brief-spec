@@ -13,6 +13,9 @@ Brief-Spec is a type-aware, evidence-backed delivery contract for AI coding harn
 
 **Public release v0.2.0** · Source candidate 0.5.0 · Not on PyPI
 
+- Public release: `v0.2.0` on GitHub.
+- Source candidate: `v0.5.0` in this checkout. Locally verified is not hosted or published.
+
 [Skills](#why-the-skills-exist) · [Outcome Brief](#outcome-brief) · [Chat](#harness-support) · [CLI](#cli) · [Install](#install) · [Docs](#documentation)
 
 ---
