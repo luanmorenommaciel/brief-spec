@@ -170,15 +170,15 @@ brief-spec validate checkpoint path/to/checkpoint.md --mode spoken
 
 Skills are installed to host-specific destinations by `brief-spec setup`:
 
-| Harness | Destination |
-| --- | --- |
-| Codex | `.agents/skills/` |
-| Claude Code | `.claude/` |
-| OMP | `.agents/skills/` |
-| Grok Build | `.grok/skills/` |
-| Kimi Code | `.agents/skills/` |
-| Cursor | `.cursor/` |
-| Copilot | `.agents/skills/`, `.github/` |
-| Goose | `.agents/skills/` |
+| Harness | Command | Destination |
+| --- | --- | --- |
+| Codex | `brief-spec setup codex` | `.codex/`, `.agents/skills/` |
+| Claude Code | `brief-spec setup claude` | `.claude/skills/` |
+| OMP | `brief-spec setup omp` | `.agents/skills/` |
+| Grok Build | `brief-spec setup grok` | `.grok/skills/` |
+| Kimi Code | `brief-spec setup kimi` | `.agents/skills/` |
+| Copilot | `brief-spec setup copilot --scope project` | `.agents/skills/`, `.github/` |
+
+Cursor Agent and Goose are experimental. Cursor paths are implemented but unpublished.
 
 The installer merges lifecycle hooks instead of replacing the host file, refuses to overwrite foreign skill files, restores prior files if installation fails, and records what it owns.

@@ -166,14 +166,16 @@ Brief-Spec records bounded operational state, applies eligibility and cooldown r
 
 | Harness | Status | Command | Project destination |
 | --- | --- | --- | --- |
-| Codex | Required | `brief-spec setup codex` | `.agents/skills/` |
-| Claude Code | Required | `brief-spec setup claude` | `.claude/` |
+| Codex | Required | `brief-spec setup codex` | `.codex/`, `.agents/skills/` |
+| Claude Code | Required | `brief-spec setup claude` | `.claude/skills/` |
 | OMP | Required | `brief-spec setup omp` | `.agents/skills/` |
 | Grok Build | Required | `brief-spec setup grok` | `.grok/skills/` |
 | Kimi Code | Required | `brief-spec setup kimi` | `.agents/skills/` |
-| Cursor | Experimental | `brief-spec setup cursor` | `.cursor/` |
-| Copilot | Experimental | `brief-spec setup copilot` | `.agents/skills/`, `.github/` |
-| Goose | Experimental | `brief-spec setup goose` | `.agents/skills/` |
+| Copilot | Experimental | `brief-spec setup copilot --scope project` | `.agents/skills/`, `.github/` |
+| Cursor Agent | Experimental | — | Unpublished |
+| Goose | Experimental | — | `.agents/skills/` |
+
+The five required harnesses retain their full v0.5.0 live baseline. Cursor Agent and Goose are experimental; Cursor paths are implemented but unpublished.
 
 Project-scoped Copilot installation also creates the network-free bridge used by Copilot cloud coding agents:
 
