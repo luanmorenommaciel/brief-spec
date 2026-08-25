@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import html
+import io
 import json
 import re
 import stat
@@ -358,17 +359,20 @@ def _zip_datetime(value: str) -> tuple[int, int, int, int, int, int]:
 
 
 def deterministic_zip(files: dict[str, bytes], created_at: str) -> bytes:
-    with tempfile.NamedTemporaryFile(prefix="brief-spec-chronicle-", suffix=".zip") as handle:
-        with zipfile.ZipFile(
-            handle.name, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
-        ) as archive:
-            for name in sorted(files):
-                info = zipfile.ZipInfo(name, date_time=_zip_datetime(created_at))
-                info.create_system = 3
-                info.external_attr = 0o100644 << 16
-                info.compress_type = zipfile.ZIP_DEFLATED
-                archive.writestr(info, files[name])
-        return Path(handle.name).read_bytes()
+    # Built in memory rather than through a NamedTemporaryFile: Windows keeps the
+    # named handle open, so reopening it by name to write the archive failed with
+    # PermissionError. A seekable buffer produces the same bytes on every platform.
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(
+        buffer, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
+    ) as archive:
+        for name in sorted(files):
+            info = zipfile.ZipInfo(name, date_time=_zip_datetime(created_at))
+            info.create_system = 3
+            info.external_attr = 0o100644 << 16
+            info.compress_type = zipfile.ZIP_DEFLATED
+            archive.writestr(info, files[name])
+    return buffer.getvalue()
 
 
 def export_snapshot(

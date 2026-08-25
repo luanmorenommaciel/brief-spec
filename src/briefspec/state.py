@@ -29,11 +29,14 @@ def _atomic_write(path: Path, content: bytes, mode: int, *, private_parent: bool
     descriptor, raw_temp = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
     temp_path = Path(raw_temp)
     try:
-        os.fchmod(descriptor, mode)
         with os.fdopen(descriptor, "wb") as handle:
             handle.write(content)
             handle.flush()
             os.fsync(handle.fileno())
+        # Path-based chmod, after the handle closes: os.fchmod is Unix-only, and
+        # calling it here left the descriptor open on Windows, so the temp file
+        # could never be replaced or removed.
+        os.chmod(temp_path, mode)
         os.replace(temp_path, path)
     finally:
         temp_path.unlink(missing_ok=True)

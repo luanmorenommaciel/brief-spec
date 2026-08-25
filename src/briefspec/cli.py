@@ -4,6 +4,7 @@ import argparse
 import json
 import os
 import sys
+from contextlib import suppress
 from pathlib import Path
 from typing import Any
 
@@ -296,7 +297,18 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _force_utf8_output() -> None:
+    """Briefs legitimately contain em dashes and arrows, but a Windows console
+    defaults to cp1252 and raises UnicodeEncodeError while printing them. Ask the
+    streams for UTF-8; ignore streams that cannot be reconfigured, such as a test
+    harness capture object."""
+    for stream in (sys.stdout, sys.stderr):
+        with suppress(AttributeError, OSError, ValueError):
+            stream.reconfigure(encoding="utf-8")
+
+
 def main(argv: list[str] | None = None) -> int:
+    _force_utf8_output()
     if argv is None and Path(sys.argv[0]).name == "briefspec":
         print(
             "briefspec is a compatibility alias; prefer brief-spec before 1.0",

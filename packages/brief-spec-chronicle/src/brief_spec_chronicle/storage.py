@@ -493,11 +493,14 @@ def atomic_external_write(path: Path, content: bytes, *, force: bool = False) ->
     descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
     temp = Path(temporary)
     try:
-        os.fchmod(descriptor, 0o644)
         with os.fdopen(descriptor, "wb") as handle:
             handle.write(content)
             handle.flush()
             os.fsync(handle.fileno())
+        # Path-based chmod, after the handle closes: os.fchmod is Unix-only, and
+        # calling it here left the descriptor open on Windows, so the temp file
+        # could never be replaced or removed.
+        os.chmod(temp, 0o644)
         os.replace(temp, path)
     finally:
         temp.unlink(missing_ok=True)

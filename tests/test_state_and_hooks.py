@@ -315,3 +315,18 @@ def test_session_lock_reclaims_stale_lock_and_times_out_on_live_lock(
         session_lock(Runtime.CODEX, "locked", timeout=0),
     ):
         pass
+
+
+def test_state_write_survives_a_platform_without_fchmod(
+    isolated_homes: dict[str, Path],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """os.fchmod is Unix-only. Windows has no such attribute, so the atomic write
+    must not depend on it, and must leave no temp file behind."""
+    monkeypatch.delattr(os, "fchmod", raising=False)
+    state = SessionState.new(Runtime.CLAUDE, "no-fchmod", NOW)
+    state.turn_count = 7
+    save_session(state)
+    path = session_path(Runtime.CLAUDE, "no-fchmod")
+    assert load_session(Runtime.CLAUDE, "no-fchmod", NOW).turn_count == 7
+    assert list(path.parent.glob(".state.json.*")) == []
