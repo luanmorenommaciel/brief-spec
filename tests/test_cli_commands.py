@@ -402,3 +402,38 @@ def test_python_module_entrypoint_delegates_to_cli(
     with pytest.raises(SystemExit) as raised:
         runpy.run_module("briefspec.__main__", run_name="__main__")
     assert raised.value.code == 17
+
+
+def test_cli_prints_non_ascii_on_a_cp1252_console(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """A Windows console defaults to cp1252 and cannot encode the em dashes and
+    arrows that briefs legitimately contain. The CLI must ask for UTF-8 instead of
+    dying with UnicodeEncodeError."""
+    brief = tmp_path / "outcome.md"
+    brief.write_text(
+        "<!-- briefspec:outcome:v1 -->\n"
+        "## Outcome Brief\n\n"
+        "Status: DONE\n"
+        "Outcome: The gate is green — every check passed.\n"
+        "Human action: None\n\n"
+        "Proof:\n"
+        "- [direct/pass] `pytest` → 0 failures\n\n"
+        "Gaps:\n- None\n\n"
+        "Next:\n- None\n\n"
+        "Open:\n- None\n"
+        "<!-- /briefspec -->\n",
+        encoding="utf-8",
+    )
+    cp1252 = io.TextIOWrapper(io.BytesIO(), encoding="cp1252", errors="strict")
+    monkeypatch.setattr(sys, "stdout", cp1252)
+    monkeypatch.setattr(sys, "stderr", io.TextIOWrapper(io.BytesIO(), encoding="cp1252"))
+
+    assert cli.main(["validate", "outcome", str(brief)]) == 0
+
+    sys.stdout.flush()
+    written = sys.stdout.buffer.getvalue().decode("utf-8")
+    assert "VALID" in written
+    assert "—" in written
