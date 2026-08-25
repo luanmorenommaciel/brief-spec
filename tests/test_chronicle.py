@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import io
 import json
 import os
 import zipfile
@@ -19,7 +20,11 @@ from brief_spec_chronicle.operations import (
     restore_project,
     review_lesson,
 )
-from brief_spec_chronicle.rendering import export_snapshot, verify_export
+from brief_spec_chronicle.rendering import (
+    deterministic_zip,
+    export_snapshot,
+    verify_export,
+)
 from brief_spec_chronicle.sources import normalize_source_event
 from brief_spec_chronicle.storage import (
     atomic_external_write,
@@ -968,3 +973,24 @@ def test_chronicle_repeated_reference_restrictions_invalid_access(
     monkeypatch.setattr("brief_spec_chronicle.rendering.resolve_public_url", no_network)
     verified = verify_export(output, level="resolved", workspace=project)
     assert verified["status"] == "WARN", verified
+
+
+def test_external_write_and_zip_do_not_depend_on_unix_only_apis(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """os.fchmod is Unix-only, and Windows cannot reopen an open NamedTemporaryFile
+    by name. Neither export path may rely on those behaviors."""
+    monkeypatch.delattr(os, "fchmod", raising=False)
+    target = tmp_path / "out" / "lesson.json"
+    atomic_external_write(target, b'{"lesson": "portable"}')
+    assert json.loads(target.read_text(encoding="utf-8")) == {"lesson": "portable"}
+    assert list(target.parent.glob(".lesson.json.*")) == []
+
+    created_at = "2026-08-14T12:01:00+00:00"
+    payload = {"b.txt": b"second", "a.txt": b"first"}
+    archive = deterministic_zip(payload, created_at)
+    assert archive == deterministic_zip(payload, created_at)
+    with zipfile.ZipFile(io.BytesIO(archive)) as bundle:
+        assert bundle.namelist() == ["a.txt", "b.txt"]
+        assert bundle.read("b.txt") == b"second"
