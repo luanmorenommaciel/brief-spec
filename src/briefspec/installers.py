@@ -223,6 +223,10 @@ def _runtime_home(runtime: Runtime) -> Path:
         Runtime.KIMI: ("KIMI_CODE_HOME", Path.home() / ".kimi-code"),
         Runtime.CURSOR: ("CURSOR_HOME", Path.home() / ".cursor"),
         Runtime.GOOSE: ("GOOSE_HOME", Path.home() / ".config" / "goose"),
+        Runtime.ANTIGRAVITY: (
+            "ANTIGRAVITY_HOME" if "ANTIGRAVITY_HOME" in os.environ else "AGY_HOME",
+            Path.home() / ".gemini" / "antigravity",
+        ),
     }
     variable, default = defaults[runtime]
     return Path(os.environ.get(variable, default)).expanduser()
@@ -247,7 +251,7 @@ def _user_targets(runtime: Runtime) -> tuple[Path, Path, Path]:
         hook = root / "extensions" / "brief-spec.ts"
     elif runtime in {Runtime.COPILOT, Runtime.GROK}:
         hook = root / "hooks" / "brief-spec.json"
-    elif runtime is Runtime.CURSOR:
+    elif runtime in {Runtime.CURSOR, Runtime.ANTIGRAVITY}:
         hook = root / "hooks.json"
     else:
         hook = root / "brief-spec" / "capabilities.json"
@@ -299,6 +303,11 @@ def _project_targets(runtime: Runtime, project: Path) -> tuple[Path, Path, Path]
             project / ".agents" / "skills",
             project / ".goose" / "brief-spec" / "brief-spec.pyz",
             project / ".goose" / "brief-spec" / "capabilities.json",
+        ),
+        Runtime.ANTIGRAVITY: (
+            project / ".agents" / "skills",
+            project / ".gemini" / "antigravity" / "brief-spec" / "brief-spec.pyz",
+            project / ".gemini" / "antigravity" / "hooks.json",
         ),
     }
     return targets[runtime]
@@ -394,7 +403,7 @@ _SUBAGENT_EVENTS = (
 
 
 def _events_for_runtime(runtime: Runtime) -> tuple[tuple[str, str], ...]:
-    if runtime in {Runtime.GROK, Runtime.KIMI}:
+    if runtime in {Runtime.GROK, Runtime.KIMI, Runtime.ANTIGRAVITY}:
         return (*_EVENTS, *_SUBAGENT_EVENTS)
     return _EVENTS
 

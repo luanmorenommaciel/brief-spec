@@ -301,6 +301,24 @@ _ADAPTERS = {
         (),
         ("Lifecycle automation is not claimed until a native live gate is available.",),
     ),
+    Runtime.ANTIGRAVITY: HarnessAdapter(
+        Runtime.ANTIGRAVITY,
+        "live-verified",
+        ("agy", "antigravity"),
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        (*_STANDARD_EVENTS, "SubagentStart", "SubagentStop"),
+        ("Native skill, rule, and lifecycle hook support for Google Antigravity harness.",),
+    ),
 }
 
 

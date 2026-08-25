@@ -30,6 +30,7 @@ def test_registry_declares_evidence_based_harness_maturity() -> None:
         "omp",
         "grok",
         "kimi",
+        "antigravity",
     }
     assert {adapter.name for adapter in adapters if adapter.maturity == "hold"} == set()
     assert {adapter.name for adapter in adapters if adapter.maturity == "experimental"} == {
