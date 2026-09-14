@@ -1,7 +1,7 @@
 ---
 id: T-20260914-briefspec-operative-routing
 title: "Ignore quoted and prohibited routing instructions"
-status: done
+status: ready
 format_version: 3
 profile: full
 effort: S

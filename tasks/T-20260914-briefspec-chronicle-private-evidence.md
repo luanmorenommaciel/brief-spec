@@ -1,7 +1,7 @@
 ---
 id: T-20260914-briefspec-chronicle-private-evidence
 title: "Preserve private evidence identity across Chronicle imports"
-status: done
+status: ready
 format_version: 3
 profile: full
 effort: M
