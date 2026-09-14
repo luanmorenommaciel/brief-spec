@@ -22,6 +22,7 @@ from brief_spec_chronicle.operations import (
 from brief_spec_chronicle.rendering import export_snapshot, verify_export
 from brief_spec_chronicle.sources import normalize_source_event
 from brief_spec_chronicle.storage import (
+    atomic_external_write,
     delete_project,
     ingest_event,
     init_project,
@@ -155,6 +156,28 @@ def _seed(project: Path) -> None:
     ]
     for value in values:
         ingest_event(project, value, source_system="test", observed_at=value["occurred_at"])
+
+
+def test_external_write_without_fchmod_preserves_public_output_contract(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delattr(os, "fchmod", raising=False)
+    parent = tmp_path / "public"
+    parent.mkdir(mode=0o755)
+    parent_mode = parent.stat().st_mode & 0o777
+    output = parent / "snapshot.json"
+
+    atomic_external_write(output, b"original")
+    assert output.read_bytes() == b"original"
+    with pytest.raises(FileExistsError):
+        atomic_external_write(output, b"unapproved")
+    assert output.read_bytes() == b"original"
+
+    atomic_external_write(output, b"replacement", force=True)
+    assert output.read_bytes() == b"replacement"
+    if os.name != "nt":
+        assert parent.stat().st_mode & 0o777 == parent_mode
+        assert output.stat().st_mode & 0o777 == 0o644
 
 
 def test_project_lifecycle_snapshot_and_deterministic_exports(

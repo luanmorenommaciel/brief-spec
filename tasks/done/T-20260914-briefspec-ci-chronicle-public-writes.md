@@ -1,7 +1,7 @@
 ---
 id: T-20260914-briefspec-ci-chronicle-public-writes
 title: "Reuse portable public atomic writes for Chronicle outputs"
-status: ready
+status: done
 format_version: 3
 profile: full
 effort: S
@@ -28,10 +28,14 @@ execution_backend: omp
 signed_off: true
 signed_off_by: repository-owner-via-explicit-chronicle-repair-approval
 signed_off_at: 2026-09-14T21:23:37Z
-accepted: false
-accepted_by: (none)
-accepted_at: (none)
+accepted: true
+accepted_by: luanmorenomaciel
+accepted_at: 2026-09-14T21:26:52Z
 signed_off_sig: hmac-sha256-v3:7c09a871:25438d01f1f1debd8662520e3b9b5eb1eeabbeeb4dcb37a0f05db67fe4540f0d
+accepted_tier: 1
+accepted_attempt_id: de861b8c-6998-48d9-a1cb-7144ef009fec
+accepted_authorization_ref: hmac-sha256-v3:7c09a871:25438d01f1f1debd8662520e3b9b5eb1eeabbeeb4dcb37a0f05db67fe4540f0d
+acceptance_record_digest: sha256:662fc1ea34e754b7a3526934e1959ae95b9b695addf229178e986ebe3ee1447a
 ---
 
 # Reuse portable public atomic writes for Chronicle outputs
