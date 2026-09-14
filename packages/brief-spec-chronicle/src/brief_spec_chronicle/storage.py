@@ -4,7 +4,6 @@ import json
 import os
 import shutil
 import sqlite3
-import tempfile
 import time
 from collections.abc import Iterator
 from contextlib import contextmanager, suppress
@@ -15,7 +14,7 @@ from typing import Any
 from briefspec.artifacts import canonical_json_bytes, sha256_bytes
 from briefspec.config import briefspec_home
 from briefspec.events import prepare_event, validate_event
-from briefspec.state import atomic_write
+from briefspec.state import atomic_write, atomic_write_public
 
 ZERO_HASH = "0" * 64
 
@@ -489,15 +488,4 @@ def delete_project(project_id: str, confirmation: str) -> dict[str, Any]:
 def atomic_external_write(path: Path, content: bytes, *, force: bool = False) -> None:
     if path.exists() and not force:
         raise FileExistsError(f"Refusing to overwrite existing output: {path}")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
-    temp = Path(temporary)
-    try:
-        os.fchmod(descriptor, 0o644)
-        with os.fdopen(descriptor, "wb") as handle:
-            handle.write(content)
-            handle.flush()
-            os.fsync(handle.fileno())
-        os.replace(temp, path)
-    finally:
-        temp.unlink(missing_ok=True)
+    atomic_write_public(path, content)
