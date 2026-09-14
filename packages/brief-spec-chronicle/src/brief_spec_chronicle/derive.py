@@ -495,9 +495,9 @@ def build_snapshot(
                 reference_details.setdefault(reference["evidence_id"], []).append(reference)
         for evidence_id in event.get("evidence_ids", []):
             for reference in reference_details.get(evidence_id) or (details,):
-                access = reference.get("access") or event["access"]
-                if access not in _EVIDENCE_ACCESS_ORDER:
-                    raise ValueError("Evidence access is invalid")
+                access = reference.get("access", event["access"])
+                if not isinstance(access, str) or access not in _EVIDENCE_ACCESS_ORDER:
+                    access = "private"
                 prior_access = evidence_access.get(evidence_id, access)
                 evidence_access[evidence_id] = max(
                     prior_access, access, key=_EVIDENCE_ACCESS_ORDER.__getitem__
