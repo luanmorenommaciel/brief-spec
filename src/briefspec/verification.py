@@ -173,6 +173,19 @@ def _verify_html(path: Path, checks: list[dict[str, Any]]) -> dict[str, Any] | N
     except json.JSONDecodeError as exc:
         _check(checks, "HTML integrity", "FAIL", f"embedded canonical JSON is invalid: {exc}")
         return None
+    try:
+        if not isinstance(delivery, dict):
+            raise ValueError("canonical delivery must be an object")
+        validation = validate_delivery(delivery)
+        if not validation.valid:
+            raise ValueError("; ".join(validation.errors))
+        expected = render_html(delivery)
+    except (AttributeError, KeyError, TypeError, ValueError) as exc:
+        _check(checks, "structure", "FAIL", f"embedded canonical delivery is invalid: {exc}")
+        return None
+    _check(checks, "structure", "PASS", "canonical delivery is valid")
+    for warning in validation.warnings:
+        _check(checks, "quality warning", "WARN", warning)
     actual = canonical_sha256(delivery)
     declared = hash_match.group(1)
     _check(
@@ -180,6 +193,14 @@ def _verify_html(path: Path, checks: list[dict[str, Any]]) -> dict[str, Any] | N
         "HTML integrity",
         "PASS" if actual == declared else "FAIL",
         f"canonical sha256 {actual}",
+    )
+    _check(
+        checks,
+        "HTML rendering",
+        "PASS" if content == expected else "FAIL",
+        "HTML matches the deterministic rendering of canonical delivery"
+        if content == expected
+        else "HTML is not the deterministic rendering of canonical delivery",
     )
     return delivery
 

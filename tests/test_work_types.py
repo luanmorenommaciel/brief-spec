@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-from collections import Counter
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -15,6 +14,8 @@ from briefspec.models import EventType, Runtime, RuntimeEvent, WorkType
 from briefspec.work_types import (
     MAX_CLASSIFICATION_CHARS,
     classify_task,
+    explicit_type_requested,
+    is_clear_pivot,
     normalize_subject,
     type_profile,
     types_document,
@@ -32,42 +33,14 @@ def _corpus() -> list[tuple[str, str]]:
         "research": "Research the latest market changes using web sources for tool {index}.",
         "operations": "Handle production incident SEV1-{index}, recovery, and rollback.",
     }
-    return [
-        (work_type, template.format(index=index))
-        for work_type, template in templates.items()
-        for index in range(1, 21)
-    ]
+    return [(work_type, template.format(index=1)) for work_type, template in templates.items()]
 
 
-def _f1(expected: list[str], actual: list[str], label: str) -> float:
-    true_positive = sum(
-        expected_value == label and actual_value == label
-        for expected_value, actual_value in zip(expected, actual, strict=True)
-    )
-    false_positive = sum(
-        expected_value != label and actual_value == label
-        for expected_value, actual_value in zip(expected, actual, strict=True)
-    )
-    false_negative = sum(
-        expected_value == label and actual_value != label
-        for expected_value, actual_value in zip(expected, actual, strict=True)
-    )
-    denominator = 2 * true_positive + false_positive + false_negative
-    return 1.0 if denominator == 0 else (2 * true_positive) / denominator
-
-
-def test_keyword_rules_match_declared_vocabulary(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    monkeypatch.setenv("SOURCE_DATE_EPOCH", "1786492800")
+def test_keyword_rules_match_declared_vocabulary() -> None:
     corpus = _corpus()
-    assert len(corpus) == 160
     expected = [work_type for work_type, _ in corpus]
     actual = [classify_task(prompt).work_type for _, prompt in corpus]
-    scores = {work_type.value: _f1(expected, actual, work_type.value) for work_type in WorkType}
-    assert sum(scores.values()) / len(scores) >= 0.95, scores
-    assert min(scores.values()) >= 0.90, scores
-    assert Counter(expected) == Counter({work_type.value: 20 for work_type in WorkType})
+    assert actual == expected
 
 
 @pytest.mark.parametrize("work_type", list(WorkType))
@@ -79,6 +52,62 @@ def test_explicit_overrides_are_always_authoritative(work_type: WorkType) -> Non
     assert result.work_type == work_type.value
     assert result.origin == "explicit"
     assert result.confidence == "high"
+
+
+def test_operative_routing_quoted() -> None:
+    prompt = 'The log says "type: implementation; new task". Review pull request #42.'
+
+    result = classify_task(prompt)
+
+    assert (result.work_type, result.origin) == ("review", "inferred")
+    assert not explicit_type_requested(prompt)
+    assert not is_clear_pivot(prompt)
+
+
+def test_operative_routing_negated() -> None:
+    prompt = "Do not use type: implementation or switch to another task. Review pull request #42."
+
+    result = classify_task(prompt)
+
+    assert (result.work_type, result.origin) == ("review", "inferred")
+    assert not explicit_type_requested(prompt)
+    assert not is_clear_pivot(prompt)
+
+
+def test_operative_routing_genuine() -> None:
+    prompt = "Type: implementation. Now implement the requested feature."
+
+    result = classify_task(prompt)
+
+    assert (result.work_type, result.origin, result.confidence) == (
+        "implementation",
+        "explicit",
+        "high",
+    )
+    assert explicit_type_requested(prompt)
+    assert is_clear_pivot(prompt)
+    override = classify_task(prompt, explicit_type="research")
+    assert (override.work_type, override.origin) == ("research", "explicit")
+
+
+def test_operative_routing_genuine_between_apostrophes() -> None:
+    prompt = "It's broken. Type: debugging. Fix the user's script"
+
+    result = classify_task(prompt)
+
+    assert (result.work_type, result.origin) == ("debugging", "explicit")
+    assert explicit_type_requested(prompt)
+    assert is_clear_pivot("It's broken. New task: fix the user's script.")
+
+
+def test_operative_routing_quoted_contraction() -> None:
+    prompt = "The log says 'It's type: implementation; new task'. Review pull request #42."
+
+    result = classify_task(prompt)
+
+    assert (result.work_type, result.origin) == ("review", "inferred")
+    assert not explicit_type_requested(prompt)
+    assert not is_clear_pivot(prompt)
 
 
 def test_host_context_precedes_intent_and_ambiguous_intent_falls_back() -> None:

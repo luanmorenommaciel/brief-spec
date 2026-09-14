@@ -8,6 +8,7 @@ from typing import Any
 from briefspec.artifacts import canonical_json_bytes, sha256_bytes
 
 from brief_spec_chronicle import __version__
+from brief_spec_chronicle.sources import _EVIDENCE_ACCESS_ORDER
 from brief_spec_chronicle.storage import iter_events, registered_project, verify_chain
 
 
@@ -483,17 +484,41 @@ def build_snapshot(
             stale["drift_id"] = "bsdft-" + sha256_bytes(canonical_json_bytes(stale))[:24]
             drift.append(stale)
             drift.sort(key=lambda item: item["drift_id"])
-    evidence_records: dict[str, dict[str, Any]] = {}
+    evidence_records: dict[tuple[str, str, str], dict[str, Any]] = {}
+    evidence_access: dict[str, str] = {}
     for event in selected:
         details = event.get("details", {})
+        reference_details: dict[str, list[dict[str, Any]]] = {}
+        references = details.get("evidence")
+        for reference in references if isinstance(references, list) else ():
+            if isinstance(reference, dict) and isinstance(reference.get("evidence_id"), str):
+                reference_details.setdefault(reference["evidence_id"], []).append(reference)
         for evidence_id in event.get("evidence_ids", []):
-            evidence_records[str(evidence_id)] = {
-                "evidence_id": str(evidence_id),
-                "access": event["access"],
-                "expires_at": details.get("expires_at"),
-                "content_sha256": details.get("content_sha256"),
-                "source_event_ids": [event["event_id"]],
-            }
+            for reference in reference_details.get(evidence_id) or (details,):
+                access = reference.get("access", event["access"])
+                if not isinstance(access, str) or access not in _EVIDENCE_ACCESS_ORDER:
+                    access = "private"
+                prior_access = evidence_access.get(evidence_id, access)
+                evidence_access[evidence_id] = max(
+                    prior_access, access, key=_EVIDENCE_ACCESS_ORDER.__getitem__
+                )
+                content_sha256 = reference.get("content_sha256")
+                expires_at = reference.get("expires_at")
+                key = (evidence_id, str(content_sha256 or ""), str(expires_at or ""))
+                record = evidence_records.get(key)
+                if record is None:
+                    record = {
+                        "evidence_id": evidence_id,
+                        "access": access,
+                        "expires_at": expires_at,
+                        "content_sha256": content_sha256,
+                        "source_event_ids": [],
+                    }
+                    evidence_records[key] = record
+                if event["event_id"] not in record["source_event_ids"]:
+                    record["source_event_ids"].append(event["event_id"])
+    for record in evidence_records.values():
+        record["access"] = evidence_access[record["evidence_id"]]
     snapshot = {
         "schema_version": "brief-spec-chronicle/1.0",
         "kind": "brief-spec-project-chronicle",

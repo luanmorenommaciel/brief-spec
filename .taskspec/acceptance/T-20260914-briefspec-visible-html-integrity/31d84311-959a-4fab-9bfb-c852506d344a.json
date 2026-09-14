@@ -1,0 +1,40 @@
+{
+  "acceptance_tier": 1,
+  "accepted_at": "2026-09-14T14:11:48Z",
+  "accepted_by": "luanmorenomaciel",
+  "contract": "AcceptanceRecord/v1",
+  "gate_outcomes": {
+    "authorization": {
+      "code": "AUTHORIZATION_VALID",
+      "status": "pass"
+    },
+    "evaluation": {
+      "code": "EVAL_PASSED",
+      "status": "pass"
+    },
+    "evidence": {
+      "code": "EVIDENCE_SATISFIED",
+      "proof": [
+        "format v3 or earlier: v4 policy receipts are not required"
+      ],
+      "status": "pass"
+    },
+    "preflight": {
+      "code": "PREFLIGHT_PASSED",
+      "status": "pass",
+      "warnings": []
+    }
+  },
+  "outcome": {
+    "code": "ACCEPTED_TIER_1",
+    "status": "accepted"
+  },
+  "receipts": [],
+  "subject": {
+    "attempt_id": "31d84311-959a-4fab-9bfb-c852506d344a",
+    "authorization_ref": "hmac-sha256-v3:7c09a871:077fe8c9eff6592a80a0f54b197e64c0d86311fe81e61c985ee7e73e012bca65",
+    "base_commit": "93d51b4f161503b08eedeeef8fadfc9768e7101d",
+    "task_id": "T-20260914-briefspec-visible-html-integrity",
+    "task_revision_digest": "sha256:56ec03d8da8da4cb8b6f91cf8c18fe33ffd981363aff097716e6f8f741ba67d7"
+  }
+}

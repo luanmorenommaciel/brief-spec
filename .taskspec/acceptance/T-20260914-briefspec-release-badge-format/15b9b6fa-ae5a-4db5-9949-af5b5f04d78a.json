@@ -1,0 +1,40 @@
+{
+  "acceptance_tier": 1,
+  "accepted_at": "2026-09-14T17:46:11Z",
+  "accepted_by": "luanmorenomaciel",
+  "contract": "AcceptanceRecord/v1",
+  "gate_outcomes": {
+    "authorization": {
+      "code": "AUTHORIZATION_VALID",
+      "status": "pass"
+    },
+    "evaluation": {
+      "code": "EVAL_PASSED",
+      "status": "pass"
+    },
+    "evidence": {
+      "code": "EVIDENCE_SATISFIED",
+      "proof": [
+        "format v3 or earlier: v4 policy receipts are not required"
+      ],
+      "status": "pass"
+    },
+    "preflight": {
+      "code": "PREFLIGHT_PASSED",
+      "status": "pass",
+      "warnings": []
+    }
+  },
+  "outcome": {
+    "code": "ACCEPTED_TIER_1",
+    "status": "accepted"
+  },
+  "receipts": [],
+  "subject": {
+    "attempt_id": "15b9b6fa-ae5a-4db5-9949-af5b5f04d78a",
+    "authorization_ref": "hmac-sha256-v3:7c09a871:4bf42a65d709eef846a486fb2650e527792be6034e8605f44838183cbc62bc25",
+    "base_commit": "3828e9363fa42a0a1126ef2905f19d3bbbec36ea",
+    "task_id": "T-20260914-briefspec-release-badge-format",
+    "task_revision_digest": "sha256:ae425e5714dbe8c6a9911d3e279b63fc9ffe4e8f9bf9c8a1be9d2becd0aef159"
+  }
+}

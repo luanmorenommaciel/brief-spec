@@ -254,7 +254,7 @@ _NEGATED_SPAN = re.compile(
     r".*?(?=(?:[.;!?\n]|\b(?:but|however|instead)\b|$))",
     re.IGNORECASE | re.DOTALL,
 )
-_QUOTED_SPAN = re.compile(r"(?P<quote>['\"`])(?P<body>.*?)(?P=quote)", re.DOTALL)
+_QUOTED_SPAN = re.compile(r"(?<!\w)'.*?'(?!\w)|\".*?\"|`.*?`", re.DOTALL)
 _BRAND_SPAN = re.compile(r"\bbrief-?spec\b", re.IGNORECASE)
 
 
@@ -277,11 +277,11 @@ def _timestamp(now: datetime | None) -> str:
 
 
 def is_clear_pivot(text: str) -> bool:
-    return bool(_PIVOT.search(text[:MAX_CLASSIFICATION_CHARS]))
+    return bool(_PIVOT.search(_affirmative_text(text[:MAX_CLASSIFICATION_CHARS])))
 
 
 def explicit_type_requested(text: str) -> bool:
-    return bool(_EXPLICIT_TYPE.search(text[:MAX_CLASSIFICATION_CHARS]))
+    return bool(_EXPLICIT_TYPE.search(_affirmative_text(text[:MAX_CLASSIFICATION_CHARS])))
 
 
 def is_substantive(text: str) -> bool:
@@ -360,7 +360,7 @@ def classify_task(
     bounded = text[:MAX_CLASSIFICATION_CHARS]
     affirmative = _affirmative_text(bounded)
     host_context = host_context or {}
-    explicit_match = _EXPLICIT_TYPE.search(bounded)
+    explicit_match = _EXPLICIT_TYPE.search(affirmative)
     requested_type = explicit_type or (explicit_match.group(1) if explicit_match else None)
     host_subject_hint: str | None = None
     if requested_type:
