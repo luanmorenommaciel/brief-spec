@@ -1,0 +1,40 @@
+{
+  "acceptance_tier": 1,
+  "accepted_at": "2026-09-14T20:27:25Z",
+  "accepted_by": "luanmorenomaciel",
+  "contract": "AcceptanceRecord/v1",
+  "gate_outcomes": {
+    "authorization": {
+      "code": "AUTHORIZATION_VALID",
+      "status": "pass"
+    },
+    "evaluation": {
+      "code": "EVAL_PASSED",
+      "status": "pass"
+    },
+    "evidence": {
+      "code": "EVIDENCE_SATISFIED",
+      "proof": [
+        "format v3 or earlier: v4 policy receipts are not required"
+      ],
+      "status": "pass"
+    },
+    "preflight": {
+      "code": "PREFLIGHT_PASSED",
+      "status": "pass",
+      "warnings": []
+    }
+  },
+  "outcome": {
+    "code": "ACCEPTED_TIER_1",
+    "status": "accepted"
+  },
+  "receipts": [],
+  "subject": {
+    "attempt_id": "29e8d5ef-20ba-48e6-bd82-043e6e6d4c3f",
+    "authorization_ref": "hmac-sha256-v3:7c09a871:d0ad098c16c355bee71947690ed6070aedd40297914c26fc953829061b7a3896",
+    "base_commit": "088dc8bf9a6bc0a607c5fdd2e48086ed5f61f856",
+    "task_id": "T-20260914-briefspec-ci-portable-chronicle-zip",
+    "task_revision_digest": "sha256:8a811af7385c9291a691331e1ee6c67a45bcae91ccbd1e2adf6ca9076b54160a"
+  }
+}
