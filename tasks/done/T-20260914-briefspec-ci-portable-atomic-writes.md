@@ -1,7 +1,7 @@
 ---
 id: T-20260914-briefspec-ci-portable-atomic-writes
 title: "Preserve atomic writes on supported Windows Python versions"
-status: ready
+status: done
 format_version: 3
 profile: full
 effort: S
@@ -28,10 +28,14 @@ execution_backend: omp
 signed_off: true
 signed_off_by: repository-owner-via-explicit-ci-repair-approval
 signed_off_at: 2026-09-14T20:04:44Z
-accepted: false
-accepted_by: (none)
-accepted_at: (none)
+accepted: true
+accepted_by: luanmorenomaciel
+accepted_at: 2026-09-14T20:27:23Z
 signed_off_sig: hmac-sha256-v3:7c09a871:86d4f75be5e411e29dd510ed42aa40aae0d1679d4df3abd701e7225a204103b1
+accepted_tier: 1
+accepted_attempt_id: d38402a5-6cba-40a0-9cd3-59604b2e4b06
+accepted_authorization_ref: hmac-sha256-v3:7c09a871:86d4f75be5e411e29dd510ed42aa40aae0d1679d4df3abd701e7225a204103b1
+acceptance_record_digest: sha256:c57a1c86090d6c96a765b7fe2455b5189ab9a8d952dce17953120b6b16e3f3f1
 ---
 
 # Preserve atomic writes on supported Windows Python versions
