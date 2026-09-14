@@ -1,7 +1,7 @@
 ---
 id: T-20260914-briefspec-ci-portable-chronicle-zip
 title: "Preserve deterministic Chronicle ZIP exports on Windows"
-status: ready
+status: in-progress
 format_version: 3
 profile: full
 effort: S

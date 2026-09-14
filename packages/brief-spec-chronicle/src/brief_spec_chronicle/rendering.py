@@ -358,9 +358,9 @@ def _zip_datetime(value: str) -> tuple[int, int, int, int, int, int]:
 
 
 def deterministic_zip(files: dict[str, bytes], created_at: str) -> bytes:
-    with tempfile.NamedTemporaryFile(prefix="brief-spec-chronicle-", suffix=".zip") as handle:
+    with tempfile.TemporaryFile(prefix="brief-spec-chronicle-", suffix=".zip") as handle:
         with zipfile.ZipFile(
-            handle.name, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
+            handle, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
         ) as archive:
             for name in sorted(files):
                 info = zipfile.ZipInfo(name, date_time=_zip_datetime(created_at))
@@ -368,7 +368,8 @@ def deterministic_zip(files: dict[str, bytes], created_at: str) -> bytes:
                 info.external_attr = 0o100644 << 16
                 info.compress_type = zipfile.ZIP_DEFLATED
                 archive.writestr(info, files[name])
-        return Path(handle.name).read_bytes()
+        handle.seek(0)
+        return handle.read()
 
 
 def export_snapshot(
