@@ -1,7 +1,7 @@
 ---
 id: T-20260914-briefspec-ci-portable-chronicle-zip
 title: "Preserve deterministic Chronicle ZIP exports on Windows"
-status: ready
+status: done
 format_version: 3
 profile: full
 effort: S
@@ -28,10 +28,14 @@ execution_backend: omp
 signed_off: true
 signed_off_by: repository-owner-via-explicit-ci-repair-approval
 signed_off_at: 2026-09-14T20:04:51Z
-accepted: false
-accepted_by: (none)
-accepted_at: (none)
+accepted: true
+accepted_by: luanmorenomaciel
+accepted_at: 2026-09-14T20:27:25Z
 signed_off_sig: hmac-sha256-v3:7c09a871:d0ad098c16c355bee71947690ed6070aedd40297914c26fc953829061b7a3896
+accepted_tier: 1
+accepted_attempt_id: 29e8d5ef-20ba-48e6-bd82-043e6e6d4c3f
+accepted_authorization_ref: hmac-sha256-v3:7c09a871:d0ad098c16c355bee71947690ed6070aedd40297914c26fc953829061b7a3896
+acceptance_record_digest: sha256:362293cb134f58aad86db60b7a0acd0df54de5cc821611aa156a9417e572dc95
 ---
 
 # Preserve deterministic Chronicle ZIP exports on Windows
