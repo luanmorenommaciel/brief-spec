@@ -1,0 +1,40 @@
+{
+  "acceptance_tier": 1,
+  "accepted_at": "2026-09-14T20:27:23Z",
+  "accepted_by": "luanmorenomaciel",
+  "contract": "AcceptanceRecord/v1",
+  "gate_outcomes": {
+    "authorization": {
+      "code": "AUTHORIZATION_VALID",
+      "status": "pass"
+    },
+    "evaluation": {
+      "code": "EVAL_PASSED",
+      "status": "pass"
+    },
+    "evidence": {
+      "code": "EVIDENCE_SATISFIED",
+      "proof": [
+        "format v3 or earlier: v4 policy receipts are not required"
+      ],
+      "status": "pass"
+    },
+    "preflight": {
+      "code": "PREFLIGHT_PASSED",
+      "status": "pass",
+      "warnings": []
+    }
+  },
+  "outcome": {
+    "code": "ACCEPTED_TIER_1",
+    "status": "accepted"
+  },
+  "receipts": [],
+  "subject": {
+    "attempt_id": "d38402a5-6cba-40a0-9cd3-59604b2e4b06",
+    "authorization_ref": "hmac-sha256-v3:7c09a871:86d4f75be5e411e29dd510ed42aa40aae0d1679d4df3abd701e7225a204103b1",
+    "base_commit": "088dc8bf9a6bc0a607c5fdd2e48086ed5f61f856",
+    "task_id": "T-20260914-briefspec-ci-portable-atomic-writes",
+    "task_revision_digest": "sha256:7efaf56a14f48c541f0733c989d237148e45c8c343acc4dd0f6ee098cfdd8ec9"
+  }
+}
