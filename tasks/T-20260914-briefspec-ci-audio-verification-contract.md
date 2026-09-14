@@ -1,7 +1,7 @@
 ---
 id: T-20260914-briefspec-ci-audio-verification-contract
 title: "Verify native audio against its actual delivery contract"
-status: ready
+status: in-progress
 format_version: 3
 profile: full
 effort: M

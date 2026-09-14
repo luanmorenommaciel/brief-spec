@@ -49,6 +49,16 @@ This project uses semantic versioning.
 
 ### Fixed
 
+- Atomic writes now support Windows Python versions without `os.fchmod` and close the temporary
+  descriptor before cleaning up a failed permission change, preserving the original destination
+  and error.
+- Chronicle ZIP creation and reading now share one owned temporary stream, avoiding Windows
+  pathname-sharing failures while preserving deterministic archive contents.
+- Repository Claude instructions now live in `.claude/CLAUDE.md`, retaining the `OPERATING.md`
+  import without triggering strict plugin-root validation warnings.
+- Optional-renderer smoke checks now compare canonical JSON between export and bundle and verify
+  each MP3 independently, rather than requiring separate speech generations to be byte-identical.
+  PDF byte-identity and rendered-artifact integrity checks remain enforced.
 - Made path-rendering and POSIX-permission tests platform-aware so Windows validates native path
   behavior without pretending that Unix mode bits are enforceable.
 - Chronicle doctor now reports the Windows permission boundary explicitly instead of producing a
