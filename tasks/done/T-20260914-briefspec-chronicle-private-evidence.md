@@ -1,7 +1,7 @@
 ---
 id: T-20260914-briefspec-chronicle-private-evidence
 title: "Preserve private evidence identity across Chronicle imports"
-status: ready
+status: done
 format_version: 3
 profile: full
 effort: M
@@ -30,12 +30,12 @@ signed_off_by: repository-owner-via-explicit-user-approval
 signed_off_at: 2026-09-14T13:30:26Z
 accepted: true
 accepted_by: luanmorenomaciel
-accepted_at: 2026-09-14T14:11:57Z
+accepted_at: 2026-09-14T14:43:42Z
 signed_off_sig: hmac-sha256-v3:7c09a871:aa4b860eed831ac9d708ee3715443c66d7dd990ebfb2eeae2545dab43738dd9b
 accepted_tier: 1
-accepted_attempt_id: 5441ce05-4260-416b-b5e8-bafe60c03d43
+accepted_attempt_id: 9ec81e20-73f7-4787-b474-de0091443755
 accepted_authorization_ref: hmac-sha256-v3:7c09a871:aa4b860eed831ac9d708ee3715443c66d7dd990ebfb2eeae2545dab43738dd9b
-acceptance_record_digest: sha256:fca188fa9d5eebe87eb1e5198cb75fbc09c8a730c5fcd6cd203968cd0fcf1315
+acceptance_record_digest: sha256:23f11471fc163c6ec33cbe35811a531bf2fdf5ee204de8b2bd6ea261f6706a0d
 ---
 
 # Preserve private evidence identity across Chronicle imports

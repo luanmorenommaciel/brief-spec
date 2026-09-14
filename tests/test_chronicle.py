@@ -910,3 +910,38 @@ def test_doctor_rebuilds_a_missing_derived_index(
     assert index.is_file()
     if os.name != "nt":
         assert project_record.stat().st_mode & 0o777 == 0o600
+
+
+@pytest.mark.parametrize("reference_access", ["restricted", ["private"]])
+def test_chronicle_repeated_reference_restrictions_invalid_access(
+    chronicle_project: tuple[Path, dict[str, object]],
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    reference_access: object,
+) -> None:
+    project, _ = chronicle_project
+    locator = "https://example.com/restricted"
+    for index, access in enumerate((reference_access, "public")):
+        event = _event(
+            "EVIDENCE_ADDED",
+            "Observed artifact access",
+            TIMES[index],
+            evidence=[locator],
+            details={"evidence": [{"evidence_id": locator, "access": access}]},
+        )
+        event["access"] = "public"
+        ingest_event(project, event, source_system="test", observed_at=TIMES[index])
+
+    snapshot = build_snapshot(project, created_at=TIMES[5])
+    assert [(record["evidence_id"], record["access"]) for record in snapshot["evidence"]] == [
+        (locator, "private")
+    ]
+    output = tmp_path / "unknown-access"
+    export_snapshot(snapshot, output, formats={"json", "html"})
+
+    def no_network(*_args: object, **_kwargs: object) -> dict[str, object]:
+        raise AssertionError("Unknown access must not authorize network resolution")
+
+    monkeypatch.setattr("brief_spec_chronicle.rendering.resolve_public_url", no_network)
+    verified = verify_export(output, level="resolved", workspace=project)
+    assert verified["status"] == "WARN", verified
