@@ -222,15 +222,19 @@ def process_event(
 
             if event.type is EventType.AGENT_STOP:
                 assistant = event.assistant_text or ""
+                outcome_expected = state.outcome_expected
                 outcome_result = validate_outcome(assistant)
-                checkpoint_result = validate_checkpoint(assistant)
                 has_outcome = outcome_result.valid
-                has_checkpoint = checkpoint_result.valid
                 explicit_checkpoint_mode = (
                     state.pending_mode
                     if state.pending_checkpoint and "explicit-request" in state.pending_reasons
                     else None
                 )
+                checkpoint_result = validate_checkpoint(
+                    assistant,
+                    CheckpointMode(explicit_checkpoint_mode) if explicit_checkpoint_mode else None,
+                )
+                has_checkpoint = checkpoint_result.valid
                 typed_valid = False
                 if state.work_type and (has_outcome or has_checkpoint):
                     try:
@@ -250,6 +254,7 @@ def process_event(
                         state.pending_checkpoint
                         and state.pending_mode == CheckpointMode.ORIENT.value
                         and "pre-compact" not in state.pending_reasons
+                        and explicit_checkpoint_mode is None
                     ):
                         state.pending_checkpoint = False
                         state.pending_reasons = []
@@ -265,7 +270,7 @@ def process_event(
                 grok_legacy_complete = event.runtime is Runtime.GROK and (
                     has_outcome or has_checkpoint
                 )
-                if state.outcome_expected and outcome_policy is Policy.ENFORCE and not has_outcome:
+                if outcome_expected and outcome_policy is Policy.ENFORCE and not has_outcome:
                     errors = (
                         outcome_result.errors
                         if "<!-- briefspec:outcome:v1 -->" in assistant
@@ -273,7 +278,7 @@ def process_event(
                     )
                     requests.append(_outcome_request(errors))
                 elif (
-                    state.outcome_expected
+                    outcome_expected
                     and outcome_policy is Policy.ENFORCE
                     and typing_enabled
                     and state.work_type
@@ -287,12 +292,13 @@ def process_event(
                     )
                 if (
                     state.pending_checkpoint
-                    and checkpoint_policy is Policy.AUTO
+                    and (checkpoint_policy is Policy.AUTO or explicit_checkpoint_mode is not None)
                     and not has_checkpoint
                     and not (
                         has_outcome
                         and state.pending_mode == CheckpointMode.ORIENT.value
                         and "pre-compact" not in state.pending_reasons
+                        and explicit_checkpoint_mode is None
                     )
                 ):
                     requests.append(_checkpoint_request(state.pending_mode, state.pending_reasons))
