@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import html
 import json
 import zipfile
 from pathlib import Path
@@ -10,6 +11,7 @@ from briefspec.bundle import build_delivery_bundle, deliver_bundle
 from briefspec.cli import main
 from briefspec.delivery import (
     canonical_json_bytes,
+    canonical_sha256,
     export_core,
     load_delivery,
     render_html,
@@ -104,6 +106,93 @@ def test_markdown_json_and_html_share_one_canonical_delivery(tmp_path: Path) -> 
         workspace=ROOT,
     )
     assert result["status"] == "PASS", result
+
+
+@pytest.mark.parametrize(
+    ("original", "replacement"),
+    [
+        (
+            '<h2 id="field-outcome">Outcome</h2><p>Canonical delivery is implemented.</p>',
+            '<h2 id="field-outcome">Outcome</h2><p>Unverified replacement outcome.</p>',
+        ),
+        ("<h1>Canonical delivery is implemented.</h1>", "<h1>Contradictory headline</h1>"),
+        ("[direct/pass kind=file]", "[reported/fail kind=file]"),
+        ("</main>", "<p>Additional unsupported report content.</p></main>"),
+        ("</style>", "#field-outcome + p {display:none}</style>"),
+    ],
+    ids=["outcome", "headline", "proof", "injected-content", "hidden-outcome"],
+)
+def test_standalone_html_visible_tamper(tmp_path: Path, original: str, replacement: str) -> None:
+    delivery = _delivery()
+    rendered = render_html(delivery)
+    assert original in rendered
+    target = tmp_path / "brief.html"
+    target.write_text(rendered.replace(original, replacement, 1), encoding="utf-8")
+
+    result = verify_target(target, level=VerificationLevel.RENDERED, workspace=ROOT)
+
+    assert result["status"] == "FAIL", result
+    assert any(
+        check["name"] == "HTML integrity" and check["status"] == "PASS"
+        for check in result["checks"]
+    ), result
+
+
+@pytest.mark.parametrize(
+    "variant", ["non-object", "unsupported-schema", "invalid-proof", "malformed-classification"]
+)
+def test_standalone_html_invalid_canonical(tmp_path: Path, variant: str) -> None:
+    delivery = _delivery()
+    rendered = render_html(delivery)
+    original_digest = canonical_sha256(delivery)
+    original_payload = html.escape(canonical_json_bytes(delivery).decode("utf-8"))
+    if variant == "non-object":
+        delivery = None
+    elif variant == "unsupported-schema":
+        delivery["schema_version"] = "999"
+    elif variant == "invalid-proof":
+        delivery["brief"]["proof"][0]["basis"] = "reported"
+    else:
+        delivery["classification"]["work_type"] = []
+    # Keep the embedded payload and every declared hash consistent with the invalid input.
+    rendered = rendered.replace(
+        f"<pre>{original_payload}</pre>",
+        f"<pre>{html.escape(canonical_json_bytes(delivery).decode('utf-8'))}</pre>",
+    ).replace(original_digest, canonical_sha256(delivery))
+    target = tmp_path / "brief.html"
+    target.write_text(rendered, encoding="utf-8")
+
+    result = verify_target(target, level=VerificationLevel.RENDERED, workspace=ROOT)
+
+    assert result["status"] == "FAIL", result
+    assert any(
+        check["name"] == "structure" and check["status"] == "FAIL" for check in result["checks"]
+    ), result
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        OUTCOME,
+        SPOKEN,
+        OUTCOME.replace(
+            "Canonical delivery is implemented.", 'Escaped <report> & "quotes" — café.'
+        ),
+    ],
+    ids=["outcome", "spoken", "escaped-unicode"],
+)
+def test_standalone_html_valid_projection(tmp_path: Path, text: str) -> None:
+    delivery = _delivery(text)
+    target = tmp_path / "brief.html"
+    target.write_text(render_html(delivery), encoding="utf-8")
+
+    result = verify_target(target, level=VerificationLevel.RENDERED, workspace=ROOT)
+
+    assert result["status"] in {"PASS", "WARN"}, result
+    assert any(
+        check["name"] == "HTML rendering" and check["status"] == "PASS"
+        for check in result["checks"]
+    ), result
 
 
 def test_bundle_is_deterministic_and_manifest_is_verified(tmp_path: Path) -> None:
