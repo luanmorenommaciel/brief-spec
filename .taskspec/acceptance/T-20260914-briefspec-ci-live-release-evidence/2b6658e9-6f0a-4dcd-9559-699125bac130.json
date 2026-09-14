@@ -1,0 +1,40 @@
+{
+  "acceptance_tier": 1,
+  "accepted_at": "2026-09-14T22:25:45Z",
+  "accepted_by": "luanmorenomaciel",
+  "contract": "AcceptanceRecord/v1",
+  "gate_outcomes": {
+    "authorization": {
+      "code": "AUTHORIZATION_VALID",
+      "status": "pass"
+    },
+    "evaluation": {
+      "code": "EVAL_PASSED",
+      "status": "pass"
+    },
+    "evidence": {
+      "code": "EVIDENCE_SATISFIED",
+      "proof": [
+        "format v3 or earlier: v4 policy receipts are not required"
+      ],
+      "status": "pass"
+    },
+    "preflight": {
+      "code": "PREFLIGHT_PASSED",
+      "status": "pass",
+      "warnings": []
+    }
+  },
+  "outcome": {
+    "code": "ACCEPTED_TIER_1",
+    "status": "accepted"
+  },
+  "receipts": [],
+  "subject": {
+    "attempt_id": "2b6658e9-6f0a-4dcd-9559-699125bac130",
+    "authorization_ref": "hmac-sha256-v3:7c09a871:8ce4e338c82e007074721fd36c7ca765efd25f393ff4eebcf471129a03fb7ba7",
+    "base_commit": "ec4514a992d1ab852794c69c1cbd98d311860c0e",
+    "task_id": "T-20260914-briefspec-ci-live-release-evidence",
+    "task_revision_digest": "sha256:812ba23501d9553bfe86dc8edc07434f3d00b0f1be19fe3b22a7f555f7d36346"
+  }
+}

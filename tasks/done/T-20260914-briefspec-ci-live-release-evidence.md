@@ -1,7 +1,7 @@
 ---
 id: T-20260914-briefspec-ci-live-release-evidence
 title: "Refresh native release evidence for the corrected source"
-status: ready
+status: done
 format_version: 3
 profile: full
 effort: S
@@ -28,10 +28,14 @@ execution_backend: omp
 signed_off: true
 signed_off_by: repository-owner-via-explicit-live-evidence-approval
 signed_off_at: 2026-09-14T21:49:48Z
-accepted: false
-accepted_by: (none)
-accepted_at: (none)
+accepted: true
+accepted_by: luanmorenomaciel
+accepted_at: 2026-09-14T22:25:45Z
 signed_off_sig: hmac-sha256-v3:7c09a871:8ce4e338c82e007074721fd36c7ca765efd25f393ff4eebcf471129a03fb7ba7
+accepted_tier: 1
+accepted_attempt_id: 2b6658e9-6f0a-4dcd-9559-699125bac130
+accepted_authorization_ref: hmac-sha256-v3:7c09a871:8ce4e338c82e007074721fd36c7ca765efd25f393ff4eebcf471129a03fb7ba7
+acceptance_record_digest: sha256:307ed407b37f9e49fb04562b2b7bee266661c47c6ef1a54fddcfc4dd11b1924b
 ---
 
 # Refresh native release evidence for the corrected source
