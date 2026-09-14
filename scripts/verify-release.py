@@ -13,6 +13,7 @@ import sys
 import tomllib
 import zipfile
 from collections.abc import Iterable
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
@@ -181,6 +182,23 @@ ACTION_REFERENCE = re.compile(
     r"^\s*(?:-\s*)?uses:\s+(?P<action>[^@\s]+)@(?P<revision>[^\s#]+)",
     re.MULTILINE,
 )
+
+
+class _ReadmeBadgeParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.badges: list[tuple[str, str]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag != "img":
+            return
+        attributes = dict(attrs)
+        source = attributes.get("src") or ""
+        prefix = "https://img.shields.io/badge/source_candidate-"
+        if source.startswith(prefix):
+            self.badges.append(
+                (attributes.get("alt") or "", source.removeprefix(prefix).partition("-")[0])
+            )
 
 
 class Verifier:
@@ -406,11 +424,16 @@ def check_versioned_release_evidence(verifier: Verifier, version: str) -> None:
         verifier.require(False, f"cannot read versioned release evidence: {exc}")
         return
 
-    badge = README_VERSION_BADGE.search(readme)
-    verifier.require(badge is not None, "README.md: version badge is missing or malformed")
-    if badge is not None:
+    parser = _ReadmeBadgeParser()
+    parser.feed(readme)
+    parser.badges.extend(
+        (f"Source candidate {badge.group('label')}", badge.group("badge"))
+        for badge in README_VERSION_BADGE.finditer(readme)
+    )
+    verifier.require(bool(parser.badges), "README.md: version badge is missing or malformed")
+    for label, badge_version in parser.badges:
         verifier.require(
-            badge.group("label") == version and badge.group("badge") == version,
+            label == f"Source candidate {version}" and badge_version == version,
             f"README.md: version badge must match {version}",
         )
     verifier.require(

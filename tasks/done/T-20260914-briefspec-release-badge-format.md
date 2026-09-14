@@ -1,7 +1,7 @@
 ---
 id: T-20260914-briefspec-release-badge-format
 title: "Verify candidate version independent of badge markup"
-status: ready
+status: done
 format_version: 3
 profile: full
 effort: S
@@ -28,10 +28,14 @@ execution_backend: omp
 signed_off: true
 signed_off_by: repository-owner-via-explicit-release-gate-approval
 signed_off_at: 2026-09-14T17:41:02Z
-accepted: false
-accepted_by: (none)
-accepted_at: (none)
+accepted: true
+accepted_by: luanmorenomaciel
+accepted_at: 2026-09-14T17:46:11Z
 signed_off_sig: hmac-sha256-v3:7c09a871:4bf42a65d709eef846a486fb2650e527792be6034e8605f44838183cbc62bc25
+accepted_tier: 1
+accepted_attempt_id: 15b9b6fa-ae5a-4db5-9949-af5b5f04d78a
+accepted_authorization_ref: hmac-sha256-v3:7c09a871:4bf42a65d709eef846a486fb2650e527792be6034e8605f44838183cbc62bc25
+acceptance_record_digest: sha256:d78808e9d0b473f4de2c73295fbaf4b2b2bf5f62c5b84076487a03262bfc6a32
 ---
 
 # Verify candidate version independent of badge markup
