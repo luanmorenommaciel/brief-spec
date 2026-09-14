@@ -1,7 +1,7 @@
 ---
 id: T-20260914-briefspec-ci-portable-atomic-writes
 title: "Preserve atomic writes on supported Windows Python versions"
-status: ready
+status: in-progress
 format_version: 3
 profile: full
 effort: S

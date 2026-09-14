@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import errno
 import os
 import stat
 from collections.abc import Callable
+from contextlib import suppress
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
@@ -13,6 +15,7 @@ from briefspec.config import DEFAULT_CONFIG
 from briefspec.hooks import process_event, render_decision
 from briefspec.models import EventType, Runtime, SessionState
 from briefspec.state import (
+    atomic_write,
     list_sessions,
     load_session,
     prune_sessions,
@@ -60,6 +63,51 @@ def test_state_files_are_private_and_round_trip(
     if os.name != "nt":
         assert stat.S_IMODE(path.stat().st_mode) == 0o600
         assert stat.S_IMODE(path.parent.stat().st_mode) == 0o700
+
+
+def test_state_round_trip_without_fchmod(
+    isolated_homes: dict[str, Path], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delattr(os, "fchmod", raising=False)
+    state = SessionState.new(Runtime.CLAUDE, "portable", NOW)
+    state.turn_count = 4
+    save_session(state)
+    state.turn_count = 7
+    save_session(state)
+    assert load_session(Runtime.CLAUDE, "portable", NOW).turn_count == 7
+    if os.name != "nt":
+        path = session_path(Runtime.CLAUDE, "portable")
+        assert stat.S_IMODE(path.stat().st_mode) == 0o600
+        assert stat.S_IMODE(path.parent.stat().st_mode) == 0o700
+
+
+def test_atomic_permission_failure_preserves_destination_and_closes_descriptor(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target = tmp_path / "atomic" / "state.json"
+    target.parent.mkdir()
+    target.write_bytes(b"original")
+    descriptor: int | None = None
+
+    def deny_permissions(fd: int, _mode: int) -> None:
+        nonlocal descriptor
+        descriptor = fd
+        raise PermissionError("permission assignment failed")
+
+    monkeypatch.setattr(os, "fchmod", deny_permissions, raising=False)
+    try:
+        with pytest.raises(PermissionError, match="permission assignment failed"):
+            atomic_write(target, b"replacement")
+        assert descriptor is not None
+        with pytest.raises(OSError) as error:
+            os.fstat(descriptor)
+        assert error.value.errno == errno.EBADF
+        assert target.read_bytes() == b"original"
+        assert list(target.parent.iterdir()) == [target]
+    finally:
+        if descriptor is not None:
+            with suppress(OSError):
+                os.close(descriptor)
 
 
 def test_corrupt_state_is_quarantined_and_reinitialized(
