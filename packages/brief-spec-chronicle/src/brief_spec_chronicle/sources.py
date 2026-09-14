@@ -4,6 +4,8 @@ from typing import Any
 
 from briefspec.events import EVENT_KINDS
 
+_EVIDENCE_ACCESS_ORDER = {"public": 0, "local": 1, "private": 2}
+
 
 def _text(value: Any, *, fallback: str, limit: int = 500) -> str:
     candidate = str(value or "").strip()
@@ -58,14 +60,29 @@ def _delivery(value: dict[str, Any]) -> dict[str, Any]:
         fallback="Brief-Spec lifecycle boundary observed",
     )
     evidence = []
+    evidence_details = []
     for item in [
         *_dicts(brief.get("proof")),
         *_dicts(value.get("provenance")),
         *_dicts(value.get("artifacts")),
     ]:
         locator = _evidence_locator(item)
-        if locator and locator not in evidence:
+        if not locator or (locator not in evidence and len(evidence) == 64):
+            continue
+        if locator not in evidence:
             evidence.append(locator)
+        access = str(item.get("access") or "local")
+        if access not in _EVIDENCE_ACCESS_ORDER:
+            raise ValueError("Evidence access is invalid")
+        evidence_details.append(
+            {
+                "evidence_id": locator,
+                "access": access,
+                "content_sha256": item.get("sha256") or item.get("content_sha256"),
+                "expires_at": item.get("expires_at"),
+                **{key: item[key] for key in ("basis", "result") if key in item},
+            }
+        )
     work_items = value.get("work_items") if isinstance(value.get("work_items"), list) else []
     task_ref = next(
         (
@@ -80,6 +97,7 @@ def _delivery(value: dict[str, Any]) -> dict[str, Any]:
         "next": _list(brief.get("next"), limit=3),
         "gaps": _list(brief.get("gaps"), limit=8),
         "human_action": brief.get("human_action"),
+        "evidence": evidence_details,
         "classification": {
             key: value.get("classification", {}).get(key)
             for key in ("work_type", "subject", "confidence", "origin")
@@ -91,7 +109,11 @@ def _delivery(value: dict[str, Any]) -> dict[str, Any]:
     return {
         "kind": kind,
         "importance": "blocking" if kind == "BLOCKER_RAISED" else "notable",
-        "access": "local",
+        "access": max(
+            (item["access"] for item in evidence_details),
+            key=_EVIDENCE_ACCESS_ORDER.__getitem__,
+            default="local",
+        ),
         "occurred_at": source.get("created_at"),
         "headline": headline,
         "source": {
