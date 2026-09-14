@@ -1,0 +1,17 @@
+{
+  "authorization": "User explicitly selected Test candidate and refresh evidence, including local candidate installation before final CI and one HMAC-sealed release-evidence leaf.",
+  "candidate_revision": "ab4351b0bb55d688d12e2f592d717fc2f6d51c03",
+  "hosted_evidence": "https://github.com/luanmorenommaciel/brief-spec/actions/runs/34898974337",
+  "blocking_fact": "All software and clean-room installation checks passed; release authorization rejects the August evidence because its source fingerprint is stale.",
+  "required_matrix": {
+    "codex": 8,
+    "claude": 8,
+    "omp": 4,
+    "grok": 4,
+    "kimi": 4
+  },
+  "write_scope": [
+    "release/live-e2e-evidence.json"
+  ],
+  "backup": "/Users/luanmorenomaciel/.local/state/brief-spec/backups/20260914T213002Z/manifest.json"
+}

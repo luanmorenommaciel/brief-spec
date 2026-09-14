@@ -1,0 +1,18 @@
+schema_version: 1
+status: SEAM_MAP=READY
+intent_id: INTENT-BRIEFSPEC-LIVE-RELEASE-EVIDENCE
+source_recipe:
+  name: recipe.json
+  sha256: 6dddadf8746d1179c442bbccf30b2d8d473dafc7af037002ecc0a297d8d9bfb4
+intent_sha256: 91207cf02fba7155a46c2cea45d984e67ca700284813e69d47c38c61bc012ecd
+system_map_sha256: 0ea58cc16ada453b85dd012948e30295edc4f9a49e62871cea6ceeec0264a366
+evidence_sha256: 58314802f6d8f665a494326e1c00902f40c9f3a0680347f1d9eb514735e4feb6
+decisions: []
+seams:
+- id: SEAM-CI-LIVE-RELEASE-EVIDENCE
+  path: seamwise/seams/SEAM-CI-LIVE-RELEASE-EVIDENCE.md
+  owner: brief-spec
+  evidence:
+  - EVIDENCE-LIVE-RELEASE-FRESHNESS
+  swimlane_id: LANE-CI-LIVE-RELEASE-EVIDENCE
+  sha256: dec7a92630e29d1173c1b9cb8e2168268e29857aaa03e7e1a3b6af1a689036f8

@@ -1,0 +1,98 @@
+{
+  "api_version": "taskspec.dev/v1",
+  "approved": true,
+  "kind": "TaskPlan",
+  "metadata": {
+    "delivery_plan_review_sha256": "ab55aef8c2f5ef8649e1ebbcf32b55ca9c212990c13da1c646059f383c5d06e3",
+    "delivery_plan_sha256": "edd85fcae11f46dd867c617fb20a77813e7c20022b4ac8382d91e249112abf5d",
+    "name": "INTENT-BRIEFSPEC-LIVE-RELEASE-EVIDENCE",
+    "producer": "seamwise",
+    "producer_version": "0.2.0",
+    "seamwise_plan_status": "DELIVERY_PLAN=READY",
+    "source": "seamwise/task-plan.json"
+  },
+  "units": [
+    {
+      "agent": "any",
+      "anti_patterns": [
+        "Do not Treat a structurally valid record or model assertion as authorization or measured success: Brief-Spec explains observations; Task-Spec and humans retain authorization and acceptance authority.; instead Preserve explicit basis and require source-bound receipts for stronger claims..",
+        "Do not Overwrite unrelated user changes or widen the signed write surface: Task-Spec authorization is bounded and receipt ownership must preserve user work.; instead Keep edits inside declared paths, serialize shared mutations and fail closed on conflicts..",
+        "Do not Satisfy an acceptance gate with stubs, source-text assertions, fabricated participants or stale summaries: Existence and apparent formatting do not prove the observable behavior.; instead Run the specified behavioral scenario on exact candidate inputs and retain truthful failure or blocked evidence.."
+      ],
+      "behaviors": [
+        {
+          "given": "the corrected source and fresh native summaries for every required host",
+          "id": "B-1",
+          "then": "The source fingerprint matches and all required host coverage is passing before authorization.",
+          "when": "the native builder regenerates release evidence"
+        },
+        {
+          "given": "fresh source-bound evidence",
+          "id": "B-2",
+          "then": "The real authorization builder succeeds without relabeling old evidence or weakening any gate.",
+          "when": "release authorization is preflighted locally"
+        }
+      ],
+      "context": "Intent INTENT-BRIEFSPEC-LIVE-RELEASE-EVIDENCE; seam SEAM-CI-LIVE-RELEASE-EVIDENCE; swimlane LANE-CI-LIVE-RELEASE-EVIDENCE; capability leg LEG-CI-LIVE-RELEASE-EVIDENCE. Done condition: Regenerate source-bound release evidence from fresh native measurements of every required host; retain failures and authorize only complete passing coverage.",
+      "creates_paths": [],
+      "depends_on": [],
+      "do_not_touch": [
+        "OPERATING.md",
+        "AGENTS.md",
+        "unrelated source or tests",
+        "global host installations and user branch history",
+        "CLAUDE.md"
+      ],
+      "done_condition": "Regenerate source-bound release evidence from fresh native measurements of every required host; retain failures and authorize only complete passing coverage.",
+      "effort": "S",
+      "evals": [
+        {
+          "command": "uv run --no-sync python scripts/build-live-e2e-evidence.py --check --require-authorized",
+          "description": "Fresh source-bound authorized host coverage",
+          "expected_duration_sec": 10,
+          "id": "eval_1",
+          "terminal": false,
+          "verifies": [
+            "B-1"
+          ]
+        },
+        {
+          "command": "uv run --no-sync python scripts/verify-release.py",
+          "description": "Existing release surface integrity",
+          "expected_duration_sec": 10,
+          "id": "eval_2",
+          "terminal": false,
+          "verifies": [
+            "B-1"
+          ]
+        },
+        {
+          "command": "uv run --no-sync python -c 'import subprocess, sys, tempfile; from pathlib import Path; sha = subprocess.check_output(['\"'\"'git'\"'\"', '\"'\"'rev-parse'\"'\"', '\"'\"'HEAD'\"'\"'], text=True).strip(); temp = tempfile.TemporaryDirectory(prefix='\"'\"'brief-spec-local-authorization-'\"'\"'); subprocess.run([sys.executable, '\"'\"'scripts/build-release-authorization.py'\"'\"', '\"'\"'--sha'\"'\"', sha, '\"'\"'--run-id'\"'\"', '\"'\"'local-preflight'\"'\"', '\"'\"'--dist'\"'\"', temp.name], check=True); temp.cleanup()'",
+          "description": "Nonpublishing local release authorization preflight",
+          "expected_duration_sec": 10,
+          "id": "eval_3",
+          "terminal": true,
+          "verifies": [
+            "B-2"
+          ]
+        }
+      ],
+      "execution_backend": "omp",
+      "goal": "Regenerate source-bound release evidence from fresh native measurements of every required host; retain failures and authorize only complete passing coverage.",
+      "id": "T-20260914-briefspec-ci-live-release-evidence",
+      "observability": "Run the existing native matrix against the actual corrected installation, preserving raw local attempt histories. Generate release/live-e2e-evidence.json only with scripts/build-live-e2e-evidence.py and fresh summaries. Local preflight uses run-id local-preflight in a disposable directory; it is not claimed as hosted authorization. Do not rewrite old scenario hashes or manufacture model identities.",
+      "profile": "full",
+      "required_tools": [
+        "python",
+        "uv"
+      ],
+      "rollback": "Revert only the authorized source/test patch; preserve all other user files and generated authorization records.",
+      "source_note": "seamwise/legs/LEG-CI-LIVE-RELEASE-EVIDENCE.md#T-20260914-briefspec-ci-live-release-evidence",
+      "title": "Refresh native release evidence for the corrected source",
+      "touches_paths": [
+        "release/live-e2e-evidence.json"
+      ],
+      "why": "Regenerate source-bound release evidence from fresh native measurements of every required host; retain failures and authorize only complete passing coverage."
+    }
+  ]
+}

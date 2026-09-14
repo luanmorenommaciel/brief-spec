@@ -1,0 +1,31 @@
+{
+  "contract": "SeamwiseTaskPlanLineage/v1",
+  "delivery_plan_sha256": "edd85fcae11f46dd867c617fb20a77813e7c20022b4ac8382d91e249112abf5d",
+  "engine_version": "0.2.0",
+  "intent": {
+    "id": "INTENT-BRIEFSPEC-LIVE-RELEASE-EVIDENCE",
+    "sha256": "91207cf02fba7155a46c2cea45d984e67ca700284813e69d47c38c61bc012ecd"
+  },
+  "review": {
+    "fixture": false,
+    "plan_sha256": "edd85fcae11f46dd867c617fb20a77813e7c20022b4ac8382d91e249112abf5d",
+    "reviewed_at": "2026-09-14T21:49:42.641143+00:00",
+    "reviewer": "luanmorenomaciel",
+    "sha256": "ab55aef8c2f5ef8649e1ebbcf32b55ca9c212990c13da1c646059f383c5d06e3"
+  },
+  "task_plan": {
+    "contract": "TaskPlan/v1",
+    "digest": "d7dc5fb9987b6bcd333e5d842023cb5beed07e1e271494d3f4ad8e65622ba457",
+    "path": "seamwise/task-plan.json"
+  },
+  "units": {
+    "T-20260914-briefspec-ci-live-release-evidence": {
+      "intent": "INTENT-BRIEFSPEC-LIVE-RELEASE-EVIDENCE",
+      "leg": "LEG-CI-LIVE-RELEASE-EVIDENCE",
+      "seam": "SEAM-CI-LIVE-RELEASE-EVIDENCE",
+      "source_sha256": "319609e17144bfa3455768c451ef46b408b6163d0d21b29c039dcb58f829f7f3",
+      "swimlane": "LANE-CI-LIVE-RELEASE-EVIDENCE",
+      "unit_id": "T-20260914-briefspec-ci-live-release-evidence"
+    }
+  }
+}

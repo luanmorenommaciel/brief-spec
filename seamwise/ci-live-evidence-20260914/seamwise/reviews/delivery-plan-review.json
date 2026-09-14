@@ -1,0 +1,10 @@
+{
+  "disposition": "accepted",
+  "draft_sha256": "14cbf6e483a8b448d626e1f4c3c88929b510861e35596fe14c41e0cf61b9f5d3",
+  "fixture": false,
+  "plan_sha256": "edd85fcae11f46dd867c617fb20a77813e7c20022b4ac8382d91e249112abf5d",
+  "reason": "User explicitly selected Test candidate and refresh evidence, including local candidate installation before final CI and one HMAC-sealed release-evidence leaf.",
+  "reviewed_at": "2026-09-14T21:49:42.641143+00:00",
+  "reviewer": "luanmorenomaciel",
+  "schema_version": 1
+}
