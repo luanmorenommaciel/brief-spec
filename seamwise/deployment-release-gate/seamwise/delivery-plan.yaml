@@ -1,0 +1,22 @@
+schema_version: 1
+status: DELIVERY_PLAN=READY
+seam_map_sha256: df998888fcd23f6e937a3fd7bcbc3df1797e23392695e3abd44a5fd9c205a0a5
+swimlanes:
+- id: LANE-RELEASE-BADGE-FORMAT
+  seam_id: SEAM-RELEASE-BADGE-FORMAT
+  owner: brief-spec
+  path: seamwise/swimlanes/LANE-RELEASE-BADGE-FORMAT.md
+  sha256: 5193d7f838c7a3eabc4d6581528a108e476a3ad4e1e21f17f43c8cd8f4c18594
+legs:
+- id: LEG-RELEASE-BADGE-FORMAT
+  seam_id: SEAM-RELEASE-BADGE-FORMAT
+  swimlane_id: LANE-RELEASE-BADGE-FORMAT
+  path: seamwise/legs/LEG-RELEASE-BADGE-FORMAT.md
+  sha256: d653a2027b8b231e4009db92c3514b2df39715e90c8d450d4f7665bb08752da0
+steel_thread:
+- LEG-RELEASE-BADGE-FORMAT
+objections: []
+contentions: []
+steel_thread_path: seamwise/steel-thread.md
+steel_thread_sha256: f0d6fbd246ef33ad4f5e6507aabb5f3fb08bdacc25a65d7ee515aa7f504caf17
+review_authority_sha256: 32a70821e0d757ca93a3889dd48c94f5e3eb852ffc5fee962b02b9dcff8e38f2

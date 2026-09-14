@@ -1,0 +1,39 @@
+schema_version: 1
+status: SEAM_MAP=READY
+intent_id: INTENT-BRIEFSPEC-REPAIR-WAVE
+source_recipe:
+  name: repair-wave-recipe.json
+  sha256: e494f8411824e7d4ac41c5d5b9a553b7f0add44afa3731d775cf74f971816b00
+intent_sha256: e773a8d755573bd0c2c5edd4f7c3341866815d5bd0b64fda46f13b2d5dc0b2c9
+system_map_sha256: 5077cae05ceb6f0a80df62a6dbe65d56f83b4b2245a794916b1d675e1ee5b97d
+evidence_sha256: e772e66f25df9da4b96092d5eadc8f275483930013f9b5fc2f2716a3c34083e1
+decisions: []
+seams:
+- id: SEAM-OPERATIVE-ROUTING
+  path: seamwise/seams/SEAM-OPERATIVE-ROUTING.md
+  owner: brief-spec
+  evidence:
+  - EVIDENCE-REPAIR-INPUT
+  swimlane_id: LANE-OPERATIVE-ROUTING
+  sha256: 133977538b4d1975ce0c2657d0f0ed4c6ad437985663f10a9c9c90d65b6c2ef2
+- id: SEAM-TERMINAL-OBLIGATIONS
+  path: seamwise/seams/SEAM-TERMINAL-OBLIGATIONS.md
+  owner: brief-spec
+  evidence:
+  - EVIDENCE-REPAIR-INPUT
+  swimlane_id: LANE-TERMINAL-OBLIGATIONS
+  sha256: f2726ccb03b4ee3379e2e5793bd1308745958b1168dde5a966de8301fb89d6d5
+- id: SEAM-VISIBLE-HTML-INTEGRITY
+  path: seamwise/seams/SEAM-VISIBLE-HTML-INTEGRITY.md
+  owner: brief-spec
+  evidence:
+  - EVIDENCE-REPAIR-INPUT
+  swimlane_id: LANE-VISIBLE-HTML-INTEGRITY
+  sha256: a5954183ca705d9da02541fed0452327cfd9acc67e96b1f18c7538c325f8e07b
+- id: SEAM-CHRONICLE-PRIVATE-EVIDENCE
+  path: seamwise/seams/SEAM-CHRONICLE-PRIVATE-EVIDENCE.md
+  owner: brief-spec
+  evidence:
+  - EVIDENCE-REPAIR-INPUT
+  swimlane_id: LANE-CHRONICLE-PRIVATE-EVIDENCE
+  sha256: dd0d76c87948977de2406deac9aa3a8cdca024433133caf49a0dfcc72697fb59

@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "intent": {
+    "id": "INTENT-RELEASE-BADGE-FORMAT",
+    "title": "Correct the authorized release verification gate",
+    "summary": "User explicitly selected: Fix the verifier, then publish. Authorized scripts/verify-release.py and tests/test_release_verification.py, engine-managed seal, and regression checks. README and advertised version remain unchanged.",
+    "claim": "proposed",
+    "source": {
+      "uri": "seamwise/input.json",
+      "captured_at": "2026-09-14T17:39:02.696482Z",
+      "sha256": "a328d29ab385b94232dbf0b7a68b9ee9ff8b2b802bfe645cf285b1c21fec9434"
+    },
+    "success": [
+      "HTML and Markdown candidate badges accept matching advertised versions and reject mismatches."
+    ],
+    "out_of_scope": [
+      "No README redesign, version change, or unrelated product behavior change."
+    ]
+  },
+  "system_map": {
+    "claim": "derived",
+    "components": [
+      "Release version consistency verifier",
+      "README HTML and Markdown badge projections"
+    ],
+    "external_dependencies": [
+      "Existing HMAC key and explicit two-file user approval"
+    ],
+    "unknowns": []
+  },
+  "evidence": [
+    {
+      "id": "EVIDENCE-RELEASE-BADGE",
+      "claim": "current",
+      "source": {
+        "uri": "seamwise/input.json",
+        "captured_at": "2026-09-14T17:39:02.696482Z",
+        "sha256": "a328d29ab385b94232dbf0b7a68b9ee9ff8b2b802bfe645cf285b1c21fec9434"
+      },
+      "confidence": 1.0,
+      "summary": "uv run --no-sync python scripts/verify-release.py failed with one error: README.md version badge is missing or malformed. README line 14 contains a valid HTML img source_candidate-0.5.0 badge and Source candidate 0.5.0 alt text; validator accepts only Markdown image syntax."
+    }
+  ],
+  "seams": [
+    {
+      "id": "SEAM-RELEASE-BADGE-FORMAT",
+      "name": "Verify candidate version independent of badge markup",
+      "description": "uv run --no-sync python scripts/verify-release.py failed with one error: README.md version badge is missing or malformed. README line 14 contains a valid HTML img source_candidate-0.5.0 badge and Source candidate 0.5.0 alt text; validator accepts only Markdown image syntax.",
+      "evidence": [
+        "EVIDENCE-RELEASE-BADGE"
+      ],
+      "responsibility": "Accept truthful HTML or Markdown badges without weakening version mismatch detection.",
+      "consumes": [
+        "Existing supported public boundary inputs"
+      ],
+      "produces": [
+        "Corrected observable boundary behavior and regression evidence"
+      ],
+      "owner": "brief-spec",
+      "independent_proof": "Three specified behavioral regression selectors must pass after the fix and discriminate the prior defect.",
+      "rejected_alternatives": [
+        {
+          "alternative": "Bypass validation or broaden write scope to a whole source directory",
+          "reason": "That would hide the defect or evade the existing authorization boundary."
+        }
+      ],
+      "swimlane": {
+        "id": "LANE-RELEASE-BADGE-FORMAT",
+        "name": "Verify candidate version independent of badge markup",
+        "owner": "brief-spec",
+        "legs": [
+          {
+            "id": "LEG-RELEASE-BADGE-FORMAT",
+            "observable_state": "Accept truthful HTML or Markdown badges without weakening version mismatch detection.",
+            "proof": "Declared observable regressions and independent Task-Spec acceptance.",
+            "requires": [],
+            "produces": [
+              "release-badge:verified"
+            ],
+            "tasks": [
+              {
+                "id": "T-20260914-briefspec-release-badge-format",
+                "title": "Verify candidate version independent of badge markup",
+                "goal": "Accept truthful HTML or Markdown badges without weakening version mismatch detection.",
+                "done_condition": "The unchanged current README passes release verification; HTML and Markdown badges with stale URL or label versions fail.",
+                "effort": "S",
+                "profile": "full",
+                "execution_backend": "omp",
+                "required_tools": [
+                  "python",
+                  "uv"
+                ],
+                "depends_on": [],
+                "touches_paths": [
+                  "scripts/verify-release.py"
+                ],
+                "creates_paths": [
+                  "tests/test_release_verification.py"
+                ],
+                "behavior": [
+                  {
+                    "id": "B-1",
+                    "given": "The candidate version is 0.5.0 and README uses either an HTML img or Markdown image with source_candidate-0.5.0 URL and Source candidate 0.5.0 label",
+                    "when": "The release verifier checks versioned release evidence",
+                    "then": "Matching version evidence passes independently of the image markup syntax."
+                  },
+                  {
+                    "id": "B-2",
+                    "given": "A candidate badge URL or label advertises a version different from the package version",
+                    "when": "The same release verifier runs",
+                    "then": "Version inconsistency remains a verification failure."
+                  }
+                ],
+                "evals": [
+                  {
+                    "id": "eval_1",
+                    "description": "release badge html",
+                    "bash": "uv run --no-sync pytest -q tests/test_release_verification.py -k release_badge_html",
+                    "verifies": [
+                      "B-1",
+                      "B-2"
+                    ]
+                  },
+                  {
+                    "id": "eval_2",
+                    "description": "release badge markdown",
+                    "bash": "uv run --no-sync pytest -q tests/test_release_verification.py -k release_badge_markdown",
+                    "verifies": [
+                      "B-1",
+                      "B-2"
+                    ]
+                  },
+                  {
+                    "id": "eval_3",
+                    "description": "release badge mismatch",
+                    "bash": "uv run --no-sync pytest -q tests/test_release_verification.py -k release_badge_mismatch",
+                    "verifies": [
+                      "B-1",
+                      "B-2"
+                    ]
+                  }
+                ],
+                "anti_patterns": [
+                  {
+                    "action": "Treat a structurally valid record or model assertion as authorization or measured success",
+                    "reason": "Brief-Spec explains observations; Task-Spec and humans retain authorization and acceptance authority.",
+                    "instead": "Preserve explicit basis and require source-bound receipts for stronger claims."
+                  },
+                  {
+                    "action": "Overwrite unrelated user changes or widen the signed write surface",
+                    "reason": "Task-Spec authorization is bounded and receipt ownership must preserve user work.",
+                    "instead": "Keep edits inside declared paths, serialize shared mutations and fail closed on conflicts."
+                  },
+                  {
+                    "action": "Satisfy an acceptance gate with stubs, source-text assertions, fabricated participants or stale summaries",
+                    "reason": "Existence and apparent formatting do not prove the observable behavior.",
+                    "instead": "Run the specified behavioral scenario on exact candidate inputs and retain truthful failure or blocked evidence."
+                  }
+                ],
+                "do_not_touch": [
+                  "OPERATING.md",
+                  "AGENTS.md",
+                  "CLAUDE.md",
+                  "unrelated product source or tests",
+                  "global host installations and user branch history"
+                ],
+                "observability": "Use the current valid HTML badge as the failing reproduction. Add semantic behavior regressions for HTML, Markdown, and stale URL/label versions. Do not edit README or disable version checks. Preserve all unrelated release checks. Run actual scripts/verify-release.py after the correction.",
+                "rollback": "Revert only the authorized source/test patch; preserve all other user files and generated authorization records."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "steel_thread": [
+    "LEG-RELEASE-BADGE-FORMAT"
+  ],
+  "contentions": [],
+  "decisions": [],
+  "objections": []
+}

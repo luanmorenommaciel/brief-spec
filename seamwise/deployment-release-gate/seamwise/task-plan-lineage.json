@@ -1,0 +1,31 @@
+{
+  "contract": "SeamwiseTaskPlanLineage/v1",
+  "delivery_plan_sha256": "723c466f8c0b69b8e4d2ccf604bae791d9ca34d7874e952f302b00b8b7ee07fa",
+  "engine_version": "0.2.0",
+  "intent": {
+    "id": "INTENT-RELEASE-BADGE-FORMAT",
+    "sha256": "ca797b4b1d9c60ca7ac6595f9aff230eb8f6301f95a3b6196da3054a1732af7a"
+  },
+  "review": {
+    "fixture": false,
+    "plan_sha256": "723c466f8c0b69b8e4d2ccf604bae791d9ca34d7874e952f302b00b8b7ee07fa",
+    "reviewed_at": "2026-09-14T17:40:23.266568+00:00",
+    "reviewer": "repository-owner-via-explicit-release-gate-approval",
+    "sha256": "0d26dbf6e632779cf527077ae00c3c51e412cdd96e9457122bb966a2382468d0"
+  },
+  "task_plan": {
+    "contract": "TaskPlan/v1",
+    "digest": "7e50f6768ebd068d832b235f64ab603dd6ba46d56c1612c99db1c8980df2dee4",
+    "path": "seamwise/task-plan.json"
+  },
+  "units": {
+    "T-20260914-briefspec-release-badge-format": {
+      "intent": "INTENT-RELEASE-BADGE-FORMAT",
+      "leg": "LEG-RELEASE-BADGE-FORMAT",
+      "seam": "SEAM-RELEASE-BADGE-FORMAT",
+      "source_sha256": "d653a2027b8b231e4009db92c3514b2df39715e90c8d450d4f7665bb08752da0",
+      "swimlane": "LANE-RELEASE-BADGE-FORMAT",
+      "unit_id": "T-20260914-briefspec-release-badge-format"
+    }
+  }
+}

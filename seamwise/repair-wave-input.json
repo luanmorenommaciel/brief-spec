@@ -1,0 +1,71 @@
+{
+  "schema": "BriefSpecRepairWave/v1",
+  "captured_at": "2026-09-14T13:27:05.832837Z",
+  "basis": "User explicitly approved moving forward with the four reproduced defects and the shortest compliant execution route. The complete six-stage program remains in the task tracker; this is its first execution wave, not a reduction in overall scope.",
+  "approval": "Explicit user message: it is approved move on; earlier interactive approval permits repository-private key setup and engine-managed sealing of ready local work only.",
+  "source_evidence_sha256": "ab952286937a1620e3304477289846ef425f8877e69d19665cfc1d27328b6107",
+  "original_full_program": "The superseded broad program recipe and human plan are retained under .briefspec/evolution/approved-full-program.",
+  "repairs": [
+    {
+      "slug": "operative-routing",
+      "title": "Ignore quoted and prohibited routing instructions",
+      "scope": [
+        "src/briefspec/work_types.py",
+        "tests/test_work_types.py"
+      ],
+      "goal": "Use the same bounded operative-text interpretation for inferred and explicit routing, explicit override detection and pivot detection. Preserve true API overrides and genuine user directives.",
+      "done": "Quoted or negated type/pivot examples cannot acquire explicit routing authority or break sticky classification; genuine overrides still take precedence.",
+      "tests": [
+        "operative_routing_quoted",
+        "operative_routing_negated",
+        "operative_routing_genuine"
+      ]
+    },
+    {
+      "slug": "terminal-obligations",
+      "title": "Preserve stop obligations before clearing state",
+      "scope": [
+        "src/briefspec/hooks.py",
+        "tests/test_hook_policies.py"
+      ],
+      "goal": "Evaluate typed outcome obligations against pre-stop state and validate explicitly requested checkpoint mode before clearing state. Preserve exactly one repair and the intentional Grok completed-brief release behavior.",
+      "done": "Required typed outcomes and requested checkpoint modes cannot be skipped by clearing flags too early, and every repair path remains bounded.",
+      "tests": [
+        "terminal_typed_obligation",
+        "terminal_requested_mode",
+        "terminal_bounded_native_repair"
+      ]
+    },
+    {
+      "slug": "visible-html-integrity",
+      "title": "Bind visible HTML to valid canonical content",
+      "scope": [
+        "src/briefspec/verification.py",
+        "tests/test_delivery.py"
+      ],
+      "goal": "Validate canonical content embedded in standalone HTML and verify its visible deterministic projection as rigorously as core bundles, without changing rendering or relaxing offline controls.",
+      "done": "Visible outcome or other report content mutations fail rendered verification even when embedded canonical JSON and hash remain unchanged; valid canonical renderings still pass.",
+      "tests": [
+        "standalone_html_visible_tamper",
+        "standalone_html_invalid_canonical",
+        "standalone_html_valid_projection"
+      ]
+    },
+    {
+      "slug": "chronicle-private-evidence",
+      "title": "Preserve private evidence identity across Chronicle imports",
+      "scope": [
+        "packages/brief-spec-chronicle/src/brief_spec_chronicle/sources.py",
+        "packages/brief-spec-chronicle/src/brief_spec_chronicle/derive.py",
+        "tests/test_chronicle.py"
+      ],
+      "goal": "Preserve per-reference access, digest, expiry and observed evidence metadata when normalizing delivery references and deriving Chronicle evidence records. Avoid less-restrictive last-write-wins behavior for repeated locators. Reuse the existing event/details contract rather than adding an authority system.",
+      "done": "Valid delivery references preserve private access, digest and expiry through normalization and snapshot derivation; repeated observations do not silently widen access or erase provenance.",
+      "tests": [
+        "chronicle_private_evidence_roundtrip",
+        "chronicle_evidence_metadata_preserved",
+        "chronicle_repeated_reference_restrictions"
+      ]
+    }
+  ]
+}

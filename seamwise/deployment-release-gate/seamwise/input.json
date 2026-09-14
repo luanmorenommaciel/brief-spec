@@ -1,0 +1,6 @@
+{
+  "schema": "BriefSpecDeploymentRepair/v1",
+  "approval": "User explicitly selected: Fix the verifier, then publish. Authorized scripts/verify-release.py and tests/test_release_verification.py, engine-managed seal, and regression checks. README and advertised version remain unchanged.",
+  "observation": "uv run --no-sync python scripts/verify-release.py failed with one error: README.md version badge is missing or malformed. README line 14 contains a valid HTML img source_candidate-0.5.0 badge and Source candidate 0.5.0 alt text; validator accepts only Markdown image syntax.",
+  "source_sha256": "3f8b7a6948c67292f5207daccfdd503fdf83a3dc2533e2b0e0568375c7f27072"
+}

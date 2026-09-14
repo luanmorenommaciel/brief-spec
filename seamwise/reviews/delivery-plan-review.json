@@ -1,0 +1,10 @@
+{
+  "disposition": "accepted",
+  "draft_sha256": "7594916bd2a855fb5c0b405c4ce750b8372f66dcc121568c70a6bce086487e13",
+  "fixture": false,
+  "plan_sha256": "3704ab5215bcd74e25091e3760b1e947298989bce0e71159fb92ed7f289eabc1",
+  "reason": "User explicitly approved moving forward with the four reproduced defects and the shortest compliant execution route; prior interactive approval authorizes local engine-managed sealing only. This four-leaf wave implements that already-approved scope; the full program remains tracked. No global deployment, publication, push, merge or PR is authorized.",
+  "reviewed_at": "2026-09-14T13:28:37.457436+00:00",
+  "reviewer": "repository-owner",
+  "schema_version": 1
+}

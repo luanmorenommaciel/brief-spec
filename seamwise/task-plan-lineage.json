@@ -1,0 +1,55 @@
+{
+  "contract": "SeamwiseTaskPlanLineage/v1",
+  "delivery_plan_sha256": "3704ab5215bcd74e25091e3760b1e947298989bce0e71159fb92ed7f289eabc1",
+  "engine_version": "0.2.0",
+  "intent": {
+    "id": "INTENT-BRIEFSPEC-REPAIR-WAVE",
+    "sha256": "e773a8d755573bd0c2c5edd4f7c3341866815d5bd0b64fda46f13b2d5dc0b2c9"
+  },
+  "review": {
+    "fixture": false,
+    "plan_sha256": "3704ab5215bcd74e25091e3760b1e947298989bce0e71159fb92ed7f289eabc1",
+    "reviewed_at": "2026-09-14T13:28:37.457436+00:00",
+    "reviewer": "repository-owner",
+    "sha256": "9883a58d0d02c6954ef023eed6d774d7a4987f44db15956bf5376c862c590dda"
+  },
+  "task_plan": {
+    "contract": "TaskPlan/v1",
+    "digest": "42c8bdd0c892438bbb3d1445ef0e6bd0dd60700bad92c7635812e08117d449b7",
+    "path": "seamwise/task-plan.json"
+  },
+  "units": {
+    "T-20260914-briefspec-chronicle-private-evidence": {
+      "intent": "INTENT-BRIEFSPEC-REPAIR-WAVE",
+      "leg": "LEG-CHRONICLE-PRIVATE-EVIDENCE",
+      "seam": "SEAM-CHRONICLE-PRIVATE-EVIDENCE",
+      "source_sha256": "3cb78a0715cddb07f3a0ba98ca1ce3b678000f5b3d5f1480bba12b785e17c494",
+      "swimlane": "LANE-CHRONICLE-PRIVATE-EVIDENCE",
+      "unit_id": "T-20260914-briefspec-chronicle-private-evidence"
+    },
+    "T-20260914-briefspec-operative-routing": {
+      "intent": "INTENT-BRIEFSPEC-REPAIR-WAVE",
+      "leg": "LEG-OPERATIVE-ROUTING",
+      "seam": "SEAM-OPERATIVE-ROUTING",
+      "source_sha256": "b0af3809fcc69430c6816518f6f55bae1b4b411618f5bb551b6c6e4fbea165ed",
+      "swimlane": "LANE-OPERATIVE-ROUTING",
+      "unit_id": "T-20260914-briefspec-operative-routing"
+    },
+    "T-20260914-briefspec-terminal-obligations": {
+      "intent": "INTENT-BRIEFSPEC-REPAIR-WAVE",
+      "leg": "LEG-TERMINAL-OBLIGATIONS",
+      "seam": "SEAM-TERMINAL-OBLIGATIONS",
+      "source_sha256": "b7b2f0aeb08bf2acff86f2fd618f3b9f5fabaad06fb718e827a227614ba163e3",
+      "swimlane": "LANE-TERMINAL-OBLIGATIONS",
+      "unit_id": "T-20260914-briefspec-terminal-obligations"
+    },
+    "T-20260914-briefspec-visible-html-integrity": {
+      "intent": "INTENT-BRIEFSPEC-REPAIR-WAVE",
+      "leg": "LEG-VISIBLE-HTML-INTEGRITY",
+      "seam": "SEAM-VISIBLE-HTML-INTEGRITY",
+      "source_sha256": "7277d81299ed7a2f2ed6cf8506cd200c1fc1c77d3e69e859b3b028aaf53dd7e5",
+      "swimlane": "LANE-VISIBLE-HTML-INTEGRITY",
+      "unit_id": "T-20260914-briefspec-visible-html-integrity"
+    }
+  }
+}

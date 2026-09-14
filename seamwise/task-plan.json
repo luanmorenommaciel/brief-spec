@@ -1,0 +1,361 @@
+{
+  "api_version": "taskspec.dev/v1",
+  "approved": true,
+  "kind": "TaskPlan",
+  "metadata": {
+    "delivery_plan_review_sha256": "9883a58d0d02c6954ef023eed6d774d7a4987f44db15956bf5376c862c590dda",
+    "delivery_plan_sha256": "3704ab5215bcd74e25091e3760b1e947298989bce0e71159fb92ed7f289eabc1",
+    "name": "INTENT-BRIEFSPEC-REPAIR-WAVE",
+    "producer": "seamwise",
+    "producer_version": "0.2.0",
+    "seamwise_plan_status": "DELIVERY_PLAN=READY",
+    "source": "seamwise/task-plan.json"
+  },
+  "units": [
+    {
+      "agent": "any",
+      "anti_patterns": [
+        "Do not Treat a structurally valid record or model assertion as authorization or measured success: Brief-Spec explains observations; Task-Spec and humans retain authorization and acceptance authority.; instead Preserve explicit basis and require source-bound receipts for stronger claims..",
+        "Do not Overwrite unrelated user changes or widen the signed write surface: Task-Spec authorization is bounded and receipt ownership must preserve user work.; instead Keep edits inside declared paths, serialize shared mutations and fail closed on conflicts..",
+        "Do not Satisfy an acceptance gate with stubs, source-text assertions, fabricated participants or stale summaries: Existence and apparent formatting do not prove the observable behavior.; instead Run the specified behavioral scenario on exact candidate inputs and retain truthful failure or blocked evidence.."
+      ],
+      "behaviors": [
+        {
+          "given": "A valid supported input and its corresponding prior reproduced defect",
+          "id": "B-1",
+          "then": "Valid delivery references preserve private access, digest and expiry through normalization and snapshot derivation; repeated observations do not silently widen access or erase provenance.",
+          "when": "Preserve per-reference access, digest, expiry and observed evidence metadata when normalizing delivery references and deriving Chronicle evidence records. Avoid less-restrictive last-write-wins behavior for repeated locators. Reuse the existing event/details contract rather than adding an authority system."
+        },
+        {
+          "given": "A valid ordinary input or an adversarial variant at the same public boundary",
+          "id": "B-2",
+          "then": "Ordinary behavior remains supported and the invalid or contradictory variant cannot silently pass or acquire stronger authority.",
+          "when": "The consumer exercises the corrected public behavior"
+        }
+      ],
+      "context": "Intent INTENT-BRIEFSPEC-REPAIR-WAVE; seam SEAM-CHRONICLE-PRIVATE-EVIDENCE; swimlane LANE-CHRONICLE-PRIVATE-EVIDENCE; capability leg LEG-CHRONICLE-PRIVATE-EVIDENCE. Done condition: Valid delivery references preserve private access, digest and expiry through normalization and snapshot derivation; repeated observations do not silently widen access or erase provenance.",
+      "creates_paths": [],
+      "depends_on": [],
+      "do_not_touch": [
+        "OPERATING.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        "unrelated product source or tests",
+        "global host installations and user branch history"
+      ],
+      "done_condition": "Valid delivery references preserve private access, digest and expiry through normalization and snapshot derivation; repeated observations do not silently widen access or erase provenance.",
+      "effort": "M",
+      "evals": [
+        {
+          "command": "uv run --no-sync pytest -q tests/test_chronicle.py -k chronicle_private_evidence_roundtrip",
+          "description": "Exercise the chronicle private evidence roundtrip observable contract.",
+          "expected_duration_sec": 10,
+          "id": "eval_1",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "uv run --no-sync pytest -q tests/test_chronicle.py -k chronicle_evidence_metadata_preserved",
+          "description": "Exercise the chronicle evidence metadata preserved observable contract.",
+          "expected_duration_sec": 10,
+          "id": "eval_2",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "uv run --no-sync pytest -q tests/test_chronicle.py -k chronicle_repeated_reference_restrictions",
+          "description": "Exercise the chronicle repeated reference restrictions observable contract.",
+          "expected_duration_sec": 10,
+          "id": "eval_3",
+          "terminal": true,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        }
+      ],
+      "execution_backend": "omp",
+      "goal": "Preserve per-reference access, digest, expiry and observed evidence metadata when normalizing delivery references and deriving Chronicle evidence records. Avoid less-restrictive last-write-wins behavior for repeated locators. Reuse the existing event/details contract rather than adding an authority system.",
+      "id": "T-20260914-briefspec-chronicle-private-evidence",
+      "observability": "Add deterministic behavioral regressions to the existing declared test file. Do not assert source text or mock echoes. Skip formatters, linters and all tests while sibling writers are in flight; the supervising parent independently runs the declared evaluations and final suite. Do not change tests merely to preserve implementation details. Read the exact source path; keep changes only in signed scope.",
+      "profile": "full",
+      "required_tools": [
+        "python",
+        "uv"
+      ],
+      "rollback": "Revert only the authorized source/test patch; preserve all other user files and generated authorization records.",
+      "source_note": "seamwise/legs/LEG-CHRONICLE-PRIVATE-EVIDENCE.md#T-20260914-briefspec-chronicle-private-evidence",
+      "title": "Preserve private evidence identity across Chronicle imports",
+      "touches_paths": [
+        "packages/brief-spec-chronicle/src/brief_spec_chronicle/sources.py",
+        "packages/brief-spec-chronicle/src/brief_spec_chronicle/derive.py",
+        "tests/test_chronicle.py"
+      ],
+      "why": "Preserve per-reference access, digest, expiry and observed evidence metadata when normalizing delivery references and deriving Chronicle evidence records. Avoid less-restrictive last-write-wins behavior for repeated locators. Reuse the existing event/details contract rather than adding an authority system."
+    },
+    {
+      "agent": "any",
+      "anti_patterns": [
+        "Do not Treat a structurally valid record or model assertion as authorization or measured success: Brief-Spec explains observations; Task-Spec and humans retain authorization and acceptance authority.; instead Preserve explicit basis and require source-bound receipts for stronger claims..",
+        "Do not Overwrite unrelated user changes or widen the signed write surface: Task-Spec authorization is bounded and receipt ownership must preserve user work.; instead Keep edits inside declared paths, serialize shared mutations and fail closed on conflicts..",
+        "Do not Satisfy an acceptance gate with stubs, source-text assertions, fabricated participants or stale summaries: Existence and apparent formatting do not prove the observable behavior.; instead Run the specified behavioral scenario on exact candidate inputs and retain truthful failure or blocked evidence.."
+      ],
+      "behaviors": [
+        {
+          "given": "A valid supported input and its corresponding prior reproduced defect",
+          "id": "B-1",
+          "then": "Quoted or negated type/pivot examples cannot acquire explicit routing authority or break sticky classification; genuine overrides still take precedence.",
+          "when": "Use the same bounded operative-text interpretation for inferred and explicit routing, explicit override detection and pivot detection. Preserve true API overrides and genuine user directives."
+        },
+        {
+          "given": "A valid ordinary input or an adversarial variant at the same public boundary",
+          "id": "B-2",
+          "then": "Ordinary behavior remains supported and the invalid or contradictory variant cannot silently pass or acquire stronger authority.",
+          "when": "The consumer exercises the corrected public behavior"
+        }
+      ],
+      "context": "Intent INTENT-BRIEFSPEC-REPAIR-WAVE; seam SEAM-OPERATIVE-ROUTING; swimlane LANE-OPERATIVE-ROUTING; capability leg LEG-OPERATIVE-ROUTING. Done condition: Quoted or negated type/pivot examples cannot acquire explicit routing authority or break sticky classification; genuine overrides still take precedence.",
+      "creates_paths": [],
+      "depends_on": [],
+      "do_not_touch": [
+        "OPERATING.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        "unrelated product source or tests",
+        "global host installations and user branch history"
+      ],
+      "done_condition": "Quoted or negated type/pivot examples cannot acquire explicit routing authority or break sticky classification; genuine overrides still take precedence.",
+      "effort": "S",
+      "evals": [
+        {
+          "command": "uv run --no-sync pytest -q tests/test_work_types.py -k operative_routing_quoted",
+          "description": "Exercise the operative routing quoted observable contract.",
+          "expected_duration_sec": 10,
+          "id": "eval_1",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "uv run --no-sync pytest -q tests/test_work_types.py -k operative_routing_negated",
+          "description": "Exercise the operative routing negated observable contract.",
+          "expected_duration_sec": 10,
+          "id": "eval_2",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "uv run --no-sync pytest -q tests/test_work_types.py -k operative_routing_genuine",
+          "description": "Exercise the operative routing genuine observable contract.",
+          "expected_duration_sec": 10,
+          "id": "eval_3",
+          "terminal": true,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        }
+      ],
+      "execution_backend": "omp",
+      "goal": "Use the same bounded operative-text interpretation for inferred and explicit routing, explicit override detection and pivot detection. Preserve true API overrides and genuine user directives.",
+      "id": "T-20260914-briefspec-operative-routing",
+      "observability": "Add deterministic behavioral regressions to the existing declared test file. Do not assert source text or mock echoes. Skip formatters, linters and all tests while sibling writers are in flight; the supervising parent independently runs the declared evaluations and final suite. Do not change tests merely to preserve implementation details. Read the exact source path; keep changes only in signed scope.",
+      "profile": "full",
+      "required_tools": [
+        "python",
+        "uv"
+      ],
+      "rollback": "Revert only the authorized source/test patch; preserve all other user files and generated authorization records.",
+      "source_note": "seamwise/legs/LEG-OPERATIVE-ROUTING.md#T-20260914-briefspec-operative-routing",
+      "title": "Ignore quoted and prohibited routing instructions",
+      "touches_paths": [
+        "src/briefspec/work_types.py",
+        "tests/test_work_types.py"
+      ],
+      "why": "Use the same bounded operative-text interpretation for inferred and explicit routing, explicit override detection and pivot detection. Preserve true API overrides and genuine user directives."
+    },
+    {
+      "agent": "any",
+      "anti_patterns": [
+        "Do not Treat a structurally valid record or model assertion as authorization or measured success: Brief-Spec explains observations; Task-Spec and humans retain authorization and acceptance authority.; instead Preserve explicit basis and require source-bound receipts for stronger claims..",
+        "Do not Overwrite unrelated user changes or widen the signed write surface: Task-Spec authorization is bounded and receipt ownership must preserve user work.; instead Keep edits inside declared paths, serialize shared mutations and fail closed on conflicts..",
+        "Do not Satisfy an acceptance gate with stubs, source-text assertions, fabricated participants or stale summaries: Existence and apparent formatting do not prove the observable behavior.; instead Run the specified behavioral scenario on exact candidate inputs and retain truthful failure or blocked evidence.."
+      ],
+      "behaviors": [
+        {
+          "given": "A valid supported input and its corresponding prior reproduced defect",
+          "id": "B-1",
+          "then": "Required typed outcomes and requested checkpoint modes cannot be skipped by clearing flags too early, and every repair path remains bounded.",
+          "when": "Evaluate typed outcome obligations against pre-stop state and validate explicitly requested checkpoint mode before clearing state. Preserve exactly one repair and the intentional Grok completed-brief release behavior."
+        },
+        {
+          "given": "A valid ordinary input or an adversarial variant at the same public boundary",
+          "id": "B-2",
+          "then": "Ordinary behavior remains supported and the invalid or contradictory variant cannot silently pass or acquire stronger authority.",
+          "when": "The consumer exercises the corrected public behavior"
+        }
+      ],
+      "context": "Intent INTENT-BRIEFSPEC-REPAIR-WAVE; seam SEAM-TERMINAL-OBLIGATIONS; swimlane LANE-TERMINAL-OBLIGATIONS; capability leg LEG-TERMINAL-OBLIGATIONS. Done condition: Required typed outcomes and requested checkpoint modes cannot be skipped by clearing flags too early, and every repair path remains bounded.",
+      "creates_paths": [],
+      "depends_on": [],
+      "do_not_touch": [
+        "OPERATING.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        "unrelated product source or tests",
+        "global host installations and user branch history"
+      ],
+      "done_condition": "Required typed outcomes and requested checkpoint modes cannot be skipped by clearing flags too early, and every repair path remains bounded.",
+      "effort": "S",
+      "evals": [
+        {
+          "command": "uv run --no-sync pytest -q tests/test_hook_policies.py -k terminal_typed_obligation",
+          "description": "Exercise the terminal typed obligation observable contract.",
+          "expected_duration_sec": 10,
+          "id": "eval_1",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "uv run --no-sync pytest -q tests/test_hook_policies.py -k terminal_requested_mode",
+          "description": "Exercise the terminal requested mode observable contract.",
+          "expected_duration_sec": 10,
+          "id": "eval_2",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "uv run --no-sync pytest -q tests/test_hook_policies.py -k terminal_bounded_native_repair",
+          "description": "Exercise the terminal bounded native repair observable contract.",
+          "expected_duration_sec": 10,
+          "id": "eval_3",
+          "terminal": true,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        }
+      ],
+      "execution_backend": "omp",
+      "goal": "Evaluate typed outcome obligations against pre-stop state and validate explicitly requested checkpoint mode before clearing state. Preserve exactly one repair and the intentional Grok completed-brief release behavior.",
+      "id": "T-20260914-briefspec-terminal-obligations",
+      "observability": "Add deterministic behavioral regressions to the existing declared test file. Do not assert source text or mock echoes. Skip formatters, linters and all tests while sibling writers are in flight; the supervising parent independently runs the declared evaluations and final suite. Do not change tests merely to preserve implementation details. Read the exact source path; keep changes only in signed scope.",
+      "profile": "full",
+      "required_tools": [
+        "python",
+        "uv"
+      ],
+      "rollback": "Revert only the authorized source/test patch; preserve all other user files and generated authorization records.",
+      "source_note": "seamwise/legs/LEG-TERMINAL-OBLIGATIONS.md#T-20260914-briefspec-terminal-obligations",
+      "title": "Preserve stop obligations before clearing state",
+      "touches_paths": [
+        "src/briefspec/hooks.py",
+        "tests/test_hook_policies.py"
+      ],
+      "why": "Evaluate typed outcome obligations against pre-stop state and validate explicitly requested checkpoint mode before clearing state. Preserve exactly one repair and the intentional Grok completed-brief release behavior."
+    },
+    {
+      "agent": "any",
+      "anti_patterns": [
+        "Do not Treat a structurally valid record or model assertion as authorization or measured success: Brief-Spec explains observations; Task-Spec and humans retain authorization and acceptance authority.; instead Preserve explicit basis and require source-bound receipts for stronger claims..",
+        "Do not Overwrite unrelated user changes or widen the signed write surface: Task-Spec authorization is bounded and receipt ownership must preserve user work.; instead Keep edits inside declared paths, serialize shared mutations and fail closed on conflicts..",
+        "Do not Satisfy an acceptance gate with stubs, source-text assertions, fabricated participants or stale summaries: Existence and apparent formatting do not prove the observable behavior.; instead Run the specified behavioral scenario on exact candidate inputs and retain truthful failure or blocked evidence.."
+      ],
+      "behaviors": [
+        {
+          "given": "A valid supported input and its corresponding prior reproduced defect",
+          "id": "B-1",
+          "then": "Visible outcome or other report content mutations fail rendered verification even when embedded canonical JSON and hash remain unchanged; valid canonical renderings still pass.",
+          "when": "Validate canonical content embedded in standalone HTML and verify its visible deterministic projection as rigorously as core bundles, without changing rendering or relaxing offline controls."
+        },
+        {
+          "given": "A valid ordinary input or an adversarial variant at the same public boundary",
+          "id": "B-2",
+          "then": "Ordinary behavior remains supported and the invalid or contradictory variant cannot silently pass or acquire stronger authority.",
+          "when": "The consumer exercises the corrected public behavior"
+        }
+      ],
+      "context": "Intent INTENT-BRIEFSPEC-REPAIR-WAVE; seam SEAM-VISIBLE-HTML-INTEGRITY; swimlane LANE-VISIBLE-HTML-INTEGRITY; capability leg LEG-VISIBLE-HTML-INTEGRITY. Done condition: Visible outcome or other report content mutations fail rendered verification even when embedded canonical JSON and hash remain unchanged; valid canonical renderings still pass.",
+      "creates_paths": [],
+      "depends_on": [],
+      "do_not_touch": [
+        "OPERATING.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        "unrelated product source or tests",
+        "global host installations and user branch history"
+      ],
+      "done_condition": "Visible outcome or other report content mutations fail rendered verification even when embedded canonical JSON and hash remain unchanged; valid canonical renderings still pass.",
+      "effort": "S",
+      "evals": [
+        {
+          "command": "uv run --no-sync pytest -q tests/test_delivery.py -k standalone_html_visible_tamper",
+          "description": "Exercise the standalone html visible tamper observable contract.",
+          "expected_duration_sec": 10,
+          "id": "eval_1",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "uv run --no-sync pytest -q tests/test_delivery.py -k standalone_html_invalid_canonical",
+          "description": "Exercise the standalone html invalid canonical observable contract.",
+          "expected_duration_sec": 10,
+          "id": "eval_2",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "uv run --no-sync pytest -q tests/test_delivery.py -k standalone_html_valid_projection",
+          "description": "Exercise the standalone html valid projection observable contract.",
+          "expected_duration_sec": 10,
+          "id": "eval_3",
+          "terminal": true,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        }
+      ],
+      "execution_backend": "omp",
+      "goal": "Validate canonical content embedded in standalone HTML and verify its visible deterministic projection as rigorously as core bundles, without changing rendering or relaxing offline controls.",
+      "id": "T-20260914-briefspec-visible-html-integrity",
+      "observability": "Add deterministic behavioral regressions to the existing declared test file. Do not assert source text or mock echoes. Skip formatters, linters and all tests while sibling writers are in flight; the supervising parent independently runs the declared evaluations and final suite. Do not change tests merely to preserve implementation details. Read the exact source path; keep changes only in signed scope.",
+      "profile": "full",
+      "required_tools": [
+        "python",
+        "uv"
+      ],
+      "rollback": "Revert only the authorized source/test patch; preserve all other user files and generated authorization records.",
+      "source_note": "seamwise/legs/LEG-VISIBLE-HTML-INTEGRITY.md#T-20260914-briefspec-visible-html-integrity",
+      "title": "Bind visible HTML to valid canonical content",
+      "touches_paths": [
+        "src/briefspec/verification.py",
+        "tests/test_delivery.py"
+      ],
+      "why": "Validate canonical content embedded in standalone HTML and verify its visible deterministic projection as rigorously as core bundles, without changing rendering or relaxing offline controls."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+schema_version: 1
+status: SEAM_MAP=READY
+intent_id: INTENT-RELEASE-BADGE-FORMAT
+source_recipe:
+  name: recipe.json
+  sha256: 6acccfdd7cef2be28aa92e576a581208e4078ed1b86fca9a92eaa7add224bc6a
+intent_sha256: ca797b4b1d9c60ca7ac6595f9aff230eb8f6301f95a3b6196da3054a1732af7a
+system_map_sha256: 2d05e7dc85c95284a3e267f1ddae823a81cda1406701f5a630c2933bf6f18ece
+evidence_sha256: de7283079ed5f9608703fae559d3be4dc975b2e1e4f106bf55ae904229ca6702
+decisions: []
+seams:
+- id: SEAM-RELEASE-BADGE-FORMAT
+  path: seamwise/seams/SEAM-RELEASE-BADGE-FORMAT.md
+  owner: brief-spec
+  evidence:
+  - EVIDENCE-RELEASE-BADGE
+  swimlane_id: LANE-RELEASE-BADGE-FORMAT
+  sha256: 973a74f302111a93598bf8d4b632059917f0a3ada5881669eb1785e510a38091

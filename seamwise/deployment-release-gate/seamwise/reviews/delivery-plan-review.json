@@ -1,0 +1,10 @@
+{
+  "disposition": "accepted",
+  "draft_sha256": "469970e7d991c1488b5b4847ee35dd85ed6aec718215e5b8defeb496bced3cad",
+  "fixture": false,
+  "plan_sha256": "723c466f8c0b69b8e4d2ccf604bae791d9ca34d7874e952f302b00b8b7ee07fa",
+  "reason": "User explicitly selected: Fix the verifier, then publish. Authorized scripts/verify-release.py and tests/test_release_verification.py, engine-managed seal, and regression checks. README and advertised version remain unchanged.",
+  "reviewed_at": "2026-09-14T17:40:23.266568+00:00",
+  "reviewer": "repository-owner-via-explicit-release-gate-approval",
+  "schema_version": 1
+}

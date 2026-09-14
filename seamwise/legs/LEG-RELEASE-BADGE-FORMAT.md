@@ -1,0 +1,96 @@
+---
+schema_version: 1
+kind: capability-leg
+claim: derived
+id: LEG-RELEASE-BADGE-FORMAT
+seam_id: SEAM-RELEASE-BADGE-FORMAT
+swimlane_id: LANE-RELEASE-BADGE-FORMAT
+observable_state: Accept truthful HTML or Markdown badges without weakening version mismatch detection.
+proof: Declared observable regressions and independent Task-Spec acceptance.
+requires: []
+produces:
+- release-badge:verified
+tasks:
+- id: T-20260914-briefspec-release-badge-format
+  title: Verify candidate version independent of badge markup
+  goal: Accept truthful HTML or Markdown badges without weakening version mismatch detection.
+  done_condition: The unchanged current README passes release verification; HTML and Markdown badges with
+    stale URL or label versions fail.
+  effort: S
+  profile: full
+  execution_backend: omp
+  required_tools:
+  - python
+  - uv
+  depends_on: []
+  touches_paths:
+  - scripts/verify-release.py
+  creates_paths:
+  - tests/test_release_verification.py
+  behavior:
+  - id: B-1
+    given: The candidate version is 0.5.0 and README uses either an HTML img or Markdown image with source_candidate-0.5.0
+      URL and Source candidate 0.5.0 label
+    when: The release verifier checks versioned release evidence
+    then: Matching version evidence passes independently of the image markup syntax.
+  - id: B-2
+    given: A candidate badge URL or label advertises a version different from the package version
+    when: The same release verifier runs
+    then: Version inconsistency remains a verification failure.
+  evals:
+  - id: eval_1
+    description: release badge html
+    bash: uv run --no-sync pytest -q tests/test_release_verification.py -k release_badge_html
+    verifies:
+    - B-1
+    - B-2
+  - id: eval_2
+    description: release badge markdown
+    bash: uv run --no-sync pytest -q tests/test_release_verification.py -k release_badge_markdown
+    verifies:
+    - B-1
+    - B-2
+  - id: eval_3
+    description: release badge mismatch
+    bash: uv run --no-sync pytest -q tests/test_release_verification.py -k release_badge_mismatch
+    verifies:
+    - B-1
+    - B-2
+  anti_patterns:
+  - action: Treat a structurally valid record or model assertion as authorization or measured success
+    reason: Brief-Spec explains observations; Task-Spec and humans retain authorization and acceptance
+      authority.
+    instead: Preserve explicit basis and require source-bound receipts for stronger claims.
+  - action: Overwrite unrelated user changes or widen the signed write surface
+    reason: Task-Spec authorization is bounded and receipt ownership must preserve user work.
+    instead: Keep edits inside declared paths, serialize shared mutations and fail closed on conflicts.
+  - action: Satisfy an acceptance gate with stubs, source-text assertions, fabricated participants or
+      stale summaries
+    reason: Existence and apparent formatting do not prove the observable behavior.
+    instead: Run the specified behavioral scenario on exact candidate inputs and retain truthful failure
+      or blocked evidence.
+  do_not_touch:
+  - OPERATING.md
+  - AGENTS.md
+  - CLAUDE.md
+  - unrelated product source or tests
+  - global host installations and user branch history
+  observability: Use the current valid HTML badge as the failing reproduction. Add semantic behavior regressions
+    for HTML, Markdown, and stale URL/label versions. Do not edit README or disable version checks. Preserve
+    all unrelated release checks. Run actual scripts/verify-release.py after the correction.
+  rollback: Revert only the authorized source/test patch; preserve all other user files and generated
+    authorization records.
+source_seam_sha256: 973a74f302111a93598bf8d4b632059917f0a3ada5881669eb1785e510a38091
+---
+# Accept truthful HTML or Markdown badges without weakening version mismatch detection.
+
+## Observable proof
+
+Declared observable regressions and independent Task-Spec acceptance.
+
+## Runnable leaves
+
+- `T-20260914-briefspec-release-badge-format` — Verify candidate version independent of badge markup: The unchanged current README passes release verification; HTML and Markdown badges with stale URL or label versions fail.
+
+The leg names a capability state, not an activity. Each leaf owns one coherent,
+independently provable done-condition.

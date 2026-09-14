@@ -1,0 +1,3 @@
+# Task-Spec repository configuration (no credentials)
+backlog_dir=tasks
+research_provider=none
