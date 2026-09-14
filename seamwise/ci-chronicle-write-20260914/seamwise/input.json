@@ -1,0 +1,21 @@
+{
+  "proposal_status": "awaiting_explicit_topology_approval",
+  "candidate_revision": "32e36be4716b810b2f4ce351423ca25bc118aa36",
+  "hosted_evidence": "https://github.com/luanmorenommaciel/brief-spec/actions/runs/34894437161",
+  "failure_log_sha256": "e18b68f9c3b8a94784b10751597bdf433c30c90af92c88a4e5ecfbc4c39ad39f",
+  "repair": {
+    "slug": "chronicle-public-writes",
+    "title": "Reuse portable public atomic writes for Chronicle outputs",
+    "goal": "Chronicle outputs succeed without os.fchmod while retaining public parent permissions, explicit overwrite authorization, and atomic failure cleanup.",
+    "touches": [
+      "packages/brief-spec-chronicle/src/brief_spec_chronicle/storage.py",
+      "tests/test_chronicle.py"
+    ],
+    "observations": "Candidate 32e36be passes 17 hosted jobs. Windows Python 3.11 and 3.12 still fail six Chronicle scenarios because storage.atomic_external_write independently calls missing os.fchmod before owning its descriptor. Core atomic_write_public already implements the portable public-write contract in this candidate."
+  },
+  "source_snapshot": {
+    "packages/brief-spec-chronicle/src/brief_spec_chronicle/storage.py": "85a688e6234ece1d2cb3a6f1b8acb9356d3c08ae0bdf6dc4f463a940300c1614",
+    "tests/test_chronicle.py": "d70e3274922229aef1f6fe45e077790eb193733ced614a5c83f61e81faaa29c1",
+    "src/briefspec/state.py": "fe25fbe2ec07748b99a905061ec3c29a1960aab7779811fac0f6013be1b137ff"
+  }
+}

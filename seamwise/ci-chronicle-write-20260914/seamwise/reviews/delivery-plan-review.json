@@ -1,0 +1,10 @@
+{
+  "disposition": "accepted",
+  "draft_sha256": "f9c73336a32801a840cf2f6256fead1098644cfcea8918111db07f5339f14304",
+  "fixture": false,
+  "plan_sha256": "c2bcd7ad93790676be9759e3e8f6ed451f419840430d51a5b2f94010e29d251c",
+  "reason": "User explicitly selected Approve the repair for this one-leg, two-file Chronicle public-write topology and its HMAC seal.",
+  "reviewed_at": "2026-09-14T21:22:54.883690+00:00",
+  "reviewer": "luanmorenomaciel",
+  "schema_version": 1
+}

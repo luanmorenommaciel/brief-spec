@@ -1,0 +1,22 @@
+schema_version: 1
+status: DELIVERY_PLAN=READY
+seam_map_sha256: d0cb50f9ea3d807e6b041237a7fd3c82fd2e6982e4447d350ceda1057bce673e
+swimlanes:
+- id: LANE-CI-CHRONICLE-PUBLIC-WRITES
+  seam_id: SEAM-CI-CHRONICLE-PUBLIC-WRITES
+  owner: brief-spec
+  path: seamwise/swimlanes/LANE-CI-CHRONICLE-PUBLIC-WRITES.md
+  sha256: 9248c4cb7f5f4f3f16b41ef0fc39f0d4682e8ca1b37416b62d21a49dd5cf3c9d
+legs:
+- id: LEG-CI-CHRONICLE-PUBLIC-WRITES
+  seam_id: SEAM-CI-CHRONICLE-PUBLIC-WRITES
+  swimlane_id: LANE-CI-CHRONICLE-PUBLIC-WRITES
+  path: seamwise/legs/LEG-CI-CHRONICLE-PUBLIC-WRITES.md
+  sha256: a8e94eda3c0e4278ee03178a5b253ce1afab1759197e12a93976959fe6c36b1d
+steel_thread:
+- LEG-CI-CHRONICLE-PUBLIC-WRITES
+objections: []
+contentions: []
+steel_thread_path: seamwise/steel-thread.md
+steel_thread_sha256: 52c733d2ddabb339df9cf0aa6e0fe309f183ca9bc342a26ae27bee39a69941f2
+review_authority_sha256: f48affe59fa9c5da63e2c275a296bd66d061e0ecdf83d6008e0bf078f87d336c

@@ -1,0 +1,31 @@
+{
+  "contract": "SeamwiseTaskPlanLineage/v1",
+  "delivery_plan_sha256": "c2bcd7ad93790676be9759e3e8f6ed451f419840430d51a5b2f94010e29d251c",
+  "engine_version": "0.2.0",
+  "intent": {
+    "id": "INTENT-BRIEFSPEC-CI-CHRONICLE-WRITES",
+    "sha256": "98c19d34c86e078d0d5d17ef4dd0886fe436666f4276d36cf8473835a69d961d"
+  },
+  "review": {
+    "fixture": false,
+    "plan_sha256": "c2bcd7ad93790676be9759e3e8f6ed451f419840430d51a5b2f94010e29d251c",
+    "reviewed_at": "2026-09-14T21:22:54.883690+00:00",
+    "reviewer": "luanmorenomaciel",
+    "sha256": "454e7f8d66a8a5dc88f6c4cd32668df7f06041652985b673963ced5cb1f5e567"
+  },
+  "task_plan": {
+    "contract": "TaskPlan/v1",
+    "digest": "7097c7c2b3ffe846281bd30f0f01853fbb2301751c28706b97f9956bdd796666",
+    "path": "seamwise/task-plan.json"
+  },
+  "units": {
+    "T-20260914-briefspec-ci-chronicle-public-writes": {
+      "intent": "INTENT-BRIEFSPEC-CI-CHRONICLE-WRITES",
+      "leg": "LEG-CI-CHRONICLE-PUBLIC-WRITES",
+      "seam": "SEAM-CI-CHRONICLE-PUBLIC-WRITES",
+      "source_sha256": "a8e94eda3c0e4278ee03178a5b253ce1afab1759197e12a93976959fe6c36b1d",
+      "swimlane": "LANE-CI-CHRONICLE-PUBLIC-WRITES",
+      "unit_id": "T-20260914-briefspec-ci-chronicle-public-writes"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+schema_version: 1
+status: SEAM_MAP=READY
+intent_id: INTENT-BRIEFSPEC-CI-CHRONICLE-WRITES
+source_recipe:
+  name: recipe.json
+  sha256: 72b941cc58ab06afaa176b35708f35eb95533184a443f6f1a6de2221391fd6df
+intent_sha256: 98c19d34c86e078d0d5d17ef4dd0886fe436666f4276d36cf8473835a69d961d
+system_map_sha256: 963ba40daeb7ed05b3d2036335ff23b194d776528f3eba408beebd0657b1e7da
+evidence_sha256: a797b4583f36765d7a145de52fddf6cfea55b5cbe8a760e60669dbd580af5e4c
+decisions: []
+seams:
+- id: SEAM-CI-CHRONICLE-PUBLIC-WRITES
+  path: seamwise/seams/SEAM-CI-CHRONICLE-PUBLIC-WRITES.md
+  owner: brief-spec
+  evidence:
+  - EVIDENCE-CI-CHRONICLE-PUBLIC-WRITES
+  swimlane_id: LANE-CI-CHRONICLE-PUBLIC-WRITES
+  sha256: 18a820014fdf94f3bc571ad058799ab63b228ac92fa810cbee8785b7d8487aeb
