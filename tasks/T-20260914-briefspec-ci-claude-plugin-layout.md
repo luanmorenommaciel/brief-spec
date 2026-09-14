@@ -1,7 +1,7 @@
 ---
 id: T-20260914-briefspec-ci-claude-plugin-layout
 title: "Separate repository Claude memory from plugin-root content"
-status: ready
+status: in-progress
 format_version: 3
 profile: full
 effort: S
