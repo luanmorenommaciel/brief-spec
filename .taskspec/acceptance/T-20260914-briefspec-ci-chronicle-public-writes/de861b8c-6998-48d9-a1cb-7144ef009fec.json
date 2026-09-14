@@ -1,0 +1,40 @@
+{
+  "acceptance_tier": 1,
+  "accepted_at": "2026-09-14T21:26:52Z",
+  "accepted_by": "luanmorenomaciel",
+  "contract": "AcceptanceRecord/v1",
+  "gate_outcomes": {
+    "authorization": {
+      "code": "AUTHORIZATION_VALID",
+      "status": "pass"
+    },
+    "evaluation": {
+      "code": "EVAL_PASSED",
+      "status": "pass"
+    },
+    "evidence": {
+      "code": "EVIDENCE_SATISFIED",
+      "proof": [
+        "format v3 or earlier: v4 policy receipts are not required"
+      ],
+      "status": "pass"
+    },
+    "preflight": {
+      "code": "PREFLIGHT_PASSED",
+      "status": "pass",
+      "warnings": []
+    }
+  },
+  "outcome": {
+    "code": "ACCEPTED_TIER_1",
+    "status": "accepted"
+  },
+  "receipts": [],
+  "subject": {
+    "attempt_id": "de861b8c-6998-48d9-a1cb-7144ef009fec",
+    "authorization_ref": "hmac-sha256-v3:7c09a871:25438d01f1f1debd8662520e3b9b5eb1eeabbeeb4dcb37a0f05db67fe4540f0d",
+    "base_commit": "07e93983d378f9972718f754ac232b05bf7c5db7",
+    "task_id": "T-20260914-briefspec-ci-chronicle-public-writes",
+    "task_revision_digest": "sha256:5f47fabea109f42c6cd16ee00e72d62d3cb455c9897ad4349d46f285f0d17bd7"
+  }
+}
