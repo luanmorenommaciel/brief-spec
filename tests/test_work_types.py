@@ -90,6 +90,26 @@ def test_operative_routing_genuine() -> None:
     assert (override.work_type, override.origin) == ("research", "explicit")
 
 
+def test_operative_routing_genuine_between_apostrophes() -> None:
+    prompt = "It's broken. Type: debugging. Fix the user's script"
+
+    result = classify_task(prompt)
+
+    assert (result.work_type, result.origin) == ("debugging", "explicit")
+    assert explicit_type_requested(prompt)
+    assert is_clear_pivot("It's broken. New task: fix the user's script.")
+
+
+def test_operative_routing_quoted_contraction() -> None:
+    prompt = "The log says 'It's type: implementation; new task'. Review pull request #42."
+
+    result = classify_task(prompt)
+
+    assert (result.work_type, result.origin) == ("review", "inferred")
+    assert not explicit_type_requested(prompt)
+    assert not is_clear_pivot(prompt)
+
+
 def test_host_context_precedes_intent_and_ambiguous_intent_falls_back() -> None:
     host = classify_task(
         "Implement this change.",
