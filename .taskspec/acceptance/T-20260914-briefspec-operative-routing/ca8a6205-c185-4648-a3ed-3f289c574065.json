@@ -1,0 +1,40 @@
+{
+  "acceptance_tier": 1,
+  "accepted_at": "2026-09-14T14:43:36Z",
+  "accepted_by": "luanmorenomaciel",
+  "contract": "AcceptanceRecord/v1",
+  "gate_outcomes": {
+    "authorization": {
+      "code": "AUTHORIZATION_VALID",
+      "status": "pass"
+    },
+    "evaluation": {
+      "code": "EVAL_PASSED",
+      "status": "pass"
+    },
+    "evidence": {
+      "code": "EVIDENCE_SATISFIED",
+      "proof": [
+        "format v3 or earlier: v4 policy receipts are not required"
+      ],
+      "status": "pass"
+    },
+    "preflight": {
+      "code": "PREFLIGHT_PASSED",
+      "status": "pass",
+      "warnings": []
+    }
+  },
+  "outcome": {
+    "code": "ACCEPTED_TIER_1",
+    "status": "accepted"
+  },
+  "receipts": [],
+  "subject": {
+    "attempt_id": "ca8a6205-c185-4648-a3ed-3f289c574065",
+    "authorization_ref": "hmac-sha256-v3:7c09a871:ecc7c2c13e913977b3a60a4a1c1c8a54f655e96d983cc30f0ae5f0dbaa7f3352",
+    "base_commit": "767325d95d96922087952540dded22c47c604a27",
+    "task_id": "T-20260914-briefspec-operative-routing",
+    "task_revision_digest": "sha256:8cd8e0ccb1486a28ad4080d5f0fa01787e33f58657012013133d8746a84f6cf2"
+  }
+}

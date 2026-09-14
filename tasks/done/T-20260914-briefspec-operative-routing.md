@@ -1,7 +1,7 @@
 ---
 id: T-20260914-briefspec-operative-routing
 title: "Ignore quoted and prohibited routing instructions"
-status: ready
+status: done
 format_version: 3
 profile: full
 effort: S
@@ -30,12 +30,12 @@ signed_off_by: repository-owner-via-explicit-user-approval
 signed_off_at: 2026-09-14T13:30:15Z
 accepted: true
 accepted_by: luanmorenomaciel
-accepted_at: 2026-09-14T14:11:33Z
+accepted_at: 2026-09-14T14:43:36Z
 signed_off_sig: hmac-sha256-v3:7c09a871:ecc7c2c13e913977b3a60a4a1c1c8a54f655e96d983cc30f0ae5f0dbaa7f3352
 accepted_tier: 1
-accepted_attempt_id: 9ced10c2-e889-4959-ae2d-250984f903b9
+accepted_attempt_id: ca8a6205-c185-4648-a3ed-3f289c574065
 accepted_authorization_ref: hmac-sha256-v3:7c09a871:ecc7c2c13e913977b3a60a4a1c1c8a54f655e96d983cc30f0ae5f0dbaa7f3352
-acceptance_record_digest: sha256:6101bce892be6cbb035ba5af57f2dd50797d99f5b921fc4f6478d94c3c447619
+acceptance_record_digest: sha256:ba7745b4fe9760493018db43d79f2f754eb34e320d4e9ddc74a398e2b39e3ab8
 ---
 
 # Ignore quoted and prohibited routing instructions

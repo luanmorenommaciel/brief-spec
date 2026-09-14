@@ -254,7 +254,7 @@ _NEGATED_SPAN = re.compile(
     r".*?(?=(?:[.;!?\n]|\b(?:but|however|instead)\b|$))",
     re.IGNORECASE | re.DOTALL,
 )
-_QUOTED_SPAN = re.compile(r"(?P<quote>['\"`])(?P<body>.*?)(?P=quote)", re.DOTALL)
+_QUOTED_SPAN = re.compile(r"(?<!\w)'.*?'(?!\w)|\".*?\"|`.*?`", re.DOTALL)
 _BRAND_SPAN = re.compile(r"\bbrief-?spec\b", re.IGNORECASE)
 
 
