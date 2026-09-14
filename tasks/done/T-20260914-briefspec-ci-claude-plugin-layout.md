@@ -1,7 +1,7 @@
 ---
 id: T-20260914-briefspec-ci-claude-plugin-layout
 title: "Separate repository Claude memory from plugin-root content"
-status: ready
+status: done
 format_version: 3
 profile: full
 effort: S
@@ -28,10 +28,14 @@ execution_backend: omp
 signed_off: true
 signed_off_by: repository-owner-via-explicit-ci-repair-approval
 signed_off_at: 2026-09-14T20:04:39Z
-accepted: false
-accepted_by: (none)
-accepted_at: (none)
+accepted: true
+accepted_by: luanmorenomaciel
+accepted_at: 2026-09-14T20:27:19Z
 signed_off_sig: hmac-sha256-v3:7c09a871:0300210dae949d306c31537009b78b5a8f9b5ad92cd24bc49addc75718d1dd46
+accepted_tier: 1
+accepted_attempt_id: f9affdf8-4e3b-4157-a513-2b41145f8456
+accepted_authorization_ref: hmac-sha256-v3:7c09a871:0300210dae949d306c31537009b78b5a8f9b5ad92cd24bc49addc75718d1dd46
+acceptance_record_digest: sha256:f4766788f30af94b4a0534e94f61fa17b8d7c9b5ea1e245f5371d9659f3182a0
 ---
 
 # Separate repository Claude memory from plugin-root content

@@ -1,0 +1,40 @@
+{
+  "acceptance_tier": 1,
+  "accepted_at": "2026-09-14T20:27:19Z",
+  "accepted_by": "luanmorenomaciel",
+  "contract": "AcceptanceRecord/v1",
+  "gate_outcomes": {
+    "authorization": {
+      "code": "AUTHORIZATION_VALID",
+      "status": "pass"
+    },
+    "evaluation": {
+      "code": "EVAL_PASSED",
+      "status": "pass"
+    },
+    "evidence": {
+      "code": "EVIDENCE_SATISFIED",
+      "proof": [
+        "format v3 or earlier: v4 policy receipts are not required"
+      ],
+      "status": "pass"
+    },
+    "preflight": {
+      "code": "PREFLIGHT_PASSED",
+      "status": "pass",
+      "warnings": []
+    }
+  },
+  "outcome": {
+    "code": "ACCEPTED_TIER_1",
+    "status": "accepted"
+  },
+  "receipts": [],
+  "subject": {
+    "attempt_id": "f9affdf8-4e3b-4157-a513-2b41145f8456",
+    "authorization_ref": "hmac-sha256-v3:7c09a871:0300210dae949d306c31537009b78b5a8f9b5ad92cd24bc49addc75718d1dd46",
+    "base_commit": "088dc8bf9a6bc0a607c5fdd2e48086ed5f61f856",
+    "task_id": "T-20260914-briefspec-ci-claude-plugin-layout",
+    "task_revision_digest": "sha256:bfb137c6a3dd065fb2b0741171bc8a9fa9cf624b1d2bfcc2830c7e5345084e35"
+  }
+}
