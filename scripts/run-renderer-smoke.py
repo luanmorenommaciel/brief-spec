@@ -54,7 +54,7 @@ def main_command() -> int:
             "export",
             str(source),
             "--formats",
-            args.renderer,
+            f"json,{args.renderer}",
             "--output-dir",
             str(root / "out"),
             "--created-at",
@@ -82,11 +82,10 @@ def main_command() -> int:
         if main(bundle_args) != 0:
             return 1
         with zipfile.ZipFile(root / "delivery.zip") as archive:
-            bundled_name = "brief.pdf" if args.renderer == "pdf" else "brief.mp3"
-            if artifact.read_bytes() != archive.read(bundled_name):
-                raise RuntimeError(
-                    f"repeated canonical {args.renderer} rendering was not byte-identical"
-                )
+            if (root / "out" / "brief.json").read_bytes() != archive.read("brief.json"):
+                raise RuntimeError("canonical input changed between export and bundle")
+            if args.renderer == "pdf" and artifact.read_bytes() != archive.read("brief.pdf"):
+                raise RuntimeError("repeated canonical PDF rendering was not byte-identical")
         return main(
             [
                 "verify",

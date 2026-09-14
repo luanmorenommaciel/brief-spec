@@ -1,7 +1,7 @@
 ---
 id: T-20260914-briefspec-ci-audio-verification-contract
 title: "Verify native audio against its actual delivery contract"
-status: ready
+status: done
 format_version: 3
 profile: full
 effort: M
@@ -28,10 +28,14 @@ execution_backend: omp
 signed_off: true
 signed_off_by: repository-owner-via-explicit-ci-repair-approval
 signed_off_at: 2026-09-14T20:04:33Z
-accepted: false
-accepted_by: (none)
-accepted_at: (none)
+accepted: true
+accepted_by: luanmorenomaciel
+accepted_at: 2026-09-14T20:27:26Z
 signed_off_sig: hmac-sha256-v3:7c09a871:8e8bff8cd483746195d28ab8bf12cd995634f7171e2240de568ac8f5b9787280
+accepted_tier: 1
+accepted_attempt_id: c1aaf92c-d7b1-48f7-a720-54f591dcac53
+accepted_authorization_ref: hmac-sha256-v3:7c09a871:8e8bff8cd483746195d28ab8bf12cd995634f7171e2240de568ac8f5b9787280
+acceptance_record_digest: sha256:c31099d25da7c7c4c453a2ffc2c8fbd7bab84db145b8366a5ba30743356c2d9f
 ---
 
 # Verify native audio against its actual delivery contract

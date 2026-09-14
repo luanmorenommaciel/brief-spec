@@ -60,6 +60,12 @@ MP3. Core ZIP members must be deterministic byte renderings of the embedded
 canonical JSON. `delivered` verifies the external receipt against its local
 destination.
 
+Independent speech generations need not produce identical MP3 bytes. Each audio
+artifact must satisfy its own integrity, Script provenance, codec, duration, and
+disclosure checks. The audio release smoke compares canonical JSON across export
+and bundle, then verifies both rendered outputs; it does not require two speech
+generations to have identical bytes.
+
 Offline URL checks remain visibly declared but unresolved instead of being
 promoted to passing evidence. Bundles are limited to 64 MiB, 128 members, 64
 MiB per expanded member, 256 MiB total expanded bytes, and a 100:1 compression
