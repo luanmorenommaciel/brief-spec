@@ -1,0 +1,9 @@
+{
+  "src/briefspec/state.py": "5a8ea022a1b6c219d7a79b347b64200ca61b1c5f4bba05b135c26e92117de01f",
+  "tests/test_state_and_hooks.py": "1603c608b8a959b46cadfe39e6ea51b1b2bf43ea00f8c00ba6ff629d9f063fc1",
+  "packages/brief-spec-chronicle/src/brief_spec_chronicle/rendering.py": "c82e1837d33834464dffee1cf96382bc6ab479019c088fa3ca2d2d1ad4077255",
+  "CLAUDE.md": "d4309a2bd70c81986ae0b2614271a125ed1fb8b8ecfb9cb2bfef05504e2e98ce",
+  "scripts/run-renderer-smoke.py": "4522db7055e0ad70eb0595c0816c9d567babe69254cf77e99a0bdb3d53380b9c",
+  "docs/delivery.md": "71c9cdc8d50c1fc08c74790916fe80a6f5048312a2b9d4135c365a7f21383d72",
+  "CHANGELOG.md": "21eb72c70759e121d772ce83d25a485e2b28ff6c2a6f5e61f51c1a03b417ac3a"
+}

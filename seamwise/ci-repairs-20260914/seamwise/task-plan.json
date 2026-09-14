@@ -1,0 +1,360 @@
+{
+  "api_version": "taskspec.dev/v1",
+  "approved": true,
+  "kind": "TaskPlan",
+  "metadata": {
+    "delivery_plan_review_sha256": "2900c487ddfd5059ac8c7922e3a92fdb1e6101e44a3cd5c57570bcc400a0a9c1",
+    "delivery_plan_sha256": "0a0126c9fab1125055640fda4d707bb4259db7aab1e59feec5a1f490d40b42c0",
+    "name": "INTENT-BRIEFSPEC-CI-REPAIRS",
+    "producer": "seamwise",
+    "producer_version": "0.2.0",
+    "seamwise_plan_status": "DELIVERY_PLAN=READY",
+    "source": "seamwise/task-plan.json"
+  },
+  "units": [
+    {
+      "agent": "any",
+      "anti_patterns": [
+        "Do not Treat a structurally valid record or model assertion as authorization or measured success: Brief-Spec explains observations; Task-Spec and humans retain authorization and acceptance authority.; instead Preserve explicit basis and require source-bound receipts for stronger claims..",
+        "Do not Overwrite unrelated user changes or widen the signed write surface: Task-Spec authorization is bounded and receipt ownership must preserve user work.; instead Keep edits inside declared paths, serialize shared mutations and fail closed on conflicts..",
+        "Do not Satisfy an acceptance gate with stubs, source-text assertions, fabricated participants or stale summaries: Existence and apparent formatting do not prove the observable behavior.; instead Run the specified behavioral scenario on exact candidate inputs and retain truthful failure or blocked evidence.."
+      ],
+      "behaviors": [
+        {
+          "given": "export and bundle use the same canonical source and created_at",
+          "id": "B-1",
+          "then": "Canonical JSON bytes agree; standalone media and the completed bundle pass rendered verification, including audio provenance and actual artifact integrity.",
+          "when": "the real optional-renderer smoke runs"
+        },
+        {
+          "given": "PDF output changes or a rendered artifact is invalid",
+          "id": "B-2",
+          "then": "PDF byte identity remains required and invalid artifacts still fail; only the unsupported independent-TTS-byte assertion is removed.",
+          "when": "verification runs"
+        }
+      ],
+      "context": "Intent INTENT-BRIEFSPEC-CI-REPAIRS; seam SEAM-CI-AUDIO-VERIFICATION-CONTRACT; swimlane LANE-CI-AUDIO-VERIFICATION-CONTRACT; capability leg LEG-CI-AUDIO-VERIFICATION-CONTRACT. Done condition: Verify identical canonical input and each independently rendered audio artifact rather than require byte-identical output from separate operating-system speech generations.",
+      "creates_paths": [],
+      "depends_on": [],
+      "do_not_touch": [
+        "OPERATING.md",
+        "AGENTS.md",
+        "unrelated source or tests",
+        "global host installations and user branch history",
+        "CLAUDE.md"
+      ],
+      "done_condition": "Verify identical canonical input and each independently rendered audio artifact rather than require byte-identical output from separate operating-system speech generations.",
+      "effort": "M",
+      "evals": [
+        {
+          "command": "python scripts/run-renderer-smoke.py audio",
+          "description": "native offline audio delivery",
+          "expected_duration_sec": 10,
+          "id": "eval_1",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "python scripts/run-renderer-smoke.py pdf",
+          "description": "native PDF byte identity",
+          "expected_duration_sec": 10,
+          "id": "eval_2",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "uv run --no-sync pytest -q tests/test_delivery_edge_cases.py::test_html_bundle_and_receipt_tampering_is_detected",
+          "description": "bundle and receipt tamper rejection",
+          "expected_duration_sec": 10,
+          "id": "eval_3",
+          "terminal": true,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        }
+      ],
+      "execution_backend": "omp",
+      "goal": "Verify identical canonical input and each independently rendered audio artifact rather than require byte-identical output from separate operating-system speech generations.",
+      "id": "T-20260914-briefspec-ci-audio-verification-contract",
+      "observability": "Export canonical JSON alongside the optional format and compare it with the bundled canonical JSON. Preserve PDF byte equality and both existing rendered verification calls. Do not cache speech, trim or change audio content, switch providers, loosen integrity verification, or claim native TTS byte determinism. Clarify the existing delivery documentation and, after smoke proof, record all four authorized CI repairs in the existing changelog.",
+      "profile": "full",
+      "required_tools": [
+        "python",
+        "uv"
+      ],
+      "rollback": "Revert only the authorized source/test patch; preserve all other user files and generated authorization records.",
+      "source_note": "seamwise/legs/LEG-CI-AUDIO-VERIFICATION-CONTRACT.md#T-20260914-briefspec-ci-audio-verification-contract",
+      "title": "Verify native audio against its actual delivery contract",
+      "touches_paths": [
+        "scripts/run-renderer-smoke.py",
+        "docs/delivery.md",
+        "CHANGELOG.md"
+      ],
+      "why": "Verify identical canonical input and each independently rendered audio artifact rather than require byte-identical output from separate operating-system speech generations."
+    },
+    {
+      "agent": "any",
+      "anti_patterns": [
+        "Do not Treat a structurally valid record or model assertion as authorization or measured success: Brief-Spec explains observations; Task-Spec and humans retain authorization and acceptance authority.; instead Preserve explicit basis and require source-bound receipts for stronger claims..",
+        "Do not Overwrite unrelated user changes or widen the signed write surface: Task-Spec authorization is bounded and receipt ownership must preserve user work.; instead Keep edits inside declared paths, serialize shared mutations and fail closed on conflicts..",
+        "Do not Satisfy an acceptance gate with stubs, source-text assertions, fabricated participants or stale summaries: Existence and apparent formatting do not prove the observable behavior.; instead Run the specified behavioral scenario on exact candidate inputs and retain truthful failure or blocked evidence.."
+      ],
+      "behaviors": [
+        {
+          "given": "the repository is opened in Claude",
+          "id": "B-1",
+          "then": "The existing OPERATING.md instructions remain reachable through .claude/CLAUDE.md with the corrected relative import.",
+          "when": "project memory is loaded"
+        },
+        {
+          "given": "current Claude validates the published plugin and marketplace",
+          "id": "B-2",
+          "then": "Both native validators pass without suppressing warnings, weakening strict mode, or deleting the repository instructions.",
+          "when": "strict validation runs"
+        }
+      ],
+      "context": "Intent INTENT-BRIEFSPEC-CI-REPAIRS; seam SEAM-CI-CLAUDE-PLUGIN-LAYOUT; swimlane LANE-CI-CLAUDE-PLUGIN-LAYOUT; capability leg LEG-CI-CLAUDE-PLUGIN-LAYOUT. Done condition: Preserve the repository operating import in the officially supported .claude/CLAUDE.md location while keeping strict native plugin validation enabled.",
+      "creates_paths": [
+        ".claude/CLAUDE.md"
+      ],
+      "depends_on": [],
+      "do_not_touch": [
+        "OPERATING.md",
+        "AGENTS.md",
+        "unrelated source or tests",
+        "global host installations and user branch history"
+      ],
+      "done_condition": "Preserve the repository operating import in the officially supported .claude/CLAUDE.md location while keeping strict native plugin validation enabled.",
+      "effort": "S",
+      "evals": [
+        {
+          "command": "claude plugin validate .claude-plugin/plugin.json --strict",
+          "description": "strict plugin validation",
+          "expected_duration_sec": 10,
+          "id": "eval_1",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "claude plugin validate .claude-plugin/marketplace.json --strict",
+          "description": "strict marketplace validation",
+          "expected_duration_sec": 10,
+          "id": "eval_2",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "python -c 'import json,secrets,subprocess,tempfile;from pathlib import Path;fixture=tempfile.TemporaryDirectory(prefix='\"'\"'briefspec-claude-memory-'\"'\"');root=Path(fixture.name);(root/'\"'\"'.claude'\"'\"').mkdir();(root/'\"'\"'.claude/CLAUDE.md'\"'\"').write_text(Path('\"'\"'.claude/CLAUDE.md'\"'\"').read_text());token=secrets.token_hex(16);(root/'\"'\"'OPERATING.md'\"'\"').write_text(Path('\"'\"'OPERATING.md'\"'\"').read_text()+'\"'\"'\\nMemory proof token: '\"'\"'+token+'\"'\"'\\n'\"'\"');result=subprocess.run(['\"'\"'claude'\"'\"','\"'\"'--print'\"'\"','\"'\"'Return only the memory proof token from the project instructions. Do not use tools.'\"'\"','\"'\"'--output-format'\"'\"','\"'\"'json'\"'\"','\"'\"'--tools'\"'\"','\"'\"''\"'\"','\"'\"'--max-turns'\"'\"','\"'\"'1'\"'\"','\"'\"'--no-session-persistence'\"'\"','\"'\"'--setting-sources'\"'\"','\"'\"'project'\"'\"','\"'\"'--settings'\"'\"','\"'\"'{\"autoMemoryEnabled\":false}'\"'\"','\"'\"'--mcp-config'\"'\"','\"'\"'{\"mcpServers\":{}}'\"'\"','\"'\"'--strict-mcp-config'\"'\"'],cwd=root,capture_output=True,text=True,timeout=120);assert result.returncode==0,result.stderr;answer=json.loads(result.stdout)['\"'\"'result'\"'\"'].strip();assert answer==token,answer;print('\"'\"'Native Claude project-memory import: PASS'\"'\"');fixture.cleanup()'",
+          "description": "native operating import through project memory",
+          "expected_duration_sec": 10,
+          "id": "eval_3",
+          "terminal": true,
+          "verifies": [
+            "B-1"
+          ]
+        }
+      ],
+      "execution_backend": "omp",
+      "goal": "Preserve the repository operating import in the officially supported .claude/CLAUDE.md location while keeping strict native plugin validation enabled.",
+      "id": "T-20260914-briefspec-ci-claude-plugin-layout",
+      "observability": "Move the existing one-line repository memory file; adjust @OPERATING.md to @../OPERATING.md. Do not modify OPERATING.md, plugin functionality, or CI strictness. Official contract: https://code.claude.com/docs/en/memory .",
+      "profile": "full",
+      "required_tools": [
+        "python",
+        "uv",
+        "claude"
+      ],
+      "rollback": "Revert only the authorized source/test patch; preserve all other user files and generated authorization records.",
+      "source_note": "seamwise/legs/LEG-CI-CLAUDE-PLUGIN-LAYOUT.md#T-20260914-briefspec-ci-claude-plugin-layout",
+      "title": "Separate repository Claude memory from plugin-root content",
+      "touches_paths": [
+        "CLAUDE.md"
+      ],
+      "why": "Preserve the repository operating import in the officially supported .claude/CLAUDE.md location while keeping strict native plugin validation enabled."
+    },
+    {
+      "agent": "any",
+      "anti_patterns": [
+        "Do not Treat a structurally valid record or model assertion as authorization or measured success: Brief-Spec explains observations; Task-Spec and humans retain authorization and acceptance authority.; instead Preserve explicit basis and require source-bound receipts for stronger claims..",
+        "Do not Overwrite unrelated user changes or widen the signed write surface: Task-Spec authorization is bounded and receipt ownership must preserve user work.; instead Keep edits inside declared paths, serialize shared mutations and fail closed on conflicts..",
+        "Do not Satisfy an acceptance gate with stubs, source-text assertions, fabricated participants or stale summaries: Existence and apparent formatting do not prove the observable behavior.; instead Run the specified behavioral scenario on exact candidate inputs and retain truthful failure or blocked evidence.."
+      ],
+      "behaviors": [
+        {
+          "given": "os.fchmod is unavailable",
+          "id": "B-1",
+          "then": "The state round-trips without weakening supported-platform permission handling.",
+          "when": "private state is saved and reloaded"
+        },
+        {
+          "given": "permission assignment fails for an existing destination",
+          "id": "B-2",
+          "then": "The original destination survives, the temporary descriptor is closed, the temporary file is removed, and the original permission error remains visible.",
+          "when": "the atomic write fails"
+        }
+      ],
+      "context": "Intent INTENT-BRIEFSPEC-CI-REPAIRS; seam SEAM-CI-PORTABLE-ATOMIC-WRITES; swimlane LANE-CI-PORTABLE-ATOMIC-WRITES; capability leg LEG-CI-PORTABLE-ATOMIC-WRITES. Done condition: Write atomically when descriptor chmod is unavailable and close the temporary descriptor before failure cleanup.",
+      "creates_paths": [],
+      "depends_on": [],
+      "do_not_touch": [
+        "OPERATING.md",
+        "AGENTS.md",
+        "unrelated source or tests",
+        "global host installations and user branch history",
+        "CLAUDE.md"
+      ],
+      "done_condition": "Write atomically when descriptor chmod is unavailable and close the temporary descriptor before failure cleanup.",
+      "effort": "S",
+      "evals": [
+        {
+          "command": "uv run --no-sync pytest -q tests/test_state_and_hooks.py -k \"without_fchmod or state_files_are_private\"",
+          "description": "portable state round-trip",
+          "expected_duration_sec": 10,
+          "id": "eval_1",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "uv run --no-sync pytest -q tests/test_state_and_hooks.py -k atomic_permission_failure",
+          "description": "permission failure ownership",
+          "expected_duration_sec": 10,
+          "id": "eval_2",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "uv run --no-sync pytest -q tests/test_delivery_edge_cases.py -k atomic",
+          "description": "transaction rollback",
+          "expected_duration_sec": 10,
+          "id": "eval_3",
+          "terminal": true,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        }
+      ],
+      "execution_backend": "omp",
+      "goal": "Write atomically when descriptor chmod is unavailable and close the temporary descriptor before failure cleanup.",
+      "id": "T-20260914-briefspec-ci-portable-atomic-writes",
+      "observability": "Keep descriptor-based chmod where available; use pathname chmod only when the platform lacks fchmod. Enter descriptor ownership before changing permissions. Do not suppress permission errors. Keep a discriminating round-trip and descriptor-cleanup regression.",
+      "profile": "full",
+      "required_tools": [
+        "python",
+        "uv"
+      ],
+      "rollback": "Revert only the authorized source/test patch; preserve all other user files and generated authorization records.",
+      "source_note": "seamwise/legs/LEG-CI-PORTABLE-ATOMIC-WRITES.md#T-20260914-briefspec-ci-portable-atomic-writes",
+      "title": "Preserve atomic writes on supported Windows Python versions",
+      "touches_paths": [
+        "src/briefspec/state.py",
+        "tests/test_state_and_hooks.py"
+      ],
+      "why": "Write atomically when descriptor chmod is unavailable and close the temporary descriptor before failure cleanup."
+    },
+    {
+      "agent": "any",
+      "anti_patterns": [
+        "Do not Treat a structurally valid record or model assertion as authorization or measured success: Brief-Spec explains observations; Task-Spec and humans retain authorization and acceptance authority.; instead Preserve explicit basis and require source-bound receipts for stronger claims..",
+        "Do not Overwrite unrelated user changes or widen the signed write surface: Task-Spec authorization is bounded and receipt ownership must preserve user work.; instead Keep edits inside declared paths, serialize shared mutations and fail closed on conflicts..",
+        "Do not Satisfy an acceptance gate with stubs, source-text assertions, fabricated participants or stale summaries: Existence and apparent formatting do not prove the observable behavior.; instead Run the specified behavioral scenario on exact candidate inputs and retain truthful failure or blocked evidence.."
+      ],
+      "behaviors": [
+        {
+          "given": "canonical Chronicle files and created_at are unchanged",
+          "id": "B-1",
+          "then": "Archive contents, ordering, timestamps, modes, and resulting bytes remain deterministic.",
+          "when": "ZIP exports are repeated"
+        },
+        {
+          "given": "the platform restricts reopening temporary-file names",
+          "id": "B-2",
+          "then": "One owned temporary stream supplies completed ZIP bytes without a second pathname open.",
+          "when": "Chronicle creates or restores an archive"
+        }
+      ],
+      "context": "Intent INTENT-BRIEFSPEC-CI-REPAIRS; seam SEAM-CI-PORTABLE-CHRONICLE-ZIP; swimlane LANE-CI-PORTABLE-CHRONICLE-ZIP; capability leg LEG-CI-PORTABLE-CHRONICLE-ZIP. Done condition: Create and read deterministic ZIP bytes through one owned temporary stream without reopening its live pathname.",
+      "creates_paths": [],
+      "depends_on": [],
+      "do_not_touch": [
+        "OPERATING.md",
+        "AGENTS.md",
+        "unrelated source or tests",
+        "global host installations and user branch history",
+        "CLAUDE.md"
+      ],
+      "done_condition": "Create and read deterministic ZIP bytes through one owned temporary stream without reopening its live pathname.",
+      "effort": "S",
+      "evals": [
+        {
+          "command": "uv run --no-sync pytest -q tests/test_chronicle.py::test_project_lifecycle_snapshot_and_deterministic_exports",
+          "description": "deterministic project export",
+          "expected_duration_sec": 10,
+          "id": "eval_1",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "uv run --no-sync pytest -q tests/test_chronicle.py::test_archive_restore_to_new_project_root",
+          "description": "archive restore",
+          "expected_duration_sec": 10,
+          "id": "eval_2",
+          "terminal": false,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        },
+        {
+          "command": "uv run --no-sync pytest -q tests/test_chronicle_cli_and_video.py::test_chronicle_cli_end_to_end",
+          "description": "native Chronicle command path",
+          "expected_duration_sec": 10,
+          "id": "eval_3",
+          "terminal": true,
+          "verifies": [
+            "B-1",
+            "B-2"
+          ]
+        }
+      ],
+      "execution_backend": "omp",
+      "goal": "Create and read deterministic ZIP bytes through one owned temporary stream without reopening its live pathname.",
+      "id": "T-20260914-briefspec-ci-portable-chronicle-zip",
+      "observability": "Use a portable temporary binary stream, pass the stream to ZipFile, finish its central directory, then seek and read the same stream. Preserve archive format and existing Windows regressions. Do not replace disk-backed staging with unnecessary whole-archive intermediate copies.",
+      "profile": "full",
+      "required_tools": [
+        "python",
+        "uv"
+      ],
+      "rollback": "Revert only the authorized source/test patch; preserve all other user files and generated authorization records.",
+      "source_note": "seamwise/legs/LEG-CI-PORTABLE-CHRONICLE-ZIP.md#T-20260914-briefspec-ci-portable-chronicle-zip",
+      "title": "Preserve deterministic Chronicle ZIP exports on Windows",
+      "touches_paths": [
+        "packages/brief-spec-chronicle/src/brief_spec_chronicle/rendering.py"
+      ],
+      "why": "Create and read deterministic ZIP bytes through one owned temporary stream without reopening its live pathname."
+    }
+  ]
+}

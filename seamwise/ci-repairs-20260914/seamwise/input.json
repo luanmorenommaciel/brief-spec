@@ -1,0 +1,61 @@
+{
+  "authorization": "User selected: Fix the remaining CI failures. The offered scope authorized four new sealed repair tasks, hosted-gate verification, corrected main publication, and affected installation refresh.",
+  "base_revision": "0217da58a1f540ead235002d6013c1646bbab857",
+  "ci_run": "https://github.com/luanmorenommaciel/brief-spec/actions/runs/34877109922",
+  "areas": [
+    {
+      "slug": "portable-atomic-writes",
+      "goal": "Write atomically when descriptor chmod is unavailable and close the temporary descriptor before failure cleanup.",
+      "touches": [
+        "src/briefspec/state.py",
+        "tests/test_state_and_hooks.py"
+      ],
+      "creates": [],
+      "observations": "Windows Python 3.11 and 3.12 lack os.fchmod; permission failure occurs before descriptor ownership enters a context and cleanup can mask it with WinError 32."
+    },
+    {
+      "slug": "portable-chronicle-zip",
+      "goal": "Create and read deterministic ZIP bytes through one owned temporary stream without reopening its live pathname.",
+      "touches": [
+        "packages/brief-spec-chronicle/src/brief_spec_chronicle/rendering.py"
+      ],
+      "creates": [],
+      "observations": "All Windows matrix versions fail when deterministic_zip reopens a still-open NamedTemporaryFile by pathname. Existing export, archive/restore, and CLI scenarios already expose the defect."
+    },
+    {
+      "slug": "claude-plugin-layout",
+      "goal": "Preserve the repository operating import in the officially supported .claude/CLAUDE.md location while keeping strict native plugin validation enabled.",
+      "touches": [
+        "CLAUDE.md"
+      ],
+      "creates": [
+        ".claude/CLAUDE.md"
+      ],
+      "observations": "Current strict Claude validation warns that root CLAUDE.md is not loaded as plugin context. The file contains only @OPERATING.md. Official memory documentation supports .claude/CLAUDE.md and resolves imports relative to that file."
+    },
+    {
+      "slug": "audio-verification-contract",
+      "goal": "Verify identical canonical input and each independently rendered audio artifact rather than require byte-identical output from separate operating-system speech generations.",
+      "touches": [
+        "scripts/run-renderer-smoke.py",
+        "docs/delivery.md",
+        "CHANGELOG.md"
+      ],
+      "creates": [],
+      "observations": "Hosted exports share source_script_sha256 9e79a2c9adfd7219dac392d54cf55a486f6f516b22a11ad4053b6df86e547d91 but measure 47.449887 and 47.473107 seconds. docs/delivery.md limits deterministic byte rendering to core ZIP members. Eight controlled local speech generations and three fixed-input encodes were identical; the hosted variation is retained rather than attributed to an unproven internal cause."
+    }
+  ],
+  "local_audio_evidence": {
+    "pcm_sha256": "43269a5f5ec995778d7f0d80d957199b7477a1a2ead19f844d8a8c3e333063d6",
+    "speech_generations": 8,
+    "fixed_input_mp3_encodes": 3,
+    "claim": "Observed local repeatability does not establish hosted-native byte identity."
+  },
+  "controlled_audio_reproduction": {
+    "real_native_speech": true,
+    "controlled_change": "Append 512 silent samples to the second real speech generation using FFmpeg.",
+    "old_gate_exit_code": 1,
+    "old_gate_error": "repeated canonical audio rendering was not byte-identical",
+    "meaning": "Different valid native media is a counterexample to the unsupported independent-generation byte invariant."
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "disposition": "accepted",
+  "draft_sha256": "64b8c3621b0f543da62ad57e77bf63607667ba2c4e5b395262115d77938cf646",
+  "fixture": false,
+  "plan_sha256": "0a0126c9fab1125055640fda4d707bb4259db7aab1e59feec5a1f490d40b42c0",
+  "reason": "The user explicitly authorized these four disjoint CI repairs and their publication. The three-path audio verification leaf uses effort M; its already-declared scope and the four-leaf topology are unchanged.",
+  "reviewed_at": "2026-09-14T20:03:18.464065+00:00",
+  "reviewer": "repository-owner-via-explicit-ci-repair-approval",
+  "schema_version": 1
+}

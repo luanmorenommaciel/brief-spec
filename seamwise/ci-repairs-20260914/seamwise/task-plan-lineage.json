@@ -1,0 +1,55 @@
+{
+  "contract": "SeamwiseTaskPlanLineage/v1",
+  "delivery_plan_sha256": "0a0126c9fab1125055640fda4d707bb4259db7aab1e59feec5a1f490d40b42c0",
+  "engine_version": "0.2.0",
+  "intent": {
+    "id": "INTENT-BRIEFSPEC-CI-REPAIRS",
+    "sha256": "db009a6c462362814ac7abb19232834b10e78cb73657228cce55804a109e65e3"
+  },
+  "review": {
+    "fixture": false,
+    "plan_sha256": "0a0126c9fab1125055640fda4d707bb4259db7aab1e59feec5a1f490d40b42c0",
+    "reviewed_at": "2026-09-14T20:03:18.464065+00:00",
+    "reviewer": "repository-owner-via-explicit-ci-repair-approval",
+    "sha256": "2900c487ddfd5059ac8c7922e3a92fdb1e6101e44a3cd5c57570bcc400a0a9c1"
+  },
+  "task_plan": {
+    "contract": "TaskPlan/v1",
+    "digest": "fc27b40051c5690fafad715c03d444f14b703b0d5b5ccc39f3660add8aec1b64",
+    "path": "seamwise/task-plan.json"
+  },
+  "units": {
+    "T-20260914-briefspec-ci-audio-verification-contract": {
+      "intent": "INTENT-BRIEFSPEC-CI-REPAIRS",
+      "leg": "LEG-CI-AUDIO-VERIFICATION-CONTRACT",
+      "seam": "SEAM-CI-AUDIO-VERIFICATION-CONTRACT",
+      "source_sha256": "11a92d8e43a69a9011fd9f960ec935680e5928f55af53ed0a558aa3788b534d5",
+      "swimlane": "LANE-CI-AUDIO-VERIFICATION-CONTRACT",
+      "unit_id": "T-20260914-briefspec-ci-audio-verification-contract"
+    },
+    "T-20260914-briefspec-ci-claude-plugin-layout": {
+      "intent": "INTENT-BRIEFSPEC-CI-REPAIRS",
+      "leg": "LEG-CI-CLAUDE-PLUGIN-LAYOUT",
+      "seam": "SEAM-CI-CLAUDE-PLUGIN-LAYOUT",
+      "source_sha256": "3c4feb2b6d5a5fcb1cb817f61915388582588aeed95fcc0c651feea2824974c6",
+      "swimlane": "LANE-CI-CLAUDE-PLUGIN-LAYOUT",
+      "unit_id": "T-20260914-briefspec-ci-claude-plugin-layout"
+    },
+    "T-20260914-briefspec-ci-portable-atomic-writes": {
+      "intent": "INTENT-BRIEFSPEC-CI-REPAIRS",
+      "leg": "LEG-CI-PORTABLE-ATOMIC-WRITES",
+      "seam": "SEAM-CI-PORTABLE-ATOMIC-WRITES",
+      "source_sha256": "604b44556ecdee707974dc34b11ab37cb2287685c10bf1665fbd010f63d62383",
+      "swimlane": "LANE-CI-PORTABLE-ATOMIC-WRITES",
+      "unit_id": "T-20260914-briefspec-ci-portable-atomic-writes"
+    },
+    "T-20260914-briefspec-ci-portable-chronicle-zip": {
+      "intent": "INTENT-BRIEFSPEC-CI-REPAIRS",
+      "leg": "LEG-CI-PORTABLE-CHRONICLE-ZIP",
+      "seam": "SEAM-CI-PORTABLE-CHRONICLE-ZIP",
+      "source_sha256": "463d609420a259b28e7336d1edff6fa3d275da6c79e489e6e2a93081ef18caa1",
+      "swimlane": "LANE-CI-PORTABLE-CHRONICLE-ZIP",
+      "unit_id": "T-20260914-briefspec-ci-portable-chronicle-zip"
+    }
+  }
+}
