@@ -41,6 +41,7 @@ def isolated_homes(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> dict[str,
         "kimi": tmp_path / "kimi",
         "cursor": tmp_path / "cursor",
         "goose": tmp_path / "goose",
+        "antigravity": tmp_path / "antigravity",
     }
     monkeypatch.setenv("BRIEFSPEC_HOME", str(roots["state"]))
     monkeypatch.setenv("CODEX_HOME", str(roots["codex"]))
@@ -51,6 +52,8 @@ def isolated_homes(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> dict[str,
     monkeypatch.setenv("KIMI_CODE_HOME", str(roots["kimi"]))
     monkeypatch.setenv("CURSOR_HOME", str(roots["cursor"]))
     monkeypatch.setenv("GOOSE_HOME", str(roots["goose"]))
+    monkeypatch.setenv("ANTIGRAVITY_HOME", str(roots["antigravity"]))
+    monkeypatch.setenv("AGY_HOME", str(roots["antigravity"]))
     return roots
 
 

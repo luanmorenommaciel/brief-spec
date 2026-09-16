@@ -65,6 +65,7 @@ brief-spec setup claude
 brief-spec setup omp
 brief-spec setup grok
 brief-spec setup kimi
+brief-spec setup antigravity
 brief-spec doctor all --probe
 ```
 

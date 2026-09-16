@@ -16,6 +16,7 @@ class Runtime(StrEnum):
     KIMI = "kimi"
     CURSOR = "cursor"
     GOOSE = "goose"
+    ANTIGRAVITY = "antigravity"
 
 
 class WorkType(StrEnum):
