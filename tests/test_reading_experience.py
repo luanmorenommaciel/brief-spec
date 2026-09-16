@@ -351,7 +351,8 @@ def test_method_context_needs_a_product_reference(text: str, expected: str) -> N
 def _codex_config(path: Path, hooks_file: Path, trusted: dict[str, str]) -> None:
     lines = ["[hooks.state]"]
     for key, digest in trusted.items():
-        lines.append(f'[hooks.state."{hooks_file}:{key}"]')
+        # JSON string escaping is valid TOML and keeps Windows backslashes literal.
+        lines.append(f"[hooks.state.{json.dumps(f'{hooks_file}:{key}')}]")
         lines.append(f'trusted_hash = "{digest}"')
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
