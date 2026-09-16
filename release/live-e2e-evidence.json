@@ -4,7 +4,7 @@
     "path": "release-manifest.json",
     "sha256": "c46cdf378574c91dad062a560d11a1f6f00eb4b6858eb88c9487a67ecf597a1f"
   },
-  "created_at": "2026-09-16T20:58:24.279362Z",
+  "created_at": "2026-09-16T21:39:01.500373Z",
   "hosts": {
     "claude": {
       "failures": [],
@@ -703,9 +703,9 @@
     "kimi"
   ],
   "schema_version": "1.0",
-  "source_revision_base": "7a9495b8fb6d3a52f44958ddf3c742ec9aa39b76",
+  "source_revision_base": "4573c6011db7f3a9f55192348a7170f402b6ea9e",
   "source_state": "dirty-worktree-candidate",
-  "source_worktree_fingerprint": "a35bd49ed2069dea7744eb2d24aee19bca2a028a125bef1ed95dd91c58d4dc11",
+  "source_worktree_fingerprint": "3fc35e034e6be4687d2849c9f42445d9aae4064e310e13656a3cf2cb453b9c30",
   "status": "authorized",
   "version": "0.5.0"
 }

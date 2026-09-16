@@ -19,7 +19,7 @@ globally installed candidate is not a public release.
 | Local gates | 620 tests, 427 source checks, 508 wheel checks, 86.32% coverage on macOS / Python 3.14.6 | Lint, formatting, release verification, 620 tests, coverage, Chronicle E2E, browser, PDF, and audio gates pass locally; the video gate was not rerun for this candidate |
 | Hosted CI | [run 34904520346](https://github.com/luanmorenommaciel/brief-spec/actions/runs/34904520346) for `7a9495b8fb6d3a52f44958ddf3c742ec9aa39b76` | passed-for-base-revision; steps executed: `true` |
 | Live harness evidence | Sanitized disposable-repository results retained locally | 2026-09-16 matrix on the exact deployed candidate: Codex 8/8, Claude 8/8, OMP 4/4, Grok 4/4, and Kimi 4/4 passed on first attempt; experimental Cursor and Goose smokes returned valid briefs, but no Cursor hook fired and Goose metadata came from its Codex child |
-| Live release authorization | `release/live-e2e-evidence.json`; source fingerprint `a35bd49ed2069dea7744eb2d24aee19bca2a028a125bef1ed95dd91c58d4dc11` | authorized by `the 2026-09-16 live matrix, 28/28 scenarios on first attempt` |
+| Live release authorization | `release/live-e2e-evidence.json`; source fingerprint `3fc35e034e6be4687d2849c9f42445d9aae4064e310e13656a3cf2cb453b9c30` | authorized by `the 2026-09-16 live matrix, 28/28 scenarios on first attempt` |
 | GitHub `v0.5.0` | Release API and workflow state | not-published |
 | PyPI core/PDF/audio | PyPI project/file lookup | not-published / not-published / not-published |
 | PyPI Chronicle/video | Independent extension project/file lookup | not-published / not-published |

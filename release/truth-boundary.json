@@ -52,7 +52,7 @@
   "live_e2e_authorization": {
     "status": "authorized",
     "evidence": "release/live-e2e-evidence.json",
-    "source_worktree_fingerprint": "a35bd49ed2069dea7744eb2d24aee19bca2a028a125bef1ed95dd91c58d4dc11",
+    "source_worktree_fingerprint": "3fc35e034e6be4687d2849c9f42445d9aae4064e310e13656a3cf2cb453b9c30",
     "blocker": "the 2026-09-16 live matrix, 28/28 scenarios on first attempt"
   },
   "live_e2e": {
