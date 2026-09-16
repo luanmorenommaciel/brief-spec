@@ -4,9 +4,9 @@
 
 - Python 3.11 or newer
 - One or more supported hosts. Codex, Claude Code, Oh My Pi (OMP), Grok Build,
-  and Kimi Code retain their full `0.5.0` live baseline; the exact current
-  uncommitted worktree has installation and synthetic-probe evidence. GitHub
-  Copilot, Cursor Agent, and Goose are experimental.
+  and Kimi Code are covered by the live host matrix in the
+  [verification record](verification.md). GitHub Copilot, Cursor Agent, and
+  Goose are experimental.
 - `uv` is recommended for isolated tool installation
 
 Brief-Spec has no runtime Python dependencies and performs no network calls from hooks.
@@ -14,9 +14,10 @@ Brief-Spec has no runtime Python dependencies and performs no network calls from
 ## Published and candidate installation
 
 The public GitHub release is currently `v0.2.0`. The source checkout is a
-`v0.5.0` candidate and must not be described as published until current
-exact-worktree live gates, hosted CI, GitHub Release, and PyPI evidence all
-pass. The retained five-host baseline is not an exact-current-worktree rerun.
+`v0.5.0` candidate and must not be described as published until the live host
+matrix, hosted CI, GitHub Release, and PyPI evidence all pass for the same
+revision. The [verification record](verification.md) states which of those
+gates currently hold.
 
 Install the public release:
 
@@ -73,6 +74,23 @@ hook configuration, and writes a receipt. It does not require a host executable 
 `doctor` reports a missing executable as a warning so configuration can be prepared ahead of time.
 `setup all` installs detected harnesses only; use `--require` when named absences must fail.
 
+### Codex hook approval
+
+Codex runs a hook only after you approve it. Open Codex once after setup and
+approve the Brief-Spec hooks in `/hooks`. `codex exec` never shows that review
+screen and skips unapproved hooks without an error. Codex ties each approval to
+the exact hook command and its position in `hooks.json`, so a setup that changes
+either one needs a new approval.
+
+```bash
+brief-spec doctor codex --scope user
+```
+
+The `hook trust` line lists any Brief-Spec hook that is not yet approved or has
+changed since approval. Brief-Spec never edits Codex's approval list itself.
+
+### Ownership and upgrades
+
 Upgrade ownership requires both a receipt path and its prior hash; a
 Brief-Spec-looking marker is not ownership. If a receipt-owned skill was edited
 locally, setup preserves it and stages the new bytes beside it as
@@ -115,9 +133,23 @@ A Claude Code project install writes skills to `.claude/skills/` so the host dis
 exists for the current directory and the user install otherwise; pass `--scope` to force one.
 
 OMP supports skills and lifecycle extensions at user and project scope. Grok Build receives native
-`.grok/skills` assets and a receipt-owned `.grok/hooks/brief-spec.json`. Kimi project setup installs
-skills only; lifecycle automation requires the user-wide managed Brief-Spec plugin, and doctor
-reports that boundary instead of claiming project-scoped hooks.
+`.grok/skills` assets and a receipt-owned `.grok/hooks/brief-spec.json`. Grok ignores the output of
+its prompt hook, so the manifest also registers `PreToolUse`: the first tool call of a classified
+task carries the decision to the model. Grok also loads hooks from `.claude/settings.json` and
+`.cursor/hooks.json` unless its `[compat.claude]` and `[compat.cursor]` hook settings are off. With
+those settings on, a machine that has Brief-Spec installed for Claude or Cursor runs Brief-Spec
+twice per Grok event. Turn them off in `~/.grok/config.toml`:
+
+```toml
+[compat.claude]
+hooks = false
+
+[compat.cursor]
+hooks = false
+```
+
+Kimi project setup installs skills only; lifecycle automation requires the user-wide managed
+Brief-Spec plugin, and doctor reports that boundary instead of claiming project-scoped hooks.
 
 ## Optional download renderers
 
@@ -184,9 +216,12 @@ The repository ships native manifests in addition to the portable installer.
 ### Codex
 
 ```bash
-codex plugin marketplace add luanmorenommaciel/brief-spec --ref v0.5.0
+codex plugin marketplace add luanmorenommaciel/brief-spec
 codex plugin add brief-spec@brief-spec
 ```
+
+No `v0.5.0` tag exists yet. Until it does, the marketplace tracks the default
+branch; pass a local checkout path instead to pin exact bytes.
 
 ### Claude Code
 

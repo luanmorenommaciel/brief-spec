@@ -59,9 +59,24 @@ brief-spec types show debugging --json
 ```
 
 Ambiguous mixed intent falls back to `general`. An inferred decision is never
-promoted to high confidence. A type stays sticky within one task until the
-user explicitly overrides it, starts a new task/session, or clearly declares a
-pivot.
+promoted to high confidence. A request verb outweighs a noun that only mentions
+other work, so "find the root cause of the 500 after the last deploy" is
+debugging, not operations. English and Portuguese prompts are both recognized.
+
+A type stays sticky within one task until the user explicitly overrides it,
+clearly declares a pivot, or the task closes. A valid Outcome Brief closes the
+task, so the next substantive request is classified afresh. A soft cue such as
+"now that X is done, research Y" switches the type only when the new request
+classifies as a different, non-fallback type. Background task notifications,
+system reminders, and hook feedback never reclassify work.
+
+Typing the full guidance on every prompt costs reading time and context. The
+hook sends the full guidance once per context window and then a one-line
+reminder that still carries the exact typed marker:
+
+```text
+Brief-Spec task: review + pull-request; sections: Scope, Verdict, Findings, Risk, Validation, Recommendation. Typed wrapper opener: `<!-- brief-spec:typed:v1 type=review subject=pull-request ... decision_id=bsd-... -->`.
+```
 
 ## Message: the Human Frame
 
@@ -210,23 +225,23 @@ order: Status → Outcome → Human action → Proof → Gaps → Next → Open.
 Example terminal review:
 
 ```markdown
-<!-- brief-spec:typed:v1 type=review subject=pull-request confidence=high origin=host classified_at=2026-08-15T12:00:00Z profile=1.0 -->
-## Scope
+<!-- brief-spec:typed:v1 type=review subject=pull-request confidence=high origin=host classified_at=2026-08-15T12:00:00Z profile=1.0 decision_id=bsd-4f1c2a9e7b30d8a5c6e1f042 -->
+### Scope
 PR 142 authentication changes and their tests.
 
-## Verdict
+### Verdict
 Request changes before merge.
 
-## Findings
+### Findings
 The refresh-token branch accepts an expired audience claim.
 
-## Risk
+### Risk
 A reused token could cross the intended service boundary.
 
-## Validation
+### Validation
 The targeted unit test passes, but no negative audience test exists.
 
-## Recommendation
+### Recommendation
 Reject mismatched audiences and add the missing regression case.
 
 <!-- briefspec:outcome:v1 -->
@@ -458,7 +473,8 @@ Chronicle directory.
 ## What Brief-Spec does not do
 
 - It does not replace the agent’s reasoning or make unsupported claims true.
-- It does not emit a full brief after every message.
+- It does not emit a full brief after every message. A short `DONE` answer may
+  use the compact Outcome form, and plain follow-ups need no brief at all.
 - It does not store raw prompts, transcripts, tool output, credentials,
   authentication state, or resume tokens in Chronicle.
 - It does not execute command-like evidence.

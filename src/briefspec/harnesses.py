@@ -202,7 +202,6 @@ _ADAPTERS = {
             "before_agent_start",
             "tool_result",
             "session.compacting",
-            "agent_end",
             "session_stop",
         ),
     ),
@@ -221,10 +220,12 @@ _ADAPTERS = {
         True,
         True,
         True,
-        (*_STANDARD_EVENTS, "SubagentStart", "SubagentStop"),
+        (*_STANDARD_EVENTS, "SubagentStart", "SubagentStop", "PreToolUse"),
         (
             "Grok records passive lifecycle events, but its passive hook stdout is not model "
-            "context; automatic routing is provided by the installed native skill. The Stop "
+            "context; automatic routing is provided by the installed native skill. The first "
+            "PreToolUse hook of a classified task delivers the decision after that tool call. "
+            "A Stop that is not a normal turn end is observe-only. The Stop "
             "hook supplies one bounded repair only when the turn still lacks a valid Outcome "
             "Brief or Session Checkpoint, never a wrap-only continuation after a completed brief.",
             "The live implementation gate uses Grok's native read_file/search_replace allowlist "

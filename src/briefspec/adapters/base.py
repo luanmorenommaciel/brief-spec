@@ -10,10 +10,17 @@ from typing import Any
 from briefspec.models import EventType, Runtime, RuntimeEvent
 
 MAX_TRANSCRIPT_BYTES = 256 * 1024
+# Grok fires an observe-only Stop when the session closes; its output is ignored by the host.
+SESSION_END_STOP_REASONS = frozenset({"channel_closed", "shutdown"})
 
 EVENT_ALIASES = {
     "sessionstart": EventType.SESSION_START,
     "session_start": EventType.SESSION_START,
+    "sessionend": EventType.SESSION_END,
+    "session_end": EventType.SESSION_END,
+    "session_shutdown": EventType.SESSION_END,
+    "pretooluse": EventType.PRE_TOOL,
+    "pre_tool_use": EventType.PRE_TOOL,
     "userpromptsubmit": EventType.USER_PROMPT,
     "userpromptsubmitted": EventType.USER_PROMPT,
     "user_prompt": EventType.USER_PROMPT,
@@ -59,7 +66,12 @@ def parse_time(value: Any) -> datetime:
 
 
 def event_type(payload: dict[str, Any], explicit: str | None = None) -> EventType:
-    raw = explicit or payload.get("hook_event_name") or payload.get("eventName")
+    raw = (
+        explicit
+        or payload.get("hook_event_name")
+        or payload.get("hookEventName")
+        or payload.get("eventName")
+    )
     if not raw:
         raw = payload.get("event") or payload.get("type")
     normalized = str(raw or "").replace("-", "").replace(" ", "").lower()
@@ -125,6 +137,10 @@ def normalize_common(
     explicit_event: str | None = None,
 ) -> RuntimeEvent:
     kind = event_type(payload, explicit_event)
+    raw_reason = payload.get("reason") if kind is EventType.AGENT_STOP else None
+    stop_reason = raw_reason if isinstance(raw_reason, str) and raw_reason else None
+    if stop_reason in SESSION_END_STOP_REASONS:
+        kind = EventType.SESSION_END
     session_id = str(
         payload.get("session_id")
         or payload.get("sessionId")
@@ -164,4 +180,5 @@ def normalize_common(
         prompt_chars=len(prompt),
         assistant_chars=len(assistant or ""),
         tool_calls=1 if kind is EventType.POST_TOOL else 0,
+        stop_reason=stop_reason,
     )

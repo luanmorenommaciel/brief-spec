@@ -77,9 +77,9 @@ flowchart LR
 
 </details>
 
-The host integrations normalize lifecycle events when the host provides them: session start, user prompt, completed tool use, pre-compaction, and agent stop.
+The host integrations normalize lifecycle events when the host provides them: session start, user prompt, tool use, pre-compaction, agent stop, and session end.
 
-Brief-Spec records bounded operational state, applies eligibility and cooldown rules, and injects guidance at the next available boundary. Hooks fail open: an internal Brief-Spec error is reported to standard error and the host receives an empty decision rather than a blocked session.
+Brief-Spec records bounded operational state, applies eligibility and cooldown rules, and injects guidance at the next available boundary. Full guidance arrives once per context window; later prompts get a one-line reminder with the exact typed marker. Background task notifications, system reminders, and hook feedback are ignored as host text. A valid Outcome Brief closes the task, so the next request is classified afresh. Hooks fail open: an internal Brief-Spec error is reported to standard error and the host receives an empty decision rather than a blocked session.
 
 ---
 
@@ -155,6 +155,18 @@ Open:
 ```
 
 Proof items are prefixed `[direct|derived|reported]/[pass|fail|info]`. See [`schemas/`](schemas/) for the machine-readable contracts.
+
+A `DONE` result with nothing left for the human may use the compact form, which keeps only Status, Outcome, and Proof. Brief-Spec reads the missing fields as `None`, so the canonical object is the same as the full form. Every other status needs all seven fields.
+
+```markdown
+<!-- briefspec:outcome:v1 -->
+## Outcome Brief
+
+Status: DONE
+Outcome: The parser now accepts empty input.
+Proof: [direct/pass] `uv run pytest tests/test_parser.py` → 12 passed
+<!-- /briefspec -->
+```
 
 ---
 
@@ -261,15 +273,17 @@ Each type has an ordered explanation profile loaded by the `brief-spec` router.
 | Harness | Status | Command | Project destination |
 | --- | --- | --- | --- |
 | Codex | Required | `brief-spec setup codex` | `.codex/`, `.agents/skills/` |
-| Claude Code | Required | `brief-spec setup claude` | `.claude/skills/` |
-| OMP | Required | `brief-spec setup omp` | `.agents/skills/` |
-| Grok Build | Required | `brief-spec setup grok` | `.grok/skills/` |
-| Kimi Code | Required | `brief-spec setup kimi` | `.agents/skills/` |
+| Claude Code | Required | `brief-spec setup claude` | `.claude/` |
+| OMP | Required | `brief-spec setup omp` | `.omp/` |
+| Grok Build | Required | `brief-spec setup grok` | `.grok/` |
+| Kimi Code | Required | `brief-spec setup kimi` | `.kimi-code/skills/` (skills only) |
 | Copilot | Experimental | `brief-spec setup copilot --scope project` | `.agents/skills/`, `.github/` |
-| Cursor Agent | Experimental | — | Unpublished |
-| Goose | Experimental | — | `.agents/skills/` |
+| Cursor Agent | Experimental | `brief-spec setup cursor` | `.cursor/` |
+| Goose | Experimental | `brief-spec setup goose` | `.agents/skills/`, `.goose/` |
 
-The five required harnesses retain their full v0.5.0 live baseline. Cursor Agent and Goose are experimental; Cursor paths are implemented but unpublished.
+The five required harnesses pass the live host matrix recorded in the [verification record](docs/verification.md). Copilot, Cursor Agent, and Goose are experimental: they install and pass a synthetic hook probe, but no live host gate covers them. Kimi lifecycle hooks exist only in the user-wide plugin, so a Kimi project install adds skills only.
+
+Codex runs a hook only after you approve it in `/hooks`, and `codex exec` skips unapproved hooks without an error. `brief-spec doctor codex` reports which Brief-Spec hooks are approved.
 
 Project-scoped Copilot installation also creates the network-free bridge used by Copilot cloud coding agents:
 
@@ -290,15 +304,19 @@ A `.claude-plugin/` directory is present in this repository for local plugin dev
 
 ### First journey
 
+The public `v0.2.0` release predates the commands below. It installs only the `briefspec`
+command with `install`, `uninstall`, `doctor`, `validate`, `config`, and `state`. The journey
+below uses the `0.5.0` source candidate; see [Install](#install).
+
 ```bash
-# Install the public release
-uv tool install git+https://github.com/luanmorenommaciel/brief-spec.git@v0.2.0
+# Install the source candidate from a checkout
+uv tool install --force .
 
 # Verify the installation
 brief-spec --version
 
 # See the eight work types
-brief-spec types
+brief-spec types list
 
 # Classify bounded task text (no network)
 echo "Review the authentication module" | brief-spec classify - --json
@@ -360,7 +378,12 @@ Brief-Spec requires **Python 3.11+**. The canonical distribution is not yet on P
 
 ```bash
 uv tool install git+https://github.com/luanmorenommaciel/brief-spec.git@v0.2.0
+briefspec install all --scope user
+briefspec doctor all --probe
 ```
+
+This older release uses the `briefspec` command and does not include work types, classification,
+exports, or the Grok, OMP, and Kimi integrations.
 
 ### Dogfood from checkout (0.5.0)
 
@@ -465,6 +488,7 @@ packages/
   brief-spec-renderer-pdf/    Optional HTML-to-PDF renderer
   brief-spec-renderer-audio/  Optional script-to-MP3 renderer
   brief-spec-chronicle/       Optional project continuity extension
+  brief-spec-renderer-video/  Experimental Chronicle video renderer
 schemas/                 Portable machine-readable contracts
 docs/                    Theory, architecture, examples, installation
 ```

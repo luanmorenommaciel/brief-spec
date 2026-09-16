@@ -28,8 +28,17 @@ METHOD_CONTEXTS: dict[str, dict[str, Any]] = {
 
 _METHOD_PATTERNS = {
     "seamwise": re.compile(r"(?i)\bseamwise\b"),
-    "task-spec": re.compile(r"(?i)\btask[ -]spec\b"),
-    "converge": re.compile(r"(?i)\bconverge\b"),
+    "task-spec": re.compile(r"(?i)\b(?:task[ -]spec|taskspec|taskmesh)\b"),
+    # "converge" is also an ordinary English verb ("the results converge"). Only a product
+    # reference counts: the capitalized name inside a sentence, a CLI-style use, or a
+    # Converge-only term.
+    "converge": re.compile(
+        r"(?<![.!?]\s)(?<![.!?]\n)(?<!^)(?<=\S\s)\bConverge\b"
+        r"|(?i:\bconverge\s+(?:run|settle|settled|settlement|dock|factory|compose|register|"
+        r"loop|status|mission|cli|repo|project)\b)"
+        r"|(?i:\bconverge[/.]\w)"
+        r"|\b(?:LOCAL_SETTLED|SETTLED loop)\b"
+    ),
 }
 
 

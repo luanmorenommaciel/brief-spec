@@ -69,10 +69,18 @@ Provider events normalize into:
 
 - `session_start`
 - `user_prompt`
+- `pre_tool` (Grok only, to deliver the classification)
 - `post_tool`
 - `pre_compact`
 - `agent_stop`
+- `session_end` (observe-only, including Grok's session-end Stop)
+- `subagent_start` and `subagent_stop`
 - `error`
+
+Before a prompt is classified, the adapter removes text the host inserted on the user's behalf:
+background task notifications, system reminders, slash-command echoes, and hook feedback. A prompt
+that contains only such text is not a user turn. It does not count toward checkpoint volume,
+reclassify work, request a checkpoint, or select a method.
 
 The internal model includes runtime, opaque session ID, timestamp, working directory, bounded
 assistant text when available, transcript reference when available, stop-loop state, counters, and
@@ -83,18 +91,39 @@ Unknown fields are ignored. Unknown or malformed payloads fail open.
 ## Trigger policy
 
 Elapsed time, turn count, assistant volume, tool count, a manual request, or context compaction can
-make a checkpoint eligible. Eligibility and delivery are separate:
+make a checkpoint eligible. Time and volume are measured inside a window that restarts at every
+valid checkpoint or Outcome Brief. Eligibility and delivery are separate:
 
 1. An unsafe event records a pending checkpoint.
 2. Active work continues.
-3. The next agent-stop boundary may render or suggest the checkpoint.
-4. Cooldown and minimum-turn rules prevent repetition.
-5. A valid terminal Outcome Brief may satisfy an automatic orient checkpoint.
+3. Under `suggest`, the model receives one suggestion per window at a tool boundary.
+4. Under `auto`, or for an explicit request, the next agent-stop boundary requests the checkpoint.
+5. Cooldown and minimum-turn rules prevent repetition.
+6. A valid terminal Outcome Brief may satisfy an automatic orient checkpoint.
 
 `manual`, `suggest`, and `auto` modes trade automation for interruption risk. `suggest` is the
 default.
 
+## Task lifecycle
+
+A task starts when a substantive prompt is classified. The type stays fixed until an explicit
+override, a clear pivot, or a valid Outcome Brief. A soft cue such as "now that X is done" switches
+the type only when the new prompt classifies as a different, non-fallback type. A valid Outcome
+Brief closes the task: the decision stays recorded, a plain follow-up such as "thanks" receives no
+guidance, and the next substantive prompt is classified afresh.
+
+Full guidance is sent once per context window. Later prompts in an open task receive a one-line
+reminder with the sections and the exact typed marker. Session start and compaction reset the
+window. OMP and Grok always receive the full text, because OMP rebuilds its system prompt every
+turn and Grok discards prompt-hook output.
+
 ## Repair guard
+
+Every stop validates the terminal message, under every policy. The state records whether the last
+message carried an Outcome Brief or Checkpoint, whether it was valid, its status, and its first
+errors. Claude Code shows a one-line warning when a brief is present but invalid; other hosts keep
+the result in state only. A compact `DONE` Outcome (Status, Outcome, Proof) validates and does not
+require the typed wrapper, because it is meant for short answers.
 
 In enforce or automatic mode, a known-invalid handoff may block one stop and send a combined repair
 instruction to the host. Brief-Spec atomically records the attempt before returning the block. A
@@ -125,7 +154,8 @@ Persisted by default:
 - timestamps and counters;
 - checkpoint reasons and mode;
 - recent event hashes;
-- one-repair state.
+- one-repair state;
+- the last brief's kind, validity, status, and validation errors.
 
 Never persisted by default:
 
@@ -146,7 +176,7 @@ Copilot, Cursor Agent, and Goose. Capability reports distinguish live-verified a
 experimental ones and report the actual delivery tier instead of inferring support from the model
 name.
 
-Project-scoped Copilot installation builds a deterministic, stdlib-only `briefspec.pyz`. The cloud
+Project-scoped Copilot installation builds a deterministic, stdlib-only `brief-spec.pyz`. The cloud
 agent can execute it from the cloned repository without package downloads or outbound network. Its
 PascalCase hook configuration is shared by VS Code and the cloud agent; the adapter returns both
 the native Copilot fields and the VS Code-compatible envelope where the hosts differ.

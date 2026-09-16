@@ -52,9 +52,29 @@ Open:
 <!-- /briefspec -->
 ```
 
-Keep `None` explicit; never omit a field. A `DONE` brief cannot contain required human action or
-unresolved gaps. `REVIEW`, `DECIDE`, and `BLOCKED` require human action. `BLOCKED` and `FAILED`
-require a gap and a next action. `DECIDE` requires an open decision.
+Keep `None` explicit; never omit a field in the full form. A `DONE` brief cannot contain required
+human action or unresolved gaps. `REVIEW`, `DECIDE`, and `BLOCKED` require human action. `BLOCKED`
+and `FAILED` require a gap and a next action. `DECIDE` requires an open decision.
+
+## Compact form
+
+A `DONE` result with no human action, gaps, next steps, or open items may use the compact form.
+It is read exactly as the full form with those four fields set to `None`. Every other status needs
+the full form.
+
+```markdown
+<!-- briefspec:outcome:v1 -->
+## Outcome Brief
+
+Status: DONE
+Outcome: One sentence describing what is now true.
+Proof: [direct/pass] `command` → observed result
+<!-- /briefspec -->
+```
+
+Use it for short answers. If anything is left for the human, write the full form.
+
+## References
 
 Read [references/contract.md](references/contract.md) when status selection or evidence strength is
 ambiguous. Read [references/examples.md](references/examples.md) when a concrete rendering example

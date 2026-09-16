@@ -65,7 +65,7 @@ def test_user_install_is_idempotent_and_does_not_duplicate_hooks(
     elif runtime is Runtime.GOOSE:
         assert json.loads(hook.read_text(encoding="utf-8"))["lifecycle_automation"] is False
     else:
-        expected_hooks = 7 if runtime is Runtime.GROK else 5
+        expected_hooks = 8 if runtime is Runtime.GROK else 5
         assert _brief_spec_hook_entry_count(hook) == expected_hooks
 
 

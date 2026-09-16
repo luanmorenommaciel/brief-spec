@@ -45,7 +45,9 @@ class ClassificationOrigin(StrEnum):
 
 class EventType(StrEnum):
     SESSION_START = "session_start"
+    SESSION_END = "session_end"
     USER_PROMPT = "user_prompt"
+    PRE_TOOL = "pre_tool"
     POST_TOOL = "post_tool"
     PRE_COMPACT = "pre_compact"
     AGENT_STOP = "agent_stop"
@@ -191,6 +193,7 @@ class RuntimeEvent:
     prompt_chars: int = 0
     assistant_chars: int = 0
     tool_calls: int = 0
+    stop_reason: str | None = None
 
 
 @dataclass(slots=True)
@@ -226,6 +229,28 @@ class SessionState:
     method_context: str = "general"
     method_phase: str | None = None
     method_context_origin: str = "fallback"
+    # A valid Outcome Brief closes the task. The decision stays recorded for audit, and the
+    # next substantive prompt is classified afresh instead of inheriting the old type.
+    task_closed: bool = False
+    # Checkpoint eligibility is measured inside a window that restarts at every valid
+    # checkpoint or Outcome Brief, so a long session is not eligible forever.
+    window_started_at: str | None = None
+    window_turn_base: int = 0
+    window_tool_base: int = 0
+    window_chars_base: int = 0
+    # Full classification guidance is sent once per context window; later prompts get the
+    # short reminder. Compaction and session start reset it.
+    guidance_delivered: bool = False
+    # Decision whose context already reached the model through a late channel (Grok).
+    context_delivered_decision_id: str | None = None
+    # Result of validating the most recent terminal message, recorded under every policy.
+    last_brief_kind: str | None = None
+    last_brief_valid: bool | None = None
+    last_brief_status: str | None = None
+    last_brief_errors: list[str] = field(default_factory=list)
+    last_brief_at: str | None = None
+    briefs_validated: int = 0
+    briefs_invalid: int = 0
 
     @classmethod
     def new(cls, runtime: Runtime, session_id: str, now: datetime) -> SessionState:
@@ -270,3 +295,5 @@ class HookDecision:
     reason: str | None = None
     context: str | None = None
     diagnostics: tuple[str, ...] = ()
+    # A short line for the human, rendered only by hosts that display hook messages.
+    notice: str | None = None

@@ -31,3 +31,9 @@ A planned file does not prove implementation. Keep these boundaries visible in `
 - Link to logs or artifacts instead of copying them.
 - Do not hide an unresolved risk in `Next`; put it in `Gaps` or `Open`.
 - Do not repeat the full narrative from the response.
+
+## Compact DONE
+
+The compact form (Status, Outcome, Proof) is valid only for `DONE`. Omitted Human action, Gaps,
+Next, and Open are read as `None`, so the canonical object equals the full form. A compact brief
+that hides a gap is a false claim, not a shorter one; use the full form whenever something is left.

@@ -16,7 +16,7 @@ from briefspec.models import (
 
 PROFILE_VERSION = "1.0"
 MAX_CLASSIFICATION_CHARS = 64 * 1024
-CLASSIFIER_ADAPTER_VERSION = "1.1"
+CLASSIFIER_ADAPTER_VERSION = "1.2"
 MIN_INFERRED_MARGIN = 1
 
 
@@ -172,71 +172,277 @@ SUBJECTS = (
     "general",
 )
 
-_TYPE_RULES: dict[str, tuple[tuple[str, str], ...]] = {
+# A verb that is also a common noun ("the new build", "a write path") is not a request.
+_NOT_AFTER_DETERMINER = (
+    r"(?<!\bthe\s)(?<!\ba\s)(?<!\ban\s)(?<!\bnew\s)(?<!\bthis\s)(?<!\bthat\s)"
+    r"(?<!\bour\s)(?<!\byour\s)(?<!\bmy\s)(?<!\blatest\s)(?<!\blast\s)"
+)
+
+# Each rule is (rule_id, pattern, weight). Weight 2 marks an explicit request verb; weight 1
+# marks supporting context such as a noun. A request verb therefore outranks a noun that
+# merely mentions another kind of work, while two request verbs still tie and abstain.
+_TYPE_RULES: dict[str, tuple[tuple[str, str, int], ...]] = {
     WorkType.DEBUGGING.value: (
-        ("debug.explicit", r"\b(?:debug|diagnos(?:e|is)|root cause|stack trace|traceback)\b"),
-        ("debug.failure", r"\b(?:failing|failure|broken|crash(?:es|ed)?|exception|error)\b"),
-        ("debug.why", r"\bwhy (?:is|does|did|won't|doesn't|isn't)\b"),
+        ("debug.explicit", r"\b(?:debug|diagnos(?:e|is)|root cause|stack trace|traceback)\b", 2),
+        (
+            "debug.failure",
+            r"\b(?:failing|failure|fail(?:s|ed)?|broken|crash(?:es|ed)?|exception|error)\b",
+            1,
+        ),
+        (
+            "debug.why",
+            r"\bwhy (?:is|does|did|do|are|won't|doesn't|isn't|don't|aren't)\b"
+            r"|\bwhy\b[^.?!\n]*\b(?:slow|fail(?:s|ed|ing)?|broken|crash(?:es|ed)?|hangs?|"
+            r"errors?|timing out|times out)\b",
+            1,
+        ),
+        (
+            "debug.explicit.pt",
+            r"\b(?:depur(?:e|ar)|diagnostiqu?(?:e|ar)|causa raiz)\b",
+            2,
+        ),
+        (
+            "debug.failure.pt",
+            r"\b(?:falh(?:a|as|ando|ou)|quebrad[oa]s?|erros?|exce[cç][aã]o|trav(?:a|ando|ou))\b",
+            1,
+        ),
+        ("debug.why.pt", r"\bpor ?que\b", 1),
     ),
     WorkType.REVIEW.value: (
-        ("review.explicit", r"\b(?:review|audit|critique|inspect)\b"),
-        ("review.pr", r"\b(?:pull request|merge request|code review|pr\s*#?\d+)\b"),
-        ("review.diff", r"\b(?:diff|change set|changeset)\b.*\b(?:risk|quality|correct|issue)\b"),
+        ("review.explicit", r"\b(?:review|audit|critique|inspect)\b", 2),
+        ("review.pr", r"\b(?:pull request|merge request|code review|prs?\s*#?\d+)\b", 1),
+        (
+            "review.diff",
+            r"\b(?:diff|change set|changeset)\b.*\b(?:risk|quality|correct|issue)\b",
+            1,
+        ),
+        (
+            "review.explicit.pt",
+            r"\brevis(?:e|ar)\s+(?:o|a|os|as|este|esta|esse|essa|meu|minha)\b"
+            r"|\brevis[aã]o\b|\baudit(?:e|ar|oria)\b|\binspecion(?:e|ar)\b",
+            2,
+        ),
     ),
     WorkType.OPERATIONS.value: (
-        ("operations.incident", r"\b(?:incident|outage|degradation|on-call|sev[0-9])\b"),
-        ("operations.release", r"\b(?:deploy|deployment|rollback|rollout|release|publish)\b"),
-        ("operations.observe", r"\b(?:monitor|alert|recovery|restore|production)\b"),
+        ("operations.incident", r"\b(?:incident|outage|degradation|on-call|sev[0-9])\b", 2),
+        (
+            "operations.release",
+            r"\b(?:deploy|deployment|rollback|rollout|release|publish)\b",
+            1,
+        ),
+        ("operations.observe", r"\b(?:monitor|alert|recovery|restore|production)\b", 1),
+        (
+            "operations.incident.pt",
+            r"\b(?:incidente|indisponibilidade|fora do ar)\b",
+            2,
+        ),
+        (
+            "operations.observe.pt",
+            r"\b(?:monitor(?:e|ar)|alertas?|recupera[cç][aã]o|produ[cç][aã]o)\b",
+            1,
+        ),
     ),
     WorkType.RESEARCH.value: (
-        ("research.explicit", r"\b(?:research|investigate the market|literature review)\b"),
-        ("research.current", r"\b(?:latest|current market|recent changes|state of the art)\b"),
+        ("research.explicit", r"\b(?:research|investigate the market|literature review)\b", 2),
+        (
+            "research.current",
+            r"\b(?:latest|current market|recent changes|state of the art)\b",
+            1,
+        ),
         (
             "research.compare",
             r"\b(?:compare|evaluate|benchmark|recommend)\b.*"
             r"\b(?:tools?|products?|vendors?|models?)\b",
+            1,
         ),
-        ("research.web", r"\b(?:browse|search the web|look up|sources?|exa|tavily|firecrawl)\b"),
+        (
+            "research.web",
+            r"\b(?:browse|search the web|look up|sources?|exa|tavily|firecrawl)\b",
+            1,
+        ),
+        ("research.explicit.pt", r"\b(?:pesquis(?:e|ar|a))\b", 2),
+        (
+            "research.current.pt",
+            r"\b(?:mais recentes?|[uú]ltimas? novidades|estado da arte)\b",
+            1,
+        ),
+        (
+            "research.compare.pt",
+            r"\b(?:compar(?:e|ar)|avali(?:e|ar))\b.*"
+            r"\b(?:ferramentas?|produtos?|fornecedores?|modelos?)\b",
+            1,
+        ),
     ),
     WorkType.PLANNING.value: (
-        ("planning.explicit", r"\b(?:plan|roadmap|strategy|proposal|implementation plan)\b"),
-        ("planning.design", r"\b(?:design|architect|architecture|specification|spec)\b"),
-        ("planning.sequence", r"\b(?:milestones?|phases?|acceptance criteria|release gates?)\b"),
+        ("planning.explicit", r"\b(?:plan|roadmap|strategy|proposal|implementation plan)\b", 2),
+        (
+            "planning.artifact",
+            r"\b(?:create|write|draft|prepare|build|make)\s+(?:(?:a|an|the|our)\s+)?"
+            r"(?:\w+\s+){0,2}(?:plan|roadmap|strategy|proposal|specification|spec|design doc)\b",
+            2,
+        ),
+        ("planning.design", r"\b(?:design|architect|architecture|specification|spec)\b", 1),
+        (
+            "planning.sequence",
+            r"\b(?:milestones?|phases?|acceptance criteria|release gates?)\b",
+            1,
+        ),
+        (
+            "planning.explicit.pt",
+            r"\b(?:planej(?:e|ar|amento)|plano|roteiro|estrat[eé]gia|proposta)\b",
+            2,
+        ),
+        (
+            "planning.sequence.pt",
+            r"\b(?:etapas?|fases?|marcos?|crit[eé]rios de aceita[cç][aã]o)\b",
+            1,
+        ),
     ),
     WorkType.EXPLORATION.value: (
-        ("exploration.explicit", r"\b(?:explore|map|trace|orient|understand)\b"),
+        ("exploration.explicit", r"\b(?:explore|exploration)\b", 2),
+        ("exploration.map", r"\b(?:map|trace|orient|understand)\b", 1),
         (
             "exploration.codebase",
             r"\b(?:codebase|repository|repo)\b.*"
             r"\b(?:works?|structured|flow|entry point)\b",
+            1,
         ),
-        ("exploration.where", r"\b(?:where is|how does|walk me through|explain how)\b"),
+        ("exploration.where", r"\b(?:where is|how does|walk me through|explain how)\b", 1),
+        ("exploration.explicit.pt", r"\b(?:explor(?:e|ar)|mape(?:ie|ar))\b", 1),
+        (
+            "exploration.where.pt",
+            r"\b(?:onde fica|como funciona|me explique como)\b"
+            r"|\breposit[oó]rio\b.*\b(?:funciona|estrutura|fluxo|pontos? de entrada)\b",
+            1,
+        ),
     ),
     WorkType.IMPLEMENTATION.value: (
-        ("implementation.explicit", r"\b(?:implement|build|create|write|add|remove|refactor)\b"),
-        ("implementation.change", r"\b(?:change|update|modify|patch|migrate|configure|install)\b"),
-        ("implementation.fix", r"\bfix\b"),
-        ("implementation.test", r"\b(?:add|write|implement)\b.*\btests?\b"),
+        ("implementation.explicit", r"\b(?:implement|refactor)\b", 2),
+        (
+            "implementation.create",
+            rf"{_NOT_AFTER_DETERMINER}\b(?:build|create|write|add|remove)\b",
+            2,
+        ),
+        (
+            "implementation.change",
+            r"\b(?:change|update|modify|patch|migrate|configure|install|upgrade|bump)\b",
+            1,
+        ),
+        ("implementation.fix", r"\bfix\b", 2),
+        ("implementation.test", r"\b(?:add|write|implement)\b.*\btests?\b", 1),
+        (
+            "implementation.execute-plan",
+            r"\b(?:go ahead|proceed|move forward|carry on|execute|carry out)\s+(?:with\s+)?"
+            r"(?:the|this|that|our|your|my)\s+(?:\w+\s+)?plan\b",
+            2,
+        ),
+        (
+            "implementation.explicit.pt",
+            r"\b(?:implement(?:e|ar)|constru(?:a|ir)|cri(?:e|ar)|escrev(?:a|er)|"
+            r"adicion(?:e|ar)|remov(?:a|er)|refator(?:e|ar))\b",
+            2,
+        ),
+        (
+            "implementation.change.pt",
+            r"\b(?:alter(?:e|ar)|atualiz(?:e|ar)|modifi(?:que|car)|migr(?:e|ar)|"
+            r"configur(?:e|ar)|instal(?:e|ar))\b",
+            1,
+        ),
+        ("implementation.fix.pt", r"\b(?:corrij(?:a|am)|corrigir|consert(?:e|ar))\b", 2),
+        (
+            "implementation.test.pt",
+            r"\b(?:adicion(?:e|ar)|escrev(?:a|er)|implement(?:e|ar))\b.*\btestes?\b",
+            1,
+        ),
     ),
 }
 
 _SUBJECT_RULES: tuple[tuple[str, str, str], ...] = (
-    ("pull-request", "subject.pull-request", r"\b(?:pull request|merge request|pr\s*#?\d+)\b"),
-    ("codebase", "subject.codebase", r"\b(?:codebase|repository|repo)\b"),
-    ("change-set", "subject.change-set", r"\b(?:diff|change set|changeset)\b"),
-    ("incident", "subject.incident", r"\b(?:incident|outage|sev[0-9]|degradation)\b"),
-    ("security", "subject.security", r"\b(?:security|vulnerability|cve|threat)\b"),
-    ("dependency", "subject.dependency", r"\b(?:dependency|dependencies|package upgrade)\b"),
-    ("architecture", "subject.architecture", r"\b(?:architecture|architectural|system design)\b"),
-    ("release", "subject.release", r"\b(?:release|deploy|deployment|publish|rollout)\b"),
-    ("refactor", "subject.refactor", r"\brefactor(?:ing)?\b"),
-    ("test", "subject.test", r"\btests?|testing|pytest|unit test|integration test\b"),
-    ("document", "subject.document", r"\b(?:document|documentation|readme|guide|pdf)\b"),
-    ("data", "subject.data", r"\b(?:data|database|schema|table|dataset|sql)\b"),
-    ("bug", "subject.bug", r"\b(?:bug|defect|broken|failure|error)\b"),
-    ("feature", "subject.feature", r"\b(?:feature|capability)\b"),
-    ("issue", "subject.issue", r"\bissue\s*#?\d+\b"),
+    (
+        "pull-request",
+        "subject.pull-request",
+        r"\b(?:pull requests?|merge requests?|prs?\s*#?\d+)\b",
+    ),
+    (
+        "codebase",
+        "subject.codebase",
+        r"\b(?:codebase|repository|repo|reposit[oó]rio|base de c[oó]digo)\b",
+    ),
+    ("change-set", "subject.change-set", r"\b(?:diffs?|change sets?|changesets?)\b"),
+    (
+        "incident",
+        "subject.incident",
+        r"\b(?:incidents?|outages?|sev[0-9]|degradation|incidentes?|fora do ar)\b",
+    ),
+    (
+        "security",
+        "subject.security",
+        r"\b(?:security|vulnerabilit(?:y|ies)|cves?|threats?|seguran[cç]a|vulnerabilidades?)\b",
+    ),
+    (
+        "dependency",
+        "subject.dependency",
+        r"\b(?:dependency|dependencies|package upgrades?|depend[eê]ncias?)\b",
+    ),
+    (
+        "architecture",
+        "subject.architecture",
+        r"\b(?:architecture|architectural|system design|arquitetura)\b",
+    ),
+    (
+        "release",
+        "subject.release",
+        r"\b(?:releases?|deploy(?:s|ments?)?|publish|rollouts?|lan[cç]amento|implanta[cç][aã]o)\b",
+    ),
+    ("refactor", "subject.refactor", r"\b(?:refactor(?:ing|s)?|refatora[cç][aã]o)\b"),
+    (
+        "test",
+        "subject.test",
+        r"\b(?:tests?|testing|pytest|unit tests?|integration tests?|testes?)\b",
+    ),
+    (
+        "document",
+        "subject.document",
+        r"\b(?:documents?|documentation|readme|guides?|pdf|documenta[cç][aã]o|documentos?)\b",
+    ),
+    (
+        "data",
+        "subject.data",
+        r"\b(?:data|database|schema|dataset|sql|dados|banco de dados)\b",
+    ),
+    (
+        "bug",
+        "subject.bug",
+        r"\b(?:bugs?|defects?|broken|failures?|errors?|crash(?:es|ed)?|defeitos?|erros?|"
+        r"quebrad[oa])\b",
+    ),
+    (
+        "feature",
+        "subject.feature",
+        r"\b(?:features?|capabilit(?:y|ies)|funcionalidades?)\b",
+    ),
+    ("issue", "subject.issue", r"\bissues?\s*#?\d+\b"),
 )
+
+# When several subjects are mentioned, prefer the one that the selected work type is about:
+# "Implement the login feature and write tests" is feature work that also mentions tests.
+_SUBJECT_AFFINITY: dict[str, tuple[str, ...]] = {
+    WorkType.REVIEW.value: ("pull-request", "change-set", "security", "codebase"),
+    WorkType.DEBUGGING.value: ("bug", "incident", "test", "data", "dependency"),
+    WorkType.IMPLEMENTATION.value: (
+        "feature",
+        "refactor",
+        "bug",
+        "document",
+        "release",
+        "dependency",
+        "test",
+    ),
+    WorkType.OPERATIONS.value: ("incident", "release", "dependency"),
+    WorkType.PLANNING.value: ("architecture", "release", "feature"),
+    WorkType.RESEARCH.value: ("dependency", "security", "architecture", "feature"),
+    WorkType.EXPLORATION.value: ("codebase", "architecture"),
+}
 
 _EXPLICIT_TYPE = re.compile(
     r"\b(?:brief-spec\s+)?(?:work\s+)?type\s*[:=]?\s*"
@@ -245,14 +451,29 @@ _EXPLICIT_TYPE = re.compile(
 )
 _PIVOT = re.compile(
     r"\b(?:new task|switch(?:ing)? to|instead(?:,|\s)|different task|now (?:please )?(?:review|"
-    r"explore|implement|debug|plan|research|deploy))\b",
+    r"explore|implement|debug|plan|research|deploy)|nova tarefa|outra tarefa|mude para|"
+    r"em vez disso)\b",
+    re.IGNORECASE,
+)
+# A soft cue only signals a possible new task. The hook switches on it only when the new
+# prompt independently classifies as a different, non-fallback work type.
+_SOFT_PIVOT = re.compile(
+    r"\b(?:now that|moving on|next up|next task|on to the next|another (?:task|thing|topic)|"
+    r"new (?:topic|request|question)|separately|unrelated(?:ly)?|before we start|"
+    r"let'?s (?:now )?(?:move|switch|turn|shift|focus)|agora que|mudando de assunto|"
+    r"pr[oó]xima tarefa)\b",
     re.IGNORECASE,
 )
 _NEGATED_SPAN = re.compile(
     r"\b(?:do\s+not|don't|never|avoid|without|must\s+not|should\s+not|"
-    r"shouldn't|cannot|can't)\b"
-    r".*?(?=(?:[.;!?\n]|\b(?:but|however|instead)\b|$))",
+    r"shouldn't|cannot|can't|n[aã]o|nunca|evite|sem)\b"
+    r".*?(?=(?:[.;!?\n]|\b(?:but|however|instead|mas|por[eé]m)\b|$))",
     re.IGNORECASE | re.DOTALL,
+)
+# "Now that the audit is done, research X" describes finished context before the request.
+_BACKGROUND_SPAN = re.compile(
+    r"\b(?:now that|agora que)\b[^,.;!?\n]*[,.;]",
+    re.IGNORECASE,
 )
 _QUOTED_SPAN = re.compile(r"(?<!\w)'.*?'(?!\w)|\".*?\"|`.*?`", re.DOTALL)
 _BRAND_SPAN = re.compile(r"\bbrief-?spec\b", re.IGNORECASE)
@@ -280,6 +501,15 @@ def is_clear_pivot(text: str) -> bool:
     return bool(_PIVOT.search(_affirmative_text(text[:MAX_CLASSIFICATION_CHARS])))
 
 
+def is_soft_pivot(text: str) -> bool:
+    """Return whether the prompt carries a weak new-task cue such as "now that" or "moving on"."""
+    return bool(
+        _SOFT_PIVOT.search(
+            _affirmative_text(text[:MAX_CLASSIFICATION_CHARS], mask_background=False)
+        )
+    )
+
+
 def explicit_type_requested(text: str) -> bool:
     return bool(_EXPLICIT_TYPE.search(_affirmative_text(text[:MAX_CLASSIFICATION_CHARS])))
 
@@ -292,22 +522,39 @@ def is_substantive(text: str) -> bool:
         return True
     if len(value.split()) < 4:
         return False
+    affirmative = _affirmative_text(value)
     return any(
-        re.search(pattern, _affirmative_text(value), re.IGNORECASE)
+        re.search(pattern, affirmative, re.IGNORECASE)
         for rules in _TYPE_RULES.values()
-        for _, pattern in rules
+        for _, pattern, _ in rules
     )
 
 
-def _affirmative_text(text: str) -> str:
-    """Mask bounded prohibitions and quoted prohibition examples before rule matching."""
+def _affirmative_text(text: str, *, mask_background: bool = True) -> str:
+    """Mask bounded prohibitions, quoted examples, and finished-context clauses."""
 
     def mask(match: re.Match[str]) -> str:
         return " " * len(match.group(0))
 
     value = _BRAND_SPAN.sub(mask, text)
     value = _QUOTED_SPAN.sub(lambda match: " " * len(match.group(0)), value)
-    return _NEGATED_SPAN.sub(mask, value)
+    value = _NEGATED_SPAN.sub(mask, value)
+    return _BACKGROUND_SPAN.sub(mask, value) if mask_background else value
+
+
+def _select_subject(work_type: str, affirmative: str) -> tuple[str, str] | None:
+    matched = [
+        (candidate, rule_id)
+        for candidate, rule_id, pattern in _SUBJECT_RULES
+        if re.search(pattern, affirmative, re.IGNORECASE)
+    ]
+    if not matched:
+        return None
+    by_subject = dict(matched)
+    for preferred in _SUBJECT_AFFINITY.get(work_type, ()):
+        if preferred in by_subject:
+            return preferred, by_subject[preferred]
+    return matched[0]
 
 
 def _finalize_classification(
@@ -383,28 +630,26 @@ def classify_task(
             rule_ids = ("host.work-type",)
         else:
             matches: dict[str, list[str]] = {}
+            scores: dict[str, int] = {}
             for candidate, rules in _TYPE_RULES.items():
                 found = [
-                    rule_id for rule_id, pattern in rules if re.search(pattern, affirmative, re.I)
+                    (rule_id, weight)
+                    for rule_id, pattern, weight in rules
+                    if re.search(pattern, affirmative, re.I)
                 ]
                 if found:
-                    matches[candidate] = found
+                    matches[candidate] = [rule_id for rule_id, _ in found]
+                    scores[candidate] = sum(weight for _, weight in found)
             if not matches:
                 work_type = WorkType(default_type).value
                 origin = ClassificationOrigin.FALLBACK.value
                 confidence = ClassificationConfidence.LOW.value
                 rule_ids = ("fallback.general",)
             else:
-                top_score = max(len(found) for found in matches.values())
-                winners = [
-                    candidate for candidate, found in matches.items() if len(found) == top_score
-                ]
+                top_score = max(scores.values())
+                winners = [candidate for candidate, score in scores.items() if score == top_score]
                 runner_up = max(
-                    (
-                        len(found)
-                        for candidate, found in matches.items()
-                        if candidate not in winners
-                    ),
+                    (score for candidate, score in scores.items() if candidate not in winners),
                     default=0,
                 )
                 if len(winners) != 1 or top_score - runner_up < MIN_INFERRED_MARGIN:
@@ -424,11 +669,9 @@ def classify_task(
     resolved_subject = subject or host_subject
     subject_rule: str | None = None
     if resolved_subject is None and origin != ClassificationOrigin.FALLBACK.value:
-        for candidate, rule_id, pattern in _SUBJECT_RULES:
-            if re.search(pattern, affirmative, re.IGNORECASE):
-                resolved_subject = candidate
-                subject_rule = rule_id
-                break
+        selected = _select_subject(work_type, affirmative)
+        if selected is not None:
+            resolved_subject, subject_rule = selected
     normalized_subject = normalize_subject(resolved_subject)
     if subject_rule:
         rule_ids = (*rule_ids, subject_rule)

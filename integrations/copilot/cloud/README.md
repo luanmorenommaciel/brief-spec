@@ -1,11 +1,11 @@
 # Copilot cloud bridge
 
-`briefspec install copilot --scope project --project <path>` installs a network-free bridge into
+`brief-spec setup copilot --scope project --project <path>` installs a network-free bridge into
 the target repository:
 
-- `.github/hooks/briefspec.json`
-- `.github/briefspec/briefspec.pyz`
-- `.github/instructions/briefspec.instructions.md`
+- `.github/hooks/brief-spec.json`
+- `.github/brief-spec/brief-spec.pyz`
+- `.github/instructions/brief-spec.instructions.md`
 - shared skills under `.agents/skills/`
 
 The zipapp is built from the same Python core used locally. Copilot cloud jobs do not inherit
@@ -17,3 +17,6 @@ The repository hook uses the PascalCase event form understood by VS Code and acc
 CLI/cloud. Brief-Spec emits the native Copilot response fields together with the VS Code-compatible
 hook envelope where the response shapes differ. This keeps one checked-in bridge usable across
 local editor sessions and ephemeral cloud jobs.
+
+Command hooks cannot add context from the prompt event in Copilot, so the bridge delivers the task
+classification once, on the first tool result of each classified task.

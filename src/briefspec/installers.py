@@ -393,8 +393,14 @@ _SUBAGENT_EVENTS = (
 )
 
 
+# Grok drops prompt-hook output, so it receives the classification on its first tool call.
+_GROK_EVENTS = (("PreToolUse", "preToolUse"),)
+
+
 def _events_for_runtime(runtime: Runtime) -> tuple[tuple[str, str], ...]:
-    if runtime in {Runtime.GROK, Runtime.KIMI}:
+    if runtime is Runtime.GROK:
+        return (*_EVENTS, *_SUBAGENT_EVENTS, *_GROK_EVENTS)
+    if runtime is Runtime.KIMI:
         return (*_EVENTS, *_SUBAGENT_EVENTS)
     return _EVENTS
 

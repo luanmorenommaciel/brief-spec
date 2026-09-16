@@ -7,6 +7,27 @@ This project uses semantic versioning.
 
 ### Added
 
+- Compact Outcome Brief for honest `DONE` results: Status, Outcome, and Proof only. The omitted
+  Human action, Gaps, Next, and Open fields are read as `None`, so the canonical object equals the
+  full form. Every other status still needs all seven fields, and `enforce` does not ask to wrap a
+  compact brief in the typed region.
+- Every stop now validates the terminal message under every policy and records the brief kind,
+  validity, status, first errors, and running valid/invalid counts in session state. Claude Code
+  shows a one-line `systemMessage` warning when a brief is present but invalid.
+- `brief-spec doctor codex` reproduces Codex's hook-approval hash and reports each Brief-Spec hook
+  as approved, not yet reviewed, or changed since review. Codex skips unapproved hooks without an
+  error, and `codex exec` never shows the review screen.
+- Grok receives the classification through a `PreToolUse` hook, once per decision, because it
+  discards prompt-hook output. A Stop correction counts as delivery. The hook never returns a
+  permission decision.
+- Copilot receives the classification on the first `postToolUse` of each classified task, because
+  command hooks cannot add context from `userPromptSubmitted`.
+- Portuguese classification rules for all eight work types and the built-in subjects, including
+  Portuguese negation masking.
+- A `session_end` event. Grok's observe-only Stop at session end (`channel_closed`, `shutdown`) maps
+  to it and changes no state.
+- `tests/test_reading_experience.py`, including a labeled everyday-prompt corpus.
+
 - `brief-spec frame` with versioned request and receipt schemas for bounded,
   presentation-only Human Frames. Lifecycle coordinators can delegate Markdown
   rendering without delegating approval or dispatch authority.
@@ -38,6 +59,32 @@ This project uses semantic versioning.
 
 ### Changed
 
+- Classifier adapter `1.2`: an explicit request verb weighs twice as much as a noun that only
+  mentions other work, so "find the root cause after the last deploy" is debugging and "deploy the
+  new build" is operations. Two request verbs of different types still abstain to `general`.
+  "Now that X is done," clauses are read as background. A labeled corpus of 31 everyday prompts
+  moved from 20 to 31 correct types and from 20 to 30 correct subjects; all 40 live-harness
+  prompts keep their expected classification.
+- Subject selection prefers the subject that fits the chosen type, accepts plurals, and no longer
+  reads the word "table" as data work.
+- A valid Outcome Brief closes the task. The decision stays recorded, a plain follow-up receives no
+  guidance, and the next substantive prompt is classified afresh. A soft cue such as "now that" or
+  "moving on" switches the type only when the new prompt classifies as a different, non-fallback
+  type.
+- Full classification guidance is sent once per context window; later prompts receive a one-line
+  reminder with the sections and exact typed marker. Session start and compaction reset the window.
+  OMP and Grok always receive the full text.
+- Checkpoint time and volume are measured since the last valid checkpoint or Outcome Brief instead
+  of since session start. Under `suggest`, the model receives one suggestion per window rather than
+  one every cooldown period.
+- The session context is one paragraph without a mid-sentence line break and mentions the compact
+  form.
+- Method context needs a product reference. The ordinary verb "converge" no longer selects the
+  Converge frame; `taskmesh` now selects Task-Spec.
+- OMP capabilities no longer list `agent_end`, which the extension does not register.
+- README, installation, compatibility, architecture, configuration, skills, examples, repository
+  layout, and contributing docs now match the installed behavior and paths.
+
 - Renamed the PDF and audio renderer source directories to
   `packages/brief-spec-renderer-pdf` and `packages/brief-spec-renderer-audio`; their legacy internal
   Python modules and `briefspec.renderers` entry points remain operational through `0.x`.
@@ -48,6 +95,21 @@ This project uses semantic versioning.
   the ownership and cleanup policy for tracked release inputs, local evidence, builds, and caches.
 
 ### Fixed
+
+- Host-inserted prompt text no longer drives the reading frame. Claude Code passes background task
+  notifications through the prompt hook; their words could reclassify the task, select a method,
+  or turn "orient checkpoint" into an explicit checkpoint request. Notifications, system
+  reminders, slash-command echoes, and hook feedback are now removed first, and a prompt made only
+  of them is not a user turn.
+- The router skill's typed-marker example now includes `decision_id`, which the hook requires to
+  accept the wrapper.
+- The typed review example in `docs/examples.md` used `##` headings that the parser rejects.
+- The README first journey ran `brief-spec types` after installing `v0.2.0`, which ships only the
+  `briefspec` command and has no `types` command.
+- Project destinations for OMP (`.omp/`) and Kimi (`.kimi-code/skills/`) were documented as
+  `.agents/skills/`; the Cursor and Goose rows had no command.
+- The Copilot cloud README and architecture doc used legacy `briefspec` file names, and the
+  installation guide referenced a `v0.5.0` tag that does not exist.
 
 - Atomic writes now support Windows Python versions without `os.fchmod` and close the temporary
   descriptor before cleaning up a failed permission change, preserving the original destination

@@ -21,13 +21,23 @@ def looks_like_action_request(prompt: str) -> bool:
 
 
 def elapsed_minutes(state: SessionState, now: datetime) -> float:
+    """Minutes since the current checkpoint window opened (session start by default)."""
     try:
-        started = datetime.fromisoformat(state.started_at)
+        started = datetime.fromisoformat(state.window_started_at or state.started_at)
         if started.tzinfo is None:
             started = started.replace(tzinfo=UTC)
         return max(0.0, (now - started).total_seconds() / 60)
     except ValueError:
         return 0.0
+
+
+def reset_window(state: SessionState, now: datetime) -> None:
+    """Start a new eligibility window after a valid checkpoint or Outcome Brief."""
+    state.window_started_at = now.astimezone(UTC).isoformat()
+    state.window_turn_base = state.turn_count
+    state.window_tool_base = state.tool_count
+    state.window_chars_base = state.assistant_chars
+    state.last_suggested_at = None
 
 
 def eligibility_reasons(
@@ -39,11 +49,11 @@ def eligibility_reasons(
     reasons: list[str] = []
     if elapsed_minutes(state, now) >= float(checkpoint["elapsed_minutes"]):
         reasons.append("elapsed")
-    if state.turn_count >= int(checkpoint["turns"]):
+    if state.turn_count - state.window_turn_base >= int(checkpoint["turns"]):
         reasons.append("turns")
-    if state.assistant_chars >= int(checkpoint["assistant_chars"]):
+    if state.assistant_chars - state.window_chars_base >= int(checkpoint["assistant_chars"]):
         reasons.append("assistant-volume")
-    if state.tool_count >= int(checkpoint["tool_calls"]):
+    if state.tool_count - state.window_tool_base >= int(checkpoint["tool_calls"]):
         reasons.append("tool-volume")
     if state.last_checkpoint_turn:
         minimum = int(checkpoint["minimum_turns_after_checkpoint"])

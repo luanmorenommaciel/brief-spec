@@ -6,6 +6,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import tomllib
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
@@ -35,6 +36,128 @@ def _contains_hook(path: Path) -> bool:
         return any(marker in text for marker in ("brief-spec.pyz", "briefspec.pyz"))
     except OSError:
         return False
+
+
+_CODEX_EVENT_LABELS = {
+    "PreToolUse": "pre_tool_use",
+    "PermissionRequest": "permission_request",
+    "PostToolUse": "post_tool_use",
+    "PreCompact": "pre_compact",
+    "PostCompact": "post_compact",
+    "SessionStart": "session_start",
+    "SessionEnd": "session_end",
+    "UserPromptSubmit": "user_prompt_submit",
+    "SubagentStart": "subagent_start",
+    "SubagentStop": "subagent_stop",
+    "Stop": "stop",
+    "Interrupt": "interrupt",
+}
+_CODEX_UNMATCHED_EVENTS = frozenset({"UserPromptSubmit", "Stop", "Interrupt"})
+_CODEX_CONTEXT_EVENTS = frozenset(
+    {"PreToolUse", "PostToolUse", "SessionStart", "UserPromptSubmit", "SubagentStart"}
+)
+_CODEX_DEFAULT_CONTEXT_LIMIT = 2500
+
+
+def codex_hook_hash(event: str, group: dict[str, Any], handler: dict[str, Any]) -> str:
+    """Reproduce the identity hash Codex stores as `hooks.state.<key>.trusted_hash`."""
+    timeout = handler.get("timeout")
+    if event in {"SessionEnd", "Interrupt"}:
+        timeout = max(1, min(timeout if timeout is not None else 1, 3))
+    else:
+        timeout = max(1, timeout if timeout is not None else 600)
+    identity_handler: dict[str, Any] = {
+        "type": "command",
+        "command": handler.get("command", ""),
+        "timeout": timeout,
+        "async": bool(handler.get("async", False)),
+    }
+    if handler.get("statusMessage") is not None:
+        identity_handler["statusMessage"] = handler["statusMessage"]
+    limit = handler.get("additionalContextLimit")
+    if event in _CODEX_CONTEXT_EVENTS and limit not in {None, _CODEX_DEFAULT_CONTEXT_LIMIT}:
+        identity_handler["additionalContextLimit"] = limit
+    identity: dict[str, Any] = {
+        "event_name": _CODEX_EVENT_LABELS[event],
+        "hooks": [identity_handler],
+    }
+    matcher = None if event in _CODEX_UNMATCHED_EVENTS else group.get("matcher")
+    if matcher is not None:
+        identity["matcher"] = matcher
+    encoded = json.dumps(identity, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return "sha256:" + hashlib.sha256(encoded.encode("utf-8")).hexdigest()
+
+
+def codex_hook_trust(hook_file: Path, config_file: Path) -> dict[str, list[str]]:
+    """Classify Brief-Spec Codex hooks as trusted, untrusted, or modified since review."""
+    result: dict[str, list[str]] = {"trusted": [], "untrusted": [], "modified": []}
+    try:
+        hooks = json.loads(hook_file.read_text(encoding="utf-8")).get("hooks", {})
+    except (OSError, json.JSONDecodeError, AttributeError):
+        return result
+    try:
+        with config_file.open("rb") as handle:
+            config = tomllib.load(handle)
+    except (OSError, tomllib.TOMLDecodeError):
+        config = {}
+    hooks_config = config.get("hooks", {}) if isinstance(config, dict) else {}
+    trust_state = hooks_config.get("state", {}) if isinstance(hooks_config, dict) else {}
+    paths = dict.fromkeys((str(hook_file), str(hook_file.resolve(strict=False))))
+    for event, groups in hooks.items() if isinstance(hooks, dict) else ():
+        if event not in _CODEX_EVENT_LABELS or not isinstance(groups, list):
+            continue
+        for group_index, group in enumerate(groups):
+            handlers = group.get("hooks", []) if isinstance(group, dict) else []
+            for handler_index, handler in enumerate(handlers):
+                if not isinstance(handler, dict) or not _is_brief_spec_command(
+                    str(handler.get("command", ""))
+                ):
+                    continue
+                suffix = f"{_CODEX_EVENT_LABELS[event]}:{group_index}:{handler_index}"
+                stored = next(
+                    (
+                        trust_state[f"{path}:{suffix}"].get("trusted_hash")
+                        for path in paths
+                        if isinstance(trust_state.get(f"{path}:{suffix}"), dict)
+                    ),
+                    None,
+                )
+                if stored is None:
+                    result["untrusted"].append(event)
+                elif stored == codex_hook_hash(event, group, handler):
+                    result["trusted"].append(event)
+                else:
+                    result["modified"].append(event)
+    return result
+
+
+def _is_brief_spec_command(command: str) -> bool:
+    return any(marker in command for marker in ("brief-spec.pyz", "briefspec.pyz"))
+
+
+def _codex_trust_check(hook_file: Path) -> Check | None:
+    from briefspec.installers import _runtime_home
+
+    if not hook_file.is_file():
+        return None
+    trust = codex_hook_trust(hook_file, _runtime_home(Runtime.CODEX) / "config.toml")
+    pending = trust["untrusted"] + trust["modified"]
+    if not pending and not trust["trusted"]:
+        return None
+    if not pending:
+        return Check("hook trust", "PASS", f"{len(trust['trusted'])} Brief-Spec hooks trusted")
+    details = []
+    if trust["untrusted"]:
+        details.append(f"not yet reviewed: {', '.join(trust['untrusted'])}")
+    if trust["modified"]:
+        details.append(f"changed since review: {', '.join(trust['modified'])}")
+    return Check(
+        "hook trust",
+        "WARN",
+        "; ".join(details),
+        "Open Codex and approve the Brief-Spec hooks in /hooks; Codex skips untrusted hooks "
+        "without an error, and `codex exec` never shows the review screen",
+    )
 
 
 def _kimi_plugin_registered(registry: Path, plugin_root: Path) -> bool:
@@ -237,6 +360,8 @@ def doctor_runtime(
                 ),
             )
         )
+        if runtime is Runtime.CODEX and hook_ok and (trust := _codex_trust_check(hook)):
+            checks.append(trust)
     executable = host_executable(runtime)
     host_detail = executable or f"{runtime.value} is not on PATH"
     if executable:

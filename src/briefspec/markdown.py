@@ -45,6 +45,10 @@ _OUTCOME_SECTION_ORDER = (
     "Next",
     "Open",
 )
+# A DONE brief with nothing left for the human may omit these fields. They are read as the
+# same explicit None values the full form carries, so the canonical object is identical.
+_COMPACT_OPTIONAL_FIELDS = ("Human action", "Gaps", "Next", "Open")
+_MISSING_FIELDS_PREFIX = "Missing required field(s)"
 
 _CHECKPOINT_SECTIONS = {
     CheckpointMode.ORIENT: (
@@ -175,6 +179,17 @@ def validate_outcome(text: str) -> ValidationResult:
     if region is None:
         return ValidationResult(False, "outcome-brief", ("Missing bounded outcome marker",))
     data, errors = _read_sections(region, _OUTCOME_SECTION_ORDER)
+    missing = [name for name in _OUTCOME_SECTION_ORDER if name not in data]
+    compact = (
+        bool(missing)
+        and set(missing) <= set(_COMPACT_OPTIONAL_FIELDS)
+        and str(data.get("Status", "")).strip().upper() == OutcomeStatus.DONE.value
+    )
+    if compact:
+        errors = [error for error in errors if not error.startswith(_MISSING_FIELDS_PREFIX)]
+        for name in missing:
+            data[name] = "None" if name == "Human action" else ["None"]
+        data["Form"] = "compact"
 
     try:
         status = OutcomeStatus(str(data.get("Status", "")).strip().upper())

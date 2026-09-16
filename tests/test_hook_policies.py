@@ -127,7 +127,7 @@ def test_suggest_context_is_not_repeated_within_cooldown(
     assert state.last_suggested_at == NOW.isoformat()
 
 
-def test_suggest_context_repeats_after_cooldown_and_resets_on_checkpoint(
+def test_suggest_context_is_given_once_per_window_and_resets_on_checkpoint(
     isolated_homes: dict[str, Path],
     checkpoint_text: Callable[..., str],
 ) -> None:
@@ -140,21 +140,33 @@ def test_suggest_context_repeats_after_cooldown_and_resets_on_checkpoint(
         Runtime.CLAUDE,
         "PostToolUse",
         "recool",
-        timestamp=NOW + cooldown,
+        timestamp=NOW + cooldown * 3,
         tool_name="Edit",
     )
-    assert process_event(later, later_payload, config).context
+    assert process_event(later, later_payload, config).context is None
     stop, stop_payload = event(
         Runtime.CLAUDE,
         "Stop",
         "recool",
-        timestamp=NOW + cooldown + timedelta(minutes=1),
+        timestamp=NOW + cooldown * 3 + timedelta(minutes=1),
         last_assistant_message=checkpoint_text("orient"),
     )
     process_event(stop, stop_payload, config)
     state = load_session(Runtime.CLAUDE, "recool", NOW)
     assert not state.pending_checkpoint
     assert state.last_suggested_at is None
+    assert state.window_tool_base == state.tool_count
+    after_cooldown = NOW + cooldown * 5
+    for index in range(2):
+        tool, tool_payload = event(
+            Runtime.CLAUDE,
+            "PostToolUse",
+            "recool",
+            timestamp=after_cooldown + timedelta(seconds=index),
+            tool_name=f"Tool{index}",
+        )
+        result = process_event(tool, tool_payload, config)
+        assert (result.context is not None) is (index == 0)
 
 
 def test_auto_policy_requests_configured_checkpoint_mode_once(

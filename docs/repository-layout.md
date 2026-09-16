@@ -29,9 +29,17 @@ briefspec/
 ├── tests/                          core, compatibility, security, and E2E tests
 ├── output/                         curated multi-model design-review corpus
 ├── assets/                         README illustrations
+├── seamwise/                       Seamwise task plans and lineage for this repository
+├── tasks/                          Task-Spec leaves (completed leaves under tasks/done/)
+├── .taskspec/                      Task-Spec acceptance records; mesh/ is ignored runtime state
+├── .agents/, .claude/              repository-local agent entry points and plugin marketplace
 ├── .briefspec/                     ignored local evidence and clean-room workspaces
 └── dist/                           ignored, rebuildable distribution artifacts
 ```
+
+`seamwise/`, `tasks/`, and `.taskspec/` belong to the method tools that plan and accept work in this
+repository, as described in `OPERATING.md`. Brief-Spec does not read them at runtime and they are
+not shipped in any distribution. `WATCHDOG.yml` configures an external review advisor.
 
 ## Naming rules
 
@@ -59,7 +67,9 @@ missing canonical/compatibility import package.
 | `docs/`, `pilots/`, `scripts/`, `tests/` | Yes | Maintained guidance and assurance | Must pass release verification |
 | `release/` | Yes | Inputs that state the candidate/public evidence boundary | Regenerate only from retained evidence |
 | `output/` | Yes | Named independent LLM reviews and their synthesized plan | Not a default export destination; provenance is documented in its README |
+| `seamwise/`, `tasks/`, `.taskspec/acceptance/` | Yes | Method records owned by Seamwise and Task-Spec | Change only through those tools |
 | `.briefspec/` | No | Local live-host evidence, snapshots, temporary projects, and clean-room environments | Preserve evidence needed by the current candidate; remove only known rebuildable entries |
+| `telemetry/`, `.taskspec/mesh/`, `.sc/` | No | Machine-local execution state excluded through `.git/info/exclude` | Never commit |
 | `dist/` | No | Locally built wheels and source distributions | Rebuild for each gate; never use as publication truth without a manifest |
 | caches and coverage files | No | Rebuildable developer state | Safe to clear between final gates |
 

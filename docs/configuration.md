@@ -44,7 +44,8 @@ retention_days = 14
 
 - `off`: no lifecycle checkpoint behavior; explicit skill use remains possible.
 - `manual`: only explicit checkpoint requests.
-- `suggest`: record eligibility and give the host context at a safe boundary.
+- `suggest`: record eligibility and give the model one suggestion per window at a tool boundary.
+  The window restarts at every valid checkpoint or Outcome Brief.
 - `auto`: request one checkpoint at the next agent-stop boundary.
 
 ### Outcome policies
@@ -57,6 +58,19 @@ retention_days = 14
 Enforcement is intentionally opt-in. A stop hook cannot perfectly infer whether every conversational
 turn is a terminal task boundary.
 
+Under every policy, each stop validates the terminal message and records the result in session
+state. Claude Code also shows a one-line warning when a brief is present but invalid. A compact
+`DONE` Outcome (Status, Outcome, Proof) is valid, and `enforce` does not ask to wrap it.
+
+### Thresholds and typing
+
+`elapsed_minutes`, `turns`, `assistant_chars`, and `tool_calls` are measured since the last valid
+checkpoint or Outcome Brief, not since the session started. `cooldown_minutes` and
+`minimum_turns_after_checkpoint` still apply after a checkpoint.
+
+With `sticky = true`, the work type stays fixed until an explicit override, a clear pivot, or a valid
+Outcome Brief closes the task. With `sticky = false`, every substantive prompt is classified.
+
 ## State operations
 
 ```bash
@@ -65,6 +79,9 @@ brief-spec state prune --older-than 14
 brief-spec state prune --older-than 14 --dry-run
 brief-spec state reset --runtime codex --session SESSION_ID
 ```
+
+`state list` includes `last_brief_kind`, `last_brief_valid`, `last_brief_status`, and
+`last_brief_errors` for each session, plus running `briefs_validated` and `briefs_invalid` counts.
 
 Set `BRIEF_SPEC_HOME` to isolate state for automation or testing. Brief-Spec stores bounded metadata,
 not raw session content. `BRIEFSPEC_HOME` remains a readable `0.x` compatibility alias.

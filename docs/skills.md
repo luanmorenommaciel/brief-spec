@@ -35,17 +35,27 @@ Brief-Spec exposes three portable skills that chat agents can discover and use. 
 ### Classification precedence
 
 1. Honor an explicit type from the user or host.
-2. On Grok Build, use the native passive hooks. Do not run the classifier from the model.
-   Put profile sections and the Outcome Brief or Session Checkpoint in the same first
-   response; do not wait for Stop to append the profile after the brief.
+2. On Grok Build, use the native hooks. Do not run the classifier from the model. The decision
+   reaches the model after the first tool call, or in a single Stop correction. Put profile
+   sections and the Outcome Brief or Session Checkpoint in the same first response; do not wait
+   for Stop to append the profile after the brief.
 3. On other harnesses, when available, run `brief-spec classify - --json` with only the bounded current task text.
 4. Use `general` when signals conflict or remain ambiguous.
+5. A request verb outweighs a noun that only mentions other work. Two request verbs of
+   different types still tie and fall back to `general`.
+
+A valid Outcome Brief closes the task, and the next substantive request is classified afresh.
+Background task notifications, system reminders, and hook feedback never count as a request.
 
 ### Subject vocabulary
 
 Built-in subjects: `pull-request`, `codebase`, `change-set`, `issue`, `bug`, `feature`, `refactor`, `test`, `release`, `architecture`, `document`, `data`, `incident`, `dependency`, `security`, and `general`.
 
 Subjects remain open normalized slugs, so an explicit `--subject migration-plan` is valid even though it is not built in.
+
+When a prompt mentions several subjects, the classifier prefers the one that fits the chosen type.
+"Implement the login feature and write tests" is `implementation + feature`, not `+ test`.
+Portuguese prompts use the same types and subjects.
 
 ---
 
@@ -83,6 +93,22 @@ Status → Outcome → Human action → Proof → Gaps → Next → Open
 | `DECIDE` | A meaningful choice is required | Requires human action and an open decision |
 | `BLOCKED` | External dependency prevents continuation | Requires a gap and a next action |
 | `FAILED` | The attempt did not achieve the requested outcome | Requires a gap and a next action |
+
+### Compact form
+
+A `DONE` result with no human action, gaps, next steps, or open items may keep only Status,
+Outcome, and Proof. The missing fields are read as `None`, so the canonical object equals the full
+form. Every other status needs all seven fields.
+
+```markdown
+<!-- briefspec:outcome:v1 -->
+## Outcome Brief
+
+Status: DONE
+Outcome: The parser now accepts empty input.
+Proof: [direct/pass] `uv run pytest tests/test_parser.py` → 12 passed
+<!-- /briefspec -->
+```
 
 ### Proof evidence
 
@@ -142,6 +168,10 @@ Use `orient` when no mode is requested.
 
 Time or interaction volume can make a checkpoint eligible. They do not force an interruption. Brief-Spec delivers an automatic checkpoint only when the host reaches a lifecycle boundary.
 
+Volume is counted inside a window that restarts at every valid checkpoint or Outcome Brief, so a
+long session does not stay eligible forever. Under the default `suggest` policy the model gets one
+suggestion per window, not one every few minutes.
+
 Configurable thresholds:
 
 - `elapsed_minutes`: Minutes since session start or last checkpoint
@@ -172,15 +202,19 @@ brief-spec validate checkpoint path/to/checkpoint.md --mode spoken
 
 Skills are installed to host-specific destinations by `brief-spec setup`:
 
-| Harness | Command | Destination |
+| Harness | Command | Project skills destination |
 | --- | --- | --- |
-| Codex | `brief-spec setup codex` | `.codex/`, `.agents/skills/` |
+| Codex | `brief-spec setup codex` | `.agents/skills/` |
 | Claude Code | `brief-spec setup claude` | `.claude/skills/` |
-| OMP | `brief-spec setup omp` | `.agents/skills/` |
+| OMP | `brief-spec setup omp` | `.omp/skills/` |
 | Grok Build | `brief-spec setup grok` | `.grok/skills/` |
-| Kimi Code | `brief-spec setup kimi` | `.agents/skills/` |
-| Copilot | `brief-spec setup copilot --scope project` | `.agents/skills/`, `.github/` |
+| Kimi Code | `brief-spec setup kimi` | `.kimi-code/skills/` |
+| Copilot | `brief-spec setup copilot --scope project` | `.agents/skills/` |
+| Cursor Agent | `brief-spec setup cursor` | `.cursor/skills/` |
+| Goose | `brief-spec setup goose` | `.agents/skills/` |
 
-Cursor Agent and Goose are experimental. Cursor paths are implemented but unpublished.
+User scope writes to each host's own skills directory, for example `~/.codex/skills/` or
+`~/.kimi-code/plugins/managed/brief-spec/skills/`. Copilot, Cursor Agent, and Goose are
+experimental.
 
 The installer merges lifecycle hooks instead of replacing the host file, refuses to overwrite foreign skill files, restores prior files if installation fails, and records what it owns.
