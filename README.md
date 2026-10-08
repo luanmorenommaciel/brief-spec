@@ -10,15 +10,15 @@ Brief-Spec is a type-aware, evidence-backed delivery contract for AI coding harn
 
 <p align="center">
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.11%2B-A56BFF?labelColor=111720" alt="Python 3.11+"></a>
-  <a href="https://github.com/luanmorenommaciel/brief-spec/releases/tag/v0.2.0"><img src="https://img.shields.io/badge/public_release-v0.2.0-070A0F?labelColor=111720" alt="Public release v0.2.0"></a>
-  <a href="docs/verification.md"><img src="https://img.shields.io/badge/source_candidate-0.5.0-29313A?labelColor=111720" alt="Source candidate 0.5.0"></a>
+  <a href="https://github.com/luanmorenommaciel/brief-spec/releases/tag/v0.5.0"><img src="https://img.shields.io/badge/public_release-v0.5.0-070A0F?labelColor=111720" alt="Public release v0.5.0"></a>
+  <a href="docs/verification.md"><img src="https://img.shields.io/badge/pypi-pending-29313A?labelColor=111720" alt="PyPI publication pending"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-29313A?labelColor=111720" alt="MIT License"></a>
 </p>
 
-**Public release v0.2.0** · Source candidate 0.5.0 · Not on PyPI
+**Public release v0.5.0** on GitHub · PyPI publication pending · MIT
 
-- Public release: `v0.2.0` on GitHub.
-- Source candidate: `v0.5.0` in this checkout. Locally verified is not hosted or published.
+- Public release: `v0.5.0` on GitHub with wheels, sdists, schemas, and signed manifests.
+- PyPI: pending trusted-publisher registration; install from the tag until `brief-spec==0.5.0` lands there.
 
 [The problem](#the-problem) · [How it works](#how-it-works) · [Outcome Brief](#outcome-brief) · [Docs](#documentation) · [Skills](#why-the-skills-exist) · [Harness](#harness-support) · [CLI](#cli) · [Install](#install)
 
@@ -304,13 +304,13 @@ A `.claude-plugin/` directory is present in this repository for local plugin dev
 
 ### First journey
 
-The public `v0.2.0` release predates the commands below. It installs only the `briefspec`
-command with `install`, `uninstall`, `doctor`, `validate`, `config`, and `state`. The journey
-below uses the `0.5.0` source candidate; see [Install](#install).
+The journey below uses the published `0.5.0` release; see [Install](#install). The older
+`v0.2.0` release installs only the `briefspec` command with `install`, `uninstall`, `doctor`,
+`validate`, `config`, and `state`.
 
 ```bash
-# Install the source candidate from a checkout
-uv tool install --force .
+# Install the published release from its tag
+uv tool install git+https://github.com/luanmorenommaciel/brief-spec.git@v0.5.0
 
 # Verify the installation
 brief-spec --version
@@ -372,20 +372,22 @@ Project values override user values. See [docs/configuration.md](docs/configurat
 
 ## Install
 
-Brief-Spec requires **Python 3.11+**. The canonical distribution is not yet on PyPI.
+Brief-Spec requires **Python 3.11+**.
 
-### Public release (v0.2.0)
+### Public release (v0.5.0)
 
 ```bash
-uv tool install git+https://github.com/luanmorenommaciel/brief-spec.git@v0.2.0
-briefspec install all --scope user
-briefspec doctor all --probe
+uv tool install git+https://github.com/luanmorenommaciel/brief-spec.git@v0.5.0
+brief-spec setup all --scope user --require codex,claude,omp,grok,kimi
+brief-spec doctor all --scope user --probe --all-scopes
 ```
 
-This older release uses the `briefspec` command and does not include work types, classification,
-exports, or the Grok, OMP, and Kimi integrations.
+The release page also carries the core and renderer wheels plus signed manifests. PyPI
+distributions (`brief-spec==0.5.0` with `brief-spec-renderer-pdf` and
+`brief-spec-renderer-audio`) are staged and will replace the tagged URL once the
+trusted-publisher registration completes.
 
-### Dogfood from checkout (0.5.0)
+### Dogfood from checkout
 
 ```bash
 uv tool install --force --reinstall \
@@ -402,6 +404,17 @@ Project-scoped installation keeps the integration inside one repository:
 brief-spec setup all --scope project --project /path/to/repository
 brief-spec doctor all --scope project --project /path/to/repository --probe
 ```
+
+### Legacy release (v0.2.0)
+
+```bash
+uv tool install git+https://github.com/luanmorenommaciel/brief-spec.git@v0.2.0
+briefspec install all --scope user
+briefspec doctor all --probe
+```
+
+This older release uses the `briefspec` command and does not include work types, classification,
+exports, or the Grok, OMP, and Kimi integrations.
 
 The tagged URL installs a versioned release instead of whatever happens to be on `main`.
 
@@ -450,7 +463,7 @@ The JSON schemas in [`schemas/`](schemas/) define the portable data contracts.
 
 ## Experimental: Human Continuity
 
-The source tree contains an optional, independently versioned Chronicle extension. It does not change the frozen Outcome Brief or Session Checkpoint `1.0` contracts and is not part of the public v0.2.0 or source candidate 0.5.0 publication claims.
+The source tree contains an optional, independently versioned Chronicle extension. It does not change the frozen Outcome Brief or Session Checkpoint `1.0` contracts and is not part of the public 0.5.0 publication claims.
 
 Chronicle is never activated globally. It records what Brief-Spec observed; it does not replace Seamwise intent, Task-Spec acceptance, Converge authorization, Git evidence, or reviewed durable knowledge.
 
@@ -462,11 +475,11 @@ Read the complete [Human Continuity architecture](docs/human-continuity.md).
 
 | Version | State | Notes |
 | --- | --- | --- |
-| v0.2.0 | Published GitHub release | Latest public release |
-| 0.5.0 | Source candidate | Locally verified; awaits live/hosted/publication gates |
+| v0.5.0 | Published GitHub release | Latest public release; PyPI pending trusted-publisher registration |
+| v0.2.0 | Published GitHub release | Historical release |
 | 0.3.0, 0.4.0 | Unpublished | Folded into 0.5.0 |
 
-"Locally verified" does not mean hosted or published. See the full [changelog](CHANGELOG.md) and [verification record](docs/verification.md).
+See the full [changelog](CHANGELOG.md) and [verification record](docs/verification.md) for the evidence boundary.
 
 ---
 

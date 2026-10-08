@@ -11,24 +11,34 @@
 
 Brief-Spec has no runtime Python dependencies and performs no network calls from hooks.
 
-## Published and candidate installation
+## Published and checkout installation
 
-The public GitHub release is currently `v0.2.0`. The source checkout is a
-`v0.5.0` candidate and must not be described as published until the live host
-matrix, hosted CI, GitHub Release, and PyPI evidence all pass for the same
-revision. The [verification record](verification.md) states which of those
-gates currently hold.
-
-Install the public release:
+The current public release is `v0.5.0`, published on GitHub with wheels, sdists, schemas,
+and signed manifests. PyPI publication is staged and pending trusted-publisher
+registration. Install the immutable, version-pinned release from its tag:
 
 ```bash
-uv tool install git+https://github.com/luanmorenommaciel/brief-spec.git@v0.2.0
-briefspec install all --scope user
-briefspec doctor all --probe
+uv tool install git+https://github.com/luanmorenommaciel/brief-spec.git@v0.5.0
+brief-spec setup all --scope user --require codex,claude,omp,grok,kimi
+brief-spec doctor all --scope user --probe --all-scopes
 ```
 
-Those commands intentionally use the legacy `v0.2.0` interface. The `briefspec`
-alias remains supported throughout `0.x`, but new installations use `brief-spec`.
+New installations use the `brief-spec` command. The legacy `briefspec` alias remains
+supported throughout `0.x`.
+
+Chronicle and video remain a separate experimental extension track until they are
+independently published.
+
+Once the PyPI trusted publishers are registered, the pinned distributions become the
+canonical install:
+
+```bash
+uv tool install --force "brief-spec==0.5.0" \
+  --with "brief-spec-renderer-pdf==0.5.0" \
+  --with "brief-spec-renderer-audio==0.5.0"
+brief-spec setup all --scope user --require codex,claude,omp,grok,kimi
+brief-spec doctor all --scope user --probe --all-scopes
+```
 
 Dogfood the complete candidate stack from its checkout. Installing Chronicle
 does not initialize or capture any project:
@@ -44,18 +54,6 @@ uv tool install --force --reinstall \
 brief-spec setup all --scope user --require codex,claude,omp,grok,kimi
 brief-spec doctor all --scope user --probe --all-scopes
 brief-spec-chronicle --version
-```
-
-After `v0.5.0` is published to PyPI, replace the candidate with immutable,
-version-pinned core and renderer distributions. Chronicle and video remain a
-separate experimental extension track until they are independently published:
-
-```bash
-uv tool install --force "brief-spec==0.5.0" \
-  --with "brief-spec-renderer-pdf==0.5.0" \
-  --with "brief-spec-renderer-audio==0.5.0"
-brief-spec setup all --scope user --require codex,claude,omp,grok,kimi
-brief-spec doctor all --scope user --probe --all-scopes
 ```
 
 Install or inspect one host:
@@ -220,8 +218,8 @@ codex plugin marketplace add luanmorenommaciel/brief-spec
 codex plugin add brief-spec@brief-spec
 ```
 
-No `v0.5.0` tag exists yet. Until it does, the marketplace tracks the default
-branch; pass a local checkout path instead to pin exact bytes.
+The marketplace tracks the default branch; pass a local checkout path instead to pin exact
+bytes. The `v0.5.0` tag marks the released revision.
 
 ### Claude Code
 

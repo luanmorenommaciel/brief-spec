@@ -148,7 +148,7 @@ This project uses semantic versioning.
 - Lesson approval creates an offline proposal export only; it cannot modify a knowledge system,
   method, skill, policy, or canonical project state.
 
-## [0.5.0] - Unreleased candidate
+## [0.5.0] - 2026-10-08
 
 ### Added
 

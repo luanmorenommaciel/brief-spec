@@ -2,12 +2,12 @@
   "schema_version": "1.0",
   "kind": "brief-spec-truth-boundary",
   "version": "0.5.0",
-  "updated_at": "2026-09-16",
-  "source_revision": "7a9495b8fb6d3a52f44958ddf3c742ec9aa39b76",
+  "updated_at": "2026-10-08",
+  "source_revision": "3781d0d36f1608eeffdd1f3e7225bc1d18096c46",
   "repository": "luanmorenommaciel/brief-spec",
   "repository_visibility": "public",
-  "latest_public_release": "v0.2.0",
-  "candidate_state": "Locally validated release candidate: reading-experience changes on top of 7a9495b, awaiting hosted CI",
+  "latest_public_release": "v0.5.0",
+  "candidate_state": "Published as GitHub release v0.5.0 from exact-SHA CI-tested bytes; PyPI publication pending trusted-publisher registration",
   "local_evidence": {
     "tests": 620,
     "release_checks": 427,
@@ -83,14 +83,14 @@
     }
   },
   "hosted_ci": {
-    "run_id": 34904520346,
-    "revision": "7a9495b8fb6d3a52f44958ddf3c742ec9aa39b76",
-    "status": "passed-for-base-revision",
+    "run_id": 35153624180,
+    "revision": "3781d0d36f1608eeffdd1f3e7225bc1d18096c46",
+    "status": "passed",
     "steps_executed": true,
-    "blocker": "that run covers 7a9495b only; the reading-experience changes had not run in hosted CI when this record was written"
+    "blocker": ""
   },
   "publication": {
-    "github_release": "not-published",
+    "github_release": "published",
     "pypi_core": "not-published",
     "pypi_pdf": "not-published",
     "pypi_audio": "not-published",
@@ -101,12 +101,11 @@
   "schemas": {
     "namespace": "GitHub v0.5.0 release assets",
     "offline_bundle": "brief-spec-schemas.bundle.json",
-    "published": false
+    "published": true
   },
   "account_gates": [
-    "Commit the candidate and run hosted CI on that exact revision",
     "Register PyPI Trusted Publishers for brief-spec and the PDF/audio renderers",
-    "Register separate publishers for Chronicle/video only when those experimental packages are promoted",
-    "Approve the v0.5.0 tag and public release after the exact-revision gates pass"
+    "Rerun the release workflow to publish the staged PyPI bytes and verify the clean install",
+    "Register separate publishers for Chronicle/video only when those experimental packages are promoted"
   ]
 }
