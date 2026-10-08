@@ -12,7 +12,7 @@ from typing import Any
 from briefspec.delivery import render_html, sha256_bytes
 from briefspec.state import atomic_write_public
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 
 _PDF_FIELD = re.compile(r"^(?P<name>[A-Za-z ]+):\s*(?P<value>.+)$", re.MULTILINE)
 _PAGE = re.compile(r'<page\s+width="(?P<width>[\d.]+)"\s+height="(?P<height>[\d.]+)">')

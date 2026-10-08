@@ -164,9 +164,49 @@ def test_outcome_rejects_uninspectable_proof(
 def test_outcome_warns_when_evidence_classification_is_missing(
     outcome_text: Callable[..., str],
 ) -> None:
-    result = validate_outcome(outcome_text(proof=("`tests/test_contract.py` — direct evidence",)))
+    result = validate_outcome(
+        outcome_text(
+            status="REVIEW",
+            human_action="Review the change.",
+            proof=("`tests/test_contract.py` — direct evidence",),
+        )
+    )
     assert result.valid
     assert any("Proof item 1 should start with" in warning for warning in result.warnings)
+
+
+@pytest.mark.parametrize(
+    ("proof", "expected"),
+    [
+        (("[direct/fail] `pytest` → 3 failed",), "DONE cannot include failing proof"),
+        (
+            ("[direct/pass] `pytest` → 9 passed", "[derived/fail] `ruff check` → 1 error"),
+            "DONE cannot include failing proof",
+        ),
+        (("[derived/pass] `pytest` → 9 passed",), "DONE requires at least one [direct/pass]"),
+        (("[reported/pass] CI run #12 → green",), "DONE requires at least one [direct/pass]"),
+        (("`pytest` → 9 passed",), "DONE requires at least one [direct/pass]"),
+        (("[direct/info] `src/app.py`",), "DONE requires at least one [direct/pass]"),
+    ],
+)
+def test_done_requires_direct_passing_proof_without_failures(
+    outcome_text: Callable[..., str], proof: tuple[str, ...], expected: str
+) -> None:
+    result = validate_outcome(outcome_text(proof=proof))
+    assert not result.valid
+    assert any(error.startswith(expected) for error in result.errors)
+
+
+def test_done_accepts_direct_pass_alongside_context(outcome_text: Callable[..., str]) -> None:
+    result = validate_outcome(
+        outcome_text(
+            proof=(
+                "[direct/pass kind=test] `pytest` → 9 passed",
+                "[reported/info] [CI](https://example.test/run/1) → queued",
+            )
+        )
+    )
+    assert result.valid, result.errors
 
 
 def test_outcome_accepts_explicit_evidence_classification(

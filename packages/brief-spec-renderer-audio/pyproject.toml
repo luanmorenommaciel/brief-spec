@@ -4,13 +4,13 @@ build-backend = "hatchling.build"
 
 [project]
 name = "brief-spec-renderer-audio"
-version = "0.5.0"
+version = "0.6.0"
 description = "Verified local macOS and opt-in OpenAI audio rendering for Brief-Spec."
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 authors = [{ name = "Luan Moreno Maciel" }]
-dependencies = ["brief-spec>=0.5,<0.6"]
+dependencies = ["brief-spec>=0.6,<0.7"]
 
 [project.entry-points."brief_spec.renderers"]
 audio = "briefspec_renderer_audio:AudioRenderer"

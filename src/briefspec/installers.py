@@ -48,6 +48,9 @@ def _owned_marker(content: bytes) -> bool:
             b"Managed by Brief-Spec",
             b"brief-spec:",
             b"briefspec:",
+            # Capability files record the installing version, so their bytes change on every
+            # upgrade; their kind identifies them as Brief-Spec's own.
+            b'"kind": "brief-spec-harness-capabilities"',
         )
     )
 

@@ -1,0 +1,150 @@
+{"id": "h001", "prompt": "entry point for the worker?", "type": "exploration", "lang": "en", "tags": ["terse"]}
+{"id": "h002", "prompt": "can you make the config loader accept yaml as well as toml?", "type": "implementation", "lang": "en", "tags": []}
+{"id": "h003", "prompt": "tests pass alone but fail when run with -n auto. why", "type": "debugging", "lang": "en", "tags": []}
+{"id": "h004", "prompt": "is there prior art for something like task-spec's hmac sealing in other tools? search around", "type": "research", "lang": "en", "tags": ["product-name"]}
+{"id": "h005", "prompt": "don't touch the repo, just research what the python packaging authority recommends for versioning", "type": "research", "lang": "en", "tags": ["negation"]}
+{"id": "h006", "prompt": "plan how we'll triage and merge 40 stale PRs without breaking main", "type": "planning", "lang": "en", "tags": ["mixed"]}
+{"id": "h007", "prompt": "research the market for developer handoff tools, who competes with workhelm?", "type": "research", "lang": "en", "tags": ["product-name"]}
+{"id": "h008", "prompt": "pra que serve o selo HMAC no task-spec?", "type": "general", "lang": "pt", "tags": ["product-name"]}
+{"id": "h009", "prompt": "find where we catch the `TimeoutError` from the vendor sdk", "type": "exploration", "lang": "en", "tags": []}
+{"id": "h010", "prompt": "o endpoint de login retorna 401 mesmo com token válido, descobre por quê", "type": "debugging", "lang": "pt", "tags": [], "subject": "auth"}
+{"id": "h011", "prompt": "make the deploy script fail fast if the git tree is dirty", "type": "implementation", "lang": "en", "tags": ["mixed"]}
+{"id": "h012", "prompt": "difference between authentication and authorization?", "type": "general", "lang": "en", "tags": ["terse"], "subject": "auth"}
+{"id": "h013", "prompt": "what's the point of keep-spec if brief-spec already writes the report?", "type": "general", "lang": "en", "tags": ["product-name"]}
+{"id": "h014", "prompt": "o que é cache distribuído, em poucas palavras?", "type": "general", "lang": "pt", "tags": []}
+{"id": "h015", "prompt": "revoke the leaked deploy key and issue a new one", "type": "operations", "lang": "en", "tags": []}
+{"id": "h016", "prompt": "also check the error paths in the same file", "type": "review", "lang": "en", "tags": ["follow-up"]}
+{"id": "h017", "prompt": "review the planning doc for the q3 migration, is the sequencing realistic?", "type": "review", "lang": "en", "tags": ["mixed"]}
+{"id": "h018", "prompt": "what's a reasonable code coverage target, in your opinion?", "type": "general", "lang": "en", "tags": []}
+{"id": "h019", "prompt": "ship 0.5.2", "type": "operations", "lang": "en", "tags": ["terse"], "subject": "release"}
+{"id": "h020", "prompt": "what's our plan for deprecating the old cli flags? draft it", "type": "planning", "lang": "en", "tags": []}
+{"id": "h021", "prompt": "the brief-spec report comes out empty for codex sessions, why?", "type": "debugging", "lang": "en", "tags": ["product-name"]}
+{"id": "h022", "prompt": "what do recent papers say about calibrating keyword classifiers against human labels?", "type": "research", "lang": "en", "tags": []}
+{"id": "h023", "prompt": "can you deploy commit a1b2c3d to the qa environment?", "type": "operations", "lang": "en", "tags": []}
+{"id": "h024", "prompt": "por que a fila do rabbit tá acumulando mensagens sem consumir?", "type": "debugging", "lang": "pt", "tags": []}
+{"id": "h025", "prompt": "I need a go/no-go on PR #1203 before standup", "type": "review", "lang": "en", "tags": [], "subject": "pull-request"}
+{"id": "h026", "prompt": "don't run anything, just write the dockerfile for the api service", "type": "implementation", "lang": "en", "tags": ["negation"]}
+{"id": "h027", "prompt": "raise the alert threshold on queue depth to 5000 in the monitoring config", "type": "operations", "lang": "en", "tags": []}
+{"id": "h028", "prompt": "what does lockstep versioning mean for a family of packages?", "type": "general", "lang": "en", "tags": ["mixed"], "subject": "release"}
+{"id": "h029", "prompt": "look up current pricing for github copilot business vs cursor teams", "type": "research", "lang": "en", "tags": []}
+{"id": "h030", "prompt": "how does taskmesh relate to task-spec, conceptually?", "type": "general", "lang": "en", "tags": ["product-name"]}
+{"id": "h031", "prompt": "compare rabbitmq and nats jetstream on delivery guarantees, with sources", "type": "research", "lang": "en", "tags": []}
+{"id": "h032", "prompt": "add a `--since` option to the history command that filters by date", "type": "implementation", "lang": "en", "tags": []}
+{"id": "h033", "prompt": "add brief-spec's report hook to the codex config template", "type": "implementation", "lang": "en", "tags": ["product-name"]}
+{"id": "h034", "prompt": "review the benchmark methodology in bench/README.md, are the numbers trustworthy?", "type": "review", "lang": "en", "tags": ["mixed"]}
+{"id": "h035", "prompt": "I need a rollout plan for switching the cache from memcached to redis", "type": "planning", "lang": "en", "tags": []}
+{"id": "h036", "prompt": "document the env vars in docs/configuration.md", "type": "implementation", "lang": "en", "tags": [], "subject": "docs"}
+{"id": "h037", "prompt": "what does the 'R' in RPI stand for in workhelm?", "type": "general", "lang": "en", "tags": ["product-name"]}
+{"id": "h038", "prompt": "still 413 after bumping client_max_body_size. dig deeper", "type": "debugging", "lang": "en", "tags": ["follow-up"]}
+{"id": "h039", "prompt": "split cli.py into one module per subcommand, keep behavior identical", "type": "implementation", "lang": "en", "tags": []}
+{"id": "h040", "prompt": "why does `make build` fail with 'No rule to make target dist/'?", "type": "debugging", "lang": "en", "tags": []}
+{"id": "h041", "prompt": "don't touch prod, just figure out why replica lag spiked at 03:00", "type": "debugging", "lang": "en", "tags": ["negation", "mixed"]}
+{"id": "h042", "prompt": "também atualiza a documentação com o novo parâmetro", "type": "implementation", "lang": "pt", "tags": ["follow-up"], "subject": "docs"}
+{"id": "h043", "prompt": "now that we picked msgspec, migrate the models off pydantic", "type": "implementation", "lang": "en", "tags": ["mixed", "follow-up"]}
+{"id": "h044", "prompt": "I'm onboarding two interns next week and they keep asking me about this, so I want an answer I can repeat to them. In simple words, what is the difference between unit tests, integration tests and end-to-end tests, and when would you reach for each one?", "type": "general", "lang": "en", "tags": ["long"]}
+{"id": "h045", "prompt": "gather benchmarks for duckdb vs polars on 10gb of parquet", "type": "research", "lang": "en", "tags": []}
+{"id": "h046", "prompt": "sobe o hotfix pra produção agora, o checkout tá fora", "type": "operations", "lang": "pt", "tags": []}
+{"id": "h047", "prompt": "what's the latest on pep 751 lockfiles? find the current status", "type": "research", "lang": "en", "tags": []}
+{"id": "h048", "prompt": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0x92 in position 14 when reading the transcript. where's it from?", "type": "debugging", "lang": "en", "tags": []}
+{"id": "h049", "prompt": "audit the incident runbook in ops/runbooks/db-failover.md for missing steps", "type": "review", "lang": "en", "tags": ["mixed"]}
+{"id": "h050", "prompt": "don't redeploy, just restart the nginx pods in staging", "type": "operations", "lang": "en", "tags": ["negation"]}
+{"id": "h051", "prompt": "upload the new brief-spec wheel to testpypi", "type": "operations", "lang": "en", "tags": ["product-name"], "subject": "release"}
+{"id": "h052", "prompt": "who owns the retry queue in services/notifier and what reads from it?", "type": "exploration", "lang": "en", "tags": []}
+{"id": "h053", "prompt": "fork vs clone, what's actually different?", "type": "general", "lang": "en", "tags": []}
+{"id": "h054", "prompt": "propose a sequencing for the brief-spec reading backlog items that touch markdown.py", "type": "planning", "lang": "en", "tags": ["product-name"]}
+{"id": "h055", "prompt": "replace print statements with structured logging in workers/", "type": "implementation", "lang": "en", "tags": []}
+{"id": "h056", "prompt": "design the retry and dead-letter flow for the event bus before we build it", "type": "planning", "lang": "en", "tags": []}
+{"id": "h057", "prompt": "plan a postmortem process for the team, who writes what and when", "type": "planning", "lang": "en", "tags": ["mixed"]}
+{"id": "h058", "prompt": "why is the keep-spec digest different on every run of the same input?", "type": "debugging", "lang": "en", "tags": ["product-name"]}
+{"id": "h059", "prompt": "depois do último deploy o relatório ficou lento, qual a causa?", "type": "debugging", "lang": "pt", "tags": ["mixed"]}
+{"id": "h060", "prompt": "why does the review step in our pipeline keep timing out?", "type": "debugging", "lang": "en", "tags": ["mixed"], "subject": "ci"}
+{"id": "h061", "prompt": "Background: we're a team of four and the mobile app, the api and the admin panel all need the new permission model. Legal wants it by end of quarter. How would you phase this so we don't block each other and can ship incrementally?", "type": "planning", "lang": "en", "tags": ["long"]}
+{"id": "h062", "prompt": "can you figure out why emails go out twice for some orders?", "type": "debugging", "lang": "en", "tags": []}
+{"id": "h063", "prompt": "skim the new onboarding doc and tell me what's confusing", "type": "review", "lang": "en", "tags": [], "subject": "docs"}
+{"id": "h064", "prompt": "what schedules the job in jobs/rollup.py? follow it back to wherever it gets registered", "type": "exploration", "lang": "en", "tags": []}
+{"id": "h065", "prompt": "how would you define technical debt to a non-engineer?", "type": "general", "lang": "en", "tags": []}
+{"id": "h066", "prompt": "how do other teams evaluate their code review bots? find writeups", "type": "research", "lang": "en", "tags": ["mixed"]}
+{"id": "h067", "prompt": "don't write code, sketch the taskmesh swimlanes for the dock refactor first", "type": "planning", "lang": "en", "tags": ["negation", "product-name"]}
+{"id": "h068", "prompt": "I need a quick definition of eventual consistency for a slide", "type": "general", "lang": "en", "tags": []}
+{"id": "h069", "prompt": "quais testes exercitam o módulo de bundle?", "type": "exploration", "lang": "pt", "tags": []}
+{"id": "h070", "prompt": "Context: I'm taking over the billing service from a dev who left. There's no README and the tests are sparse. Before I touch anything I need a map of the package: which modules matter, where money gets calculated, which external APIs are called, and where config comes from.", "type": "exploration", "lang": "en", "tags": ["long"]}
+{"id": "h071", "prompt": "why is utc preferred for storing timestamps?", "type": "general", "lang": "en", "tags": []}
+{"id": "h072", "prompt": "can you review src/payments/refund.py? looking for edge cases around partial refunds", "type": "review", "lang": "en", "tags": []}
+{"id": "h073", "prompt": "how are feature flags evaluated in the frontend? find the hook and walk me through it", "type": "exploration", "lang": "en", "tags": []}
+{"id": "h074", "prompt": "procura a documentação oficial sobre os eventos de hook do codex", "type": "research", "lang": "pt", "tags": []}
+{"id": "h075", "prompt": "react says 'too many re-renders' on the settings page, what's looping?", "type": "debugging", "lang": "en", "tags": []}
+{"id": "h076", "prompt": "find a few public postmortems about cache stampedes and summarize the lessons", "type": "research", "lang": "en", "tags": ["mixed"]}
+{"id": "h077", "prompt": "Background: we merged a big refactor of the scheduler last week and nobody really looked at it because of the holiday. Please go through scheduler/core.py and scheduler/locks.py and tell me whether anything in there could double-run a job or deadlock.", "type": "review", "lang": "en", "tags": []}
+{"id": "h078", "prompt": "review the taskmesh finish output, does it leak anything it shouldn't?", "type": "review", "lang": "en", "tags": ["product-name"]}
+{"id": "h079", "prompt": "re-trigger the failed nightly e2e workflow", "type": "operations", "lang": "en", "tags": [], "subject": "ci"}
+{"id": "h080", "prompt": "audita as permissões do bucket s3 de produção no terraform", "type": "review", "lang": "pt", "tags": ["mixed"]}
+{"id": "h081", "prompt": "do i actually need kubernetes for a side project? gut feeling", "type": "general", "lang": "en", "tags": ["mixed"]}
+{"id": "h082", "prompt": "can you map how `taskspec gate --stamp` computes and writes the hmac? read only", "type": "exploration", "lang": "en", "tags": ["product-name"]}
+{"id": "h083", "prompt": "I need to understand the data model before changing anything: list the main tables in models/ and how they relate", "type": "exploration", "lang": "en", "tags": ["mixed"]}
+{"id": "h084", "prompt": "decompose the search revamp into a task-spec recipe we can review", "type": "planning", "lang": "en", "tags": ["product-name"]}
+{"id": "h085", "prompt": "monads, in one sentence?", "type": "general", "lang": "en", "tags": ["terse"]}
+{"id": "h086", "prompt": "Some context: since we moved CI runners to the new pool, about one in ten builds fails during dependency install with a checksum mismatch on a wheel. Retrying usually works. I want the actual cause before we just paper over it with retries.", "type": "debugging", "lang": "en", "tags": ["mixed", "long"], "subject": "ci"}
+{"id": "h087", "prompt": "lgtm or not? diff is in the last commit", "type": "review", "lang": "en", "tags": []}
+{"id": "h088", "prompt": "ok, given those findings, what order should we fix them in?", "type": "planning", "lang": "en", "tags": ["follow-up", "mixed"]}
+{"id": "h089", "prompt": "break the 'offline mode' feature into shippable slices", "type": "planning", "lang": "en", "tags": []}
+{"id": "h090", "prompt": "don't rewrite it, just tell me what's wrong with this sql: `SELECT * FROM orders o JOIN users u WHERE o.total > 100`", "type": "review", "lang": "en", "tags": ["negation"]}
+{"id": "h091", "prompt": "is it true that converge never merges the user branch?", "type": "general", "lang": "en", "tags": ["product-name"]}
+{"id": "h092", "prompt": "add a health check endpoint at /healthz that returns the build sha", "type": "implementation", "lang": "en", "tags": ["mixed"]}
+{"id": "h093", "prompt": "what is a cron expression", "type": "general", "lang": "en", "tags": ["terse"]}
+{"id": "h094", "prompt": "which python static site generators are still actively maintained? check commit activity", "type": "research", "lang": "en", "tags": []}
+{"id": "h095", "prompt": "is the release job for v0.5.2 still running?", "type": "operations", "lang": "en", "tags": [], "subject": "release"}
+{"id": "h096", "prompt": "the cause is the off-by-one in paginate(), page index should start at 0. patch it", "type": "implementation", "lang": "en", "tags": ["mixed"]}
+{"id": "h097", "prompt": "como a gente deveria dividir esse serviço em módulos? propõe uma arquitetura", "type": "planning", "lang": "pt", "tags": []}
+{"id": "h098", "prompt": "can you plan the removal of python 3.9 support?", "type": "planning", "lang": "en", "tags": []}
+{"id": "h099", "prompt": "the site is down. fail over to the secondary region now", "type": "operations", "lang": "en", "tags": []}
+{"id": "h100", "prompt": "show me every place that writes into tasks/ outside of the batch command", "type": "exploration", "lang": "en", "tags": []}
+{"id": "h101", "prompt": "cpu pegged at 100% on one pod only, find out what it's doing", "type": "debugging", "lang": "en", "tags": ["mixed"]}
+{"id": "h102", "prompt": "I need a comparison of temporal vs prefect vs dagster for our workflows", "type": "research", "lang": "en", "tags": []}
+{"id": "h103", "prompt": "wire the keep-spec surface id into the bundle metadata", "type": "implementation", "lang": "en", "tags": ["product-name"]}
+{"id": "h104", "prompt": "check the helm chart values for prod before tomorrow's deploy", "type": "review", "lang": "en", "tags": ["mixed"]}
+{"id": "h105", "prompt": "don't refactor, just tell me which modules import from legacy/", "type": "exploration", "lang": "en", "tags": ["negation"]}
+{"id": "h106", "prompt": "the workhelm sync command hangs forever on large backlogs, investigate", "type": "debugging", "lang": "en", "tags": ["product-name"]}
+{"id": "h107", "prompt": "revisa a função de cálculo de frete, acho que tem problema de arredondamento", "type": "review", "lang": "pt", "tags": []}
+{"id": "h108", "prompt": "I need the prod api scaled down to 2 pods for the night", "type": "operations", "lang": "en", "tags": []}
+{"id": "h109", "prompt": "image uploads over 5mb started failing with 413 this week. what's causing it", "type": "debugging", "lang": "en", "tags": []}
+{"id": "h110", "prompt": "can you tell me what a write-ahead log is in two lines?", "type": "general", "lang": "en", "tags": []}
+{"id": "h111", "prompt": "I need a csv export endpoint for the reports page", "type": "implementation", "lang": "en", "tags": []}
+{"id": "h112", "prompt": "how does the keep-spec observer decide a surface is stale? show me the code path", "type": "exploration", "lang": "en", "tags": ["product-name"]}
+{"id": "h113", "prompt": "I need to know why the container exits with code 139 on arm", "type": "debugging", "lang": "en", "tags": []}
+{"id": "h114", "prompt": "how does brief-spec find the transcript file for a session?", "type": "exploration", "lang": "en", "tags": ["product-name"]}
+{"id": "h115", "prompt": "then write a regression test for it", "type": "implementation", "lang": "en", "tags": ["follow-up"]}
+{"id": "h116", "prompt": "where does the cli decide which output format to use?", "type": "exploration", "lang": "en", "tags": []}
+{"id": "h117", "prompt": "outline the steps to make keep-spec's ingest incremental", "type": "planning", "lang": "en", "tags": ["product-name"]}
+{"id": "h118", "prompt": "implement retries in the taskmesh leaf runner, max 3, configurable", "type": "implementation", "lang": "en", "tags": ["product-name"]}
+{"id": "h119", "prompt": "critique the converge compose config, anything redundant?", "type": "review", "lang": "en", "tags": ["product-name"]}
+{"id": "h120", "prompt": "me mostra como o evento de pagamento chega até o serviço de notificações", "type": "exploration", "lang": "pt", "tags": []}
+{"id": "h121", "prompt": "dá uma revisada no meu teste, ele tá testando o que deveria?", "type": "review", "lang": "pt", "tags": []}
+{"id": "h122", "prompt": "how should we version the hook protocol going forward? propose an approach", "type": "planning", "lang": "en", "tags": []}
+{"id": "h123", "prompt": "after the review passes, publish the package", "type": "operations", "lang": "en", "tags": ["mixed", "follow-up"], "subject": "release"}
+{"id": "h124", "prompt": "cria um endpoint pra listar usuários inativos", "type": "implementation", "lang": "pt", "tags": []}
+{"id": "h125", "prompt": "trace the request path for POST /v2/orders from router to db", "type": "exploration", "lang": "en", "tags": []}
+{"id": "h126", "prompt": "monta um plano pra migrar os testes de unittest pra pytest", "type": "planning", "lang": "pt", "tags": []}
+{"id": "h127", "prompt": "roll back the converge factory runner to the previous image", "type": "operations", "lang": "en", "tags": ["product-name"]}
+{"id": "h128", "prompt": "now that the bug is fixed, can you explain in plain terms what a dangling pointer is?", "type": "general", "lang": "en", "tags": ["mixed", "follow-up"]}
+{"id": "h129", "prompt": "you mentioned 'backpressure' earlier, what does that mean exactly?", "type": "general", "lang": "en", "tags": ["follow-up"]}
+{"id": "h130", "prompt": "don't open any files, just tell me what pep 8 says about line length", "type": "general", "lang": "en", "tags": ["negation"]}
+{"id": "h131", "prompt": "is `async def` without any await inside pointless?", "type": "general", "lang": "en", "tags": []}
+{"id": "h132", "prompt": "onde o cliente http é instanciado nesse projeto?", "type": "exploration", "lang": "pt", "tags": []}
+{"id": "h133", "prompt": "renew the expired oauth client secret for the staging app", "type": "operations", "lang": "en", "tags": [], "subject": "auth"}
+{"id": "h134", "prompt": "what should go into v0.7 vs v0.8? prioritize the backlog for me", "type": "planning", "lang": "en", "tags": []}
+{"id": "h135", "prompt": "is python's `is` the same as `==`?", "type": "general", "lang": "en", "tags": []}
+{"id": "h136", "prompt": "vale a pena aprender go em 2026? opinião sincera", "type": "general", "lang": "pt", "tags": []}
+{"id": "h137", "prompt": "where's the code that builds the github release notes?", "type": "exploration", "lang": "en", "tags": ["mixed"], "subject": "release"}
+{"id": "h138", "prompt": "adiciona cache de 5 minutos na consulta de produtos", "type": "implementation", "lang": "pt", "tags": []}
+{"id": "h139", "prompt": "planeja as etapas pra adicionar suporte a multi-idioma no app", "type": "planning", "lang": "pt", "tags": []}
+{"id": "h140", "prompt": "is a flaky test considered a bug or just noise?", "type": "general", "lang": "en", "tags": ["mixed"]}
+{"id": "h141", "prompt": "reinicia o pipeline de ci que falhou na branch main", "type": "operations", "lang": "pt", "tags": [], "subject": "ci"}
+{"id": "h142", "prompt": "find the codex cli docs on lifecycle events and summarize what's available", "type": "research", "lang": "en", "tags": []}
+{"id": "h143", "prompt": "compara o github actions com o gitlab ci em custo e recursos", "type": "research", "lang": "pt", "tags": ["mixed"], "subject": "ci"}
+{"id": "h144", "prompt": "rate this api design: is `PATCH /users/{id}/activate` a good idea?", "type": "review", "lang": "en", "tags": ["ambiguous-but-labeled"]}
+{"id": "h145", "prompt": "is the workhelm backlog importer doing anything unsafe with file paths? audit it", "type": "review", "lang": "en", "tags": ["product-name"]}
+{"id": "h146", "prompt": "pesquisa quais bibliotecas de feature flag em python são mais usadas", "type": "research", "lang": "pt", "tags": []}
+{"id": "h147", "prompt": "aumenta o número de réplicas do worker pra 8", "type": "operations", "lang": "pt", "tags": []}
+{"id": "h148", "prompt": "survey how open source projects document agent hooks, any good examples?", "type": "research", "lang": "en", "tags": []}
+{"id": "h149", "prompt": "Heads up: marketing is launching at 9am and we expect 5x traffic. Before then, scale the web tier, warm the cdn cache for the landing pages, and set up a dashboard I can watch during the launch.", "type": "operations", "lang": "en", "tags": []}
+{"id": "h150", "prompt": "can you find out which llm eval libraries support multi-class confusion matrices?", "type": "research", "lang": "en", "tags": []}

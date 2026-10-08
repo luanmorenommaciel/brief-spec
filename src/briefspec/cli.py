@@ -15,12 +15,22 @@ from briefspec.config import briefspec_home, config_template, load_config
 from briefspec.delivery import load_delivery, validate_delivery
 from briefspec.diagnostics import doctor_all_scopes, doctor_runtime
 from briefspec.errors import BriefSpecError, InstallConflict
+from briefspec.evaluation import evaluate, load_corpus, render_report
 from briefspec.frames import render_frame
+from briefspec.freshness import git_head
 from briefspec.harnesses import detected_harnesses
 from briefspec.hooks import emit_diagnostics, process_event, read_hook_payload, render_decision
 from briefspec.installers import install_runtime, install_runtimes, uninstall_runtime
 from briefspec.markdown import detect_kind, validate_checkpoint, validate_outcome
 from briefspec.models import CheckpointMode, Runtime, VerificationLevel, WorkType
+from briefspec.notify import (
+    CHANNEL_KINDS,
+    NotifyError,
+    acknowledge,
+    load_channels,
+    notify,
+    select_channels,
+)
 from briefspec.renderers import renderer_capabilities, setup_renderers
 from briefspec.state import atomic_write, list_sessions, prune_sessions, reset_session
 from briefspec.verification import verify_target
@@ -167,6 +177,14 @@ def build_parser() -> argparse.ArgumentParser:
     classify.add_argument("--subject")
     classify.add_argument("--json", action="store_true")
 
+    evaluation = commands.add_parser(
+        "eval", help="score the local classifier against a labeled prompt corpus"
+    )
+    evaluation.add_argument("corpus", nargs="?", type=Path)
+    evaluation.add_argument("--min-accuracy", type=float)
+    evaluation.add_argument("--show", type=int, default=20, help="mismatches to print")
+    evaluation.add_argument("--json", action="store_true")
+
     frame = commands.add_parser("frame")
     frame.add_argument("request", help="BriefSpecFrameRequest/v1 JSON path or - for stdin")
     frame.add_argument("--output", required=True, type=Path)
@@ -258,6 +276,35 @@ def build_parser() -> argparse.ArgumentParser:
     deliver.add_argument("--force", action="store_true")
     deliver.add_argument("--allow-plugins", action="store_true")
     deliver.add_argument("--json", action="store_true")
+
+    notify_command = commands.add_parser(
+        "notify", help="post a brief to Slack, Teams, Discord, Google Chat, or a webhook"
+    )
+    notify_command.add_argument("input")
+    notify_command.add_argument("--to", required=True, help="comma-separated channel names, or all")
+    notify_command.add_argument("--consent-network", action="store_true")
+    notify_command.add_argument("--dry-run", action="store_true")
+    notify_command.add_argument("--thread", help="thread key; defaults to the task decision")
+    notify_command.add_argument("--link", help="https link to the full brief")
+    notify_command.add_argument("--attach", type=Path, help="file to upload (slack-bot only)")
+    notify_command.add_argument("--resend", action="store_true")
+    notify_command.add_argument("--trigger", default="manual", help=argparse.SUPPRESS)
+    notify_command.add_argument("--source-revision", help=argparse.SUPPRESS)
+    notify_command.add_argument("--created-at", help=argparse.SUPPRESS)
+    notify_command.add_argument("--json", action="store_true")
+
+    ack = commands.add_parser(
+        "ack", help="record that you read a DECIDE, BLOCKED, or REVIEW brief and what you chose"
+    )
+    ack.add_argument("input")
+    ack.add_argument("--choice", required=True)
+    ack.add_argument("--by")
+    ack.add_argument("--json", action="store_true")
+
+    channels_command = commands.add_parser("channels", help="list configured output channels")
+    channels_sub = channels_command.add_subparsers(dest="channels_command", required=True)
+    channels_list = channels_sub.add_parser("list")
+    channels_list.add_argument("--json", action="store_true")
 
     hook = commands.add_parser("hook", help=argparse.SUPPRESS)
     hook.add_argument(
@@ -434,6 +481,13 @@ def main(argv: list[str] | None = None) -> int:
                     "contracts": {
                         "human_frame_request": "BriefSpecFrameRequest/v1",
                         "human_frame_receipt": "BriefSpecFrameReceipt/v1",
+                        "notify_receipt": "brief-spec-notify-receipt/1.0",
+                        "ack_receipt": "brief-spec-ack-receipt/1.0",
+                    },
+                    "outputs": {
+                        "channels": list(CHANNEL_KINDS),
+                        "direction": "one-way",
+                        "network_consent_required": True,
                     },
                     "authority": {
                         "approval": False,
@@ -459,6 +513,21 @@ def main(argv: list[str] | None = None) -> int:
                 subject=args.subject,
             )
             _print_result(classification.to_dict(), args.json)
+            return 0
+
+        if args.command == "eval":
+            report = evaluate(load_corpus(args.corpus))
+            if args.json:
+                print(json.dumps(report, indent=2, sort_keys=True))
+            else:
+                print(render_report(report, limit=args.show))
+            if args.min_accuracy is not None and report["accuracy"] < args.min_accuracy:
+                print(
+                    f"brief-spec: accuracy {report['accuracy']:.3f} is below "
+                    f"{args.min_accuracy:.3f}",
+                    file=sys.stderr,
+                )
+                return 1
             return 0
 
         if args.command == "frame":
@@ -527,6 +596,11 @@ def main(argv: list[str] | None = None) -> int:
         if args.command in {"export", "bundle"}:
             text = _read_text(args.input)
             source_path = None if args.input == "-" else Path(args.input)
+            source_revision = args.source_revision
+            if source_revision is None:
+                source_revision = git_head((source_path or Path.cwd()).resolve())
+            elif source_revision.lower() == "none":
+                source_revision = None
             delivery, warnings = load_delivery(
                 text,
                 source_path=source_path,
@@ -535,7 +609,7 @@ def main(argv: list[str] | None = None) -> int:
                 session_ref=args.session_ref,
                 host_version=args.host_version,
                 adapter_version=args.adapter_version,
-                source_revision=args.source_revision,
+                source_revision=source_revision,
                 model=args.model,
                 model_provider=args.model_provider,
                 created_at=args.created_at,
@@ -593,6 +667,110 @@ def main(argv: list[str] | None = None) -> int:
             )
             _print_result(result, args.json)
             return 0
+
+        if args.command == "ack":
+            text = _read_text(args.input)
+            source_path = None if args.input == "-" else Path(args.input)
+            delivery, _ = load_delivery(
+                text,
+                source_path=source_path,
+                source_revision=git_head((source_path or Path.cwd()).resolve()),
+            )
+            receipt = acknowledge(delivery, choice=args.choice, by=args.by)
+            if args.json:
+                print(json.dumps(receipt, indent=2, sort_keys=True))
+            else:
+                print(f"Acknowledged {receipt['metadata']['status']}: {args.choice}")
+                print(f"receipt {receipt['receipt_id']} for brief {receipt['content_sha256'][:12]}")
+            return 0
+
+        if args.command == "channels":
+            listed = [channel.public() for channel in load_channels().values()]
+            if args.json:
+                print(json.dumps(listed, indent=2, sort_keys=True))
+            elif not listed:
+                print("No channels configured.")
+            else:
+                for item in listed:
+                    secret = "set" if item["secret_present"] else "missing"
+                    env = item["secret_env"] or item["url_env"]
+                    print(f"{item['name']}: {item['kind']} ({env} {secret}) from {item['source']}")
+            return 0
+
+        if args.command == "notify":
+            source_path = None if args.input == "-" else Path(args.input)
+            pending_dir = (briefspec_home() / "notify" / "pending").resolve()
+            is_pending = (
+                args.trigger == "hook"
+                and source_path is not None
+                and source_path.resolve().parent == pending_dir
+            )
+            try:
+                text = _read_text(args.input)
+            finally:
+                if is_pending and source_path is not None:
+                    source_path.unlink(missing_ok=True)
+            revision = args.source_revision
+            if revision is None:
+                revision = git_head((source_path or Path.cwd()).resolve())
+            elif revision.lower() == "none":
+                revision = None
+            delivery, _ = load_delivery(
+                text,
+                source_path=None if is_pending else source_path,
+                source_revision=revision,
+                created_at=args.created_at,
+            )
+            if args.link and not args.link.startswith("https://"):
+                raise ValueError("--link must be an https URL")
+            names = [name.strip() for name in args.to.split(",") if name.strip()]
+            brief = delivery.get("brief", {})
+            status = (
+                str(brief.get("status")) if brief.get("kind") == "outcome-brief" else "CHECKPOINT"
+            )
+            selected = select_channels(load_channels(), names, status)
+            if args.trigger == "hook":
+                selected = [channel for channel in selected if status in channel.when_status]
+            results: list[dict[str, Any]] = []
+            failed = False
+            for channel in selected:
+                try:
+                    results.append(
+                        notify(
+                            delivery,
+                            channel,
+                            consent_network=args.consent_network,
+                            dry_run=args.dry_run,
+                            thread_key=args.thread,
+                            link=args.link,
+                            attach=args.attach,
+                            resend=args.resend,
+                            trigger=args.trigger,
+                        )
+                    )
+                except NotifyError as exc:
+                    failed = True
+                    results.append({"channel": channel.name, "error": str(exc)})
+            if args.json:
+                print(json.dumps(results, indent=2, sort_keys=True))
+            else:
+                if not selected:
+                    print(f"No channel's when_status includes {status}; nothing sent.")
+                for item in results:
+                    name = item.get("channel") or item.get("destination", {}).get("channel")
+                    if "error" in item:
+                        print(f"{name}: FAILED: {item['error']}")
+                    elif item.get("dry_run"):
+                        print(f"{name}: dry run, nothing sent")
+                        print(json.dumps(item["payload"], indent=2, ensure_ascii=False))
+                    elif item.get("skipped"):
+                        print(f"{name}: skipped, {item['skipped']}")
+                    else:
+                        where = item["destination"].get("permalink") or item["destination"].get(
+                            "message_id", "sent"
+                        )
+                        print(f"{name}: sent ({where})")
+            return 1 if failed else 0
 
         if args.command == "hook":
             try:

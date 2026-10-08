@@ -1,0 +1,300 @@
+{"id": "c001", "prompt": "agora que o deploy terminou, me explica o que é blue-green", "type": "general", "lang": "pt", "tags": ["mixed", "follow-up"]}
+{"id": "c002", "prompt": "procura artigos sobre classificação de intenção em prompts de código", "type": "research", "lang": "pt", "tags": []}
+{"id": "c003", "prompt": "why does the root cause analysis template use five whys? whats the idea behind it", "type": "general", "lang": "en", "tags": ["mixed"]}
+{"id": "c004", "prompt": "what does HMAC stand for and why would a seal use it", "type": "general", "lang": "en", "tags": []}
+{"id": "c005", "prompt": "don't implement anything yet, give me a plan for adding portuguese support", "type": "planning", "lang": "en", "tags": ["negation"]}
+{"id": "c006", "prompt": "run the database migration on prod during the maintenance window", "type": "operations", "lang": "en", "tags": []}
+{"id": "c007", "prompt": "is brief-spec just a prompt template or more than that?", "type": "general", "lang": "en", "tags": ["product-name"]}
+{"id": "c008", "prompt": "faz sentido usar uuid como chave primária? só quero tua opinião", "type": "general", "lang": "pt", "tags": []}
+{"id": "c009", "prompt": "deploy the new build to staging", "type": "operations", "lang": "en", "tags": []}
+{"id": "c010", "prompt": "tabs or spaces for yaml? opinion pls", "type": "general", "lang": "en", "tags": []}
+{"id": "c011", "prompt": "planeja a migração do banco pra postgres em etapas", "type": "planning", "lang": "pt", "tags": []}
+{"id": "c012", "prompt": "look at pr 88 in task-spec and tell me if it widens signed scope", "type": "review", "lang": "en", "tags": ["product-name"], "subject": "pull-request"}
+{"id": "c013", "prompt": "check the dockerfile for best-practice issues", "type": "review", "lang": "en", "tags": []}
+{"id": "c014", "prompt": "memory keeps growing in the worker process until oom. find out why", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c015", "prompt": "the integration test times out only on tuesdays?? what's going on", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c016", "prompt": "audit the dependencies in requirements.txt for known-bad versions", "type": "review", "lang": "en", "tags": ["ambiguous-but-labeled"]}
+{"id": "c017", "prompt": "find the public discussion about hook timeouts in the claude code issue tracker", "type": "research", "lang": "en", "tags": []}
+{"id": "c018", "prompt": "don't deploy yet, just review the diff", "type": "review", "lang": "en", "tags": ["negation", "mixed"]}
+{"id": "c019", "prompt": "remove the dead code around the old seamwise import", "type": "implementation", "lang": "en", "tags": ["product-name"]}
+{"id": "c020", "prompt": "how is a TaskPlan different from a recipe in task-spec, in your own words", "type": "general", "lang": "en", "tags": ["product-name"]}
+{"id": "c021", "prompt": "find benchmarks comparing uv and pip install times", "type": "research", "lang": "en", "tags": []}
+{"id": "c022", "prompt": "can you look over my diff before i push? anything off?", "type": "review", "lang": "en", "tags": []}
+{"id": "c023", "prompt": "write unit tests for secret_scan.py", "type": "implementation", "lang": "en", "tags": ["terse"]}
+{"id": "c024", "prompt": "how does converge talk to linear? just read, no edits", "type": "exploration", "lang": "en", "tags": ["product-name"]}
+{"id": "c025", "prompt": "review the brief-spec README for accuracy and tone", "type": "review", "lang": "en", "tags": ["product-name"], "subject": "docs"}
+{"id": "c026", "prompt": "workhelm's backlog sync drops items silently, why?", "type": "debugging", "lang": "en", "tags": ["product-name"]}
+{"id": "c027", "prompt": "add a --json flag to the status command", "type": "implementation", "lang": "en", "tags": []}
+{"id": "c028", "prompt": "review PR #412", "type": "review", "lang": "en", "tags": ["terse"], "subject": "pull-request"}
+{"id": "c029", "prompt": "design the caching strategy for the catalog api", "type": "planning", "lang": "en", "tags": []}
+{"id": "c030", "prompt": "quais ferramentas de observabilidade open source estão em alta? faz um levantamento", "type": "research", "lang": "pt", "tags": []}
+{"id": "c031", "prompt": "install the keep-spec observer on the build host", "type": "operations", "lang": "en", "tags": ["product-name"]}
+{"id": "c032", "prompt": "don't fix it yet, just find out why the build got so slow", "type": "debugging", "lang": "en", "tags": ["negation"]}
+{"id": "c033", "prompt": "plan the debugging session: what would you check first, second, third for the memory leak", "type": "planning", "lang": "en", "tags": ["mixed", "ambiguous-but-labeled"]}
+{"id": "c034", "prompt": "before we touch it, help me understand how cache invalidation works in services/catalog", "type": "exploration", "lang": "en", "tags": ["mixed"]}
+{"id": "c035", "prompt": "walk me through how taskmesh picks the next leaf to run", "type": "exploration", "lang": "en", "tags": ["product-name"]}
+{"id": "c036", "prompt": "pesquisa as alternativas ao celery em python e compara", "type": "research", "lang": "pt", "tags": []}
+{"id": "c037", "prompt": "make taskmesh's leaf loader skip files without frontmatter", "type": "implementation", "lang": "en", "tags": ["product-name"]}
+{"id": "c038", "prompt": "the bug is that we compare naive and aware datetimes in freshness.py, fix it by normalizing to utc", "type": "implementation", "lang": "en", "tags": ["mixed"]}
+{"id": "c039", "prompt": "trace how the deploy command in scripts/ ends up calling the k8s api", "type": "exploration", "lang": "en", "tags": ["mixed"]}
+{"id": "c040", "prompt": "o worker está travando depois de algumas horas, descobre a causa", "type": "debugging", "lang": "pt", "tags": []}
+{"id": "c041", "prompt": "write an ADR proposal for choosing between celery and rq", "type": "planning", "lang": "en", "tags": ["mixed", "ambiguous-but-labeled"]}
+{"id": "c042", "prompt": "compare postgres logical replication tools: debezium, pglogical, native", "type": "research", "lang": "en", "tags": []}
+{"id": "c043", "prompt": "how do events get from the queue consumer into postgres? step by step through the code", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c044", "prompt": "what calls `verify_bundle()`? i want the full call graph", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c045", "prompt": "onde fica a lógica de autenticação nesse projeto?", "type": "exploration", "lang": "pt", "tags": [], "subject": "auth"}
+{"id": "c046", "prompt": "write a migration to add a `deleted_at` column to orders", "type": "implementation", "lang": "en", "tags": []}
+{"id": "c047", "prompt": "where are the review templates defined?", "type": "exploration", "lang": "en", "tags": ["mixed"]}
+{"id": "c048", "prompt": "what's the current consensus on hmac vs ed25519 signatures for tamper-evident files? find sources", "type": "research", "lang": "en", "tags": []}
+{"id": "c049", "prompt": "before writing any code, design the plugin api", "type": "planning", "lang": "en", "tags": []}
+{"id": "c050", "prompt": "design a release process for this repo: branching, tagging, changelog", "type": "planning", "lang": "en", "tags": ["mixed"], "subject": "release"}
+{"id": "c051", "prompt": "find where `render_markdown` is called from", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c052", "prompt": "rollback prod to the previous release, checkout is down", "type": "operations", "lang": "en", "tags": [], "subject": "release"}
+{"id": "c053", "prompt": "after that, update the changelog too", "type": "implementation", "lang": "en", "tags": ["follow-up"]}
+{"id": "c054", "prompt": "the stamp verification fails with 'hmac mismatch' on a leaf i just sealed with task-spec, why?", "type": "debugging", "lang": "en", "tags": ["product-name"]}
+{"id": "c055", "prompt": "what's TTL in dns, simply", "type": "general", "lang": "en", "tags": ["terse"]}
+{"id": "c056", "prompt": "move the k8s node pool to the new instance type in us-east-1", "type": "operations", "lang": "en", "tags": []}
+{"id": "c057", "prompt": "figure out why the docker container can't reach the db on localhost", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c058", "prompt": "faz rollback do último deploy, o checkout caiu", "type": "operations", "lang": "pt", "tags": []}
+{"id": "c059", "prompt": "the app hangs on startup after upgrading to python 3.13. investigate", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c060", "prompt": "how does the auth middleware decide which routes are public?", "type": "exploration", "lang": "en", "tags": [], "subject": "auth"}
+{"id": "c061", "prompt": "map out the entry points of this cli", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c062", "prompt": "renew the tls cert for api.example.com before it expires friday", "type": "operations", "lang": "en", "tags": []}
+{"id": "c063", "prompt": "tag v0.6.0 and push the tag", "type": "operations", "lang": "en", "tags": [], "subject": "release"}
+{"id": "c064", "prompt": "find papers on evaluating text classifiers with small labeled sets", "type": "research", "lang": "en", "tags": []}
+{"id": "c065", "prompt": "não mexe no código, só reinicia os workers de produção", "type": "operations", "lang": "pt", "tags": ["negation"]}
+{"id": "c066", "prompt": "the dashboard shows yesterday's numbers even after refresh. track down the cause", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c067", "prompt": "why does `sorted_items = items.sort()` give me None here", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c068", "prompt": "find every place we read the CLAUDE_PROJECT_DIR env var", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c069", "prompt": "difference between `git merge --squash` and squash-and-merge on github?", "type": "general", "lang": "en", "tags": []}
+{"id": "c070", "prompt": "why does `pytest tests/test_hooks.py` fail on ci but pass locally?", "type": "debugging", "lang": "en", "tags": ["mixed"], "subject": "ci"}
+{"id": "c071", "prompt": "what are other teams using for agent handoff reports? find examples", "type": "research", "lang": "en", "tags": []}
+{"id": "c072", "prompt": "check the status of the release pipeline for v0.5.0", "type": "operations", "lang": "en", "tags": [], "subject": "release"}
+{"id": "c073", "prompt": "audit src/briefspec/hooks.py for security issues", "type": "review", "lang": "en", "tags": ["terse"]}
+{"id": "c074", "prompt": "sketch the architecture for multi-tenant support", "type": "planning", "lang": "en", "tags": []}
+{"id": "c075", "prompt": "eli5 what a race condition is", "type": "general", "lang": "en", "tags": []}
+{"id": "c076", "prompt": "replace requests with httpx in the client and keep the same interface", "type": "implementation", "lang": "en", "tags": []}
+{"id": "c077", "prompt": "also review the tests you just wrote", "type": "review", "lang": "en", "tags": ["follow-up"]}
+{"id": "c078", "prompt": "logins randomly fail for some users, no error in the logs. dig into it", "type": "debugging", "lang": "en", "tags": [], "subject": "auth"}
+{"id": "c079", "prompt": "research how other agent frameworks classify task type before routing, langgraph, crewai, autogen and anything newer you can find, and summarize whether they use rules, embeddings or an llm call, with links to the relevant docs or source so i can compare against our keyword approach", "type": "research", "lang": "en", "tags": ["long"]}
+{"id": "c080", "prompt": "the HMAC check passes locally and fails in the container, investigate the difference", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c081", "prompt": "add type hints to markdown.py", "type": "implementation", "lang": "en", "tags": ["terse"]}
+{"id": "c082", "prompt": "what's the state of the art for prompt intent classification in 2026?", "type": "research", "lang": "en", "tags": []}
+{"id": "c083", "prompt": "is my explanation in the CONTRIBUTING guide clear enough for newcomers?", "type": "review", "lang": "en", "tags": [], "subject": "docs"}
+{"id": "c084", "prompt": "is it correct that git rebase rewrites commit hashes?", "type": "general", "lang": "en", "tags": []}
+{"id": "c085", "prompt": "what modules depend on work_types.py", "type": "exploration", "lang": "en", "tags": ["terse"]}
+{"id": "c086", "prompt": "make the cli print a friendly error instead of a traceback when the file is missing", "type": "implementation", "lang": "en", "tags": []}
+{"id": "c087", "prompt": "does this regex look right for slugs? `^[a-z0-9-]+$`", "type": "review", "lang": "en", "tags": []}
+{"id": "c088", "prompt": "the review bot keeps approving PRs that fail lint, why?", "type": "debugging", "lang": "en", "tags": ["mixed"]}
+{"id": "c089", "prompt": "give me a phased plan to raise test coverage from 40 to 80%", "type": "planning", "lang": "en", "tags": []}
+{"id": "c090", "prompt": "tá dando erro 'ModuleNotFoundError: briefspec' depois de instalar, investiga", "type": "debugging", "lang": "pt", "tags": []}
+{"id": "c091", "prompt": "compare github actions, circleci and buildkite pricing for a 10-person team", "type": "research", "lang": "en", "tags": ["mixed"], "subject": "ci"}
+{"id": "c092", "prompt": "promote the staging build to production", "type": "operations", "lang": "en", "tags": []}
+{"id": "c093", "prompt": "qual a diferença entre docker e máquina virtual?", "type": "general", "lang": "pt", "tags": []}
+{"id": "c094", "prompt": "implement pagination on GET /api/projects, 50 per page", "type": "implementation", "lang": "en", "tags": []}
+{"id": "c095", "prompt": "explain how this repo is organized - packages, tests, docs", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c096", "prompt": "corrige o import quebrado em utils/__init__.py, já sei que o problema é esse", "type": "implementation", "lang": "pt", "tags": []}
+{"id": "c097", "prompt": "don't write code, just research which rust crates people use for jsonl streaming", "type": "research", "lang": "en", "tags": ["negation"]}
+{"id": "c098", "prompt": "update the README install section to use pipx", "type": "implementation", "lang": "en", "tags": [], "subject": "docs"}
+{"id": "c099", "prompt": "add a github actions workflow that runs pytest on push", "type": "implementation", "lang": "en", "tags": ["mixed"], "subject": "ci"}
+{"id": "c100", "prompt": "we're getting paged for 5xx on api-gateway across two regions and the status page is still green. start incident response: open the incident, post an initial status update, shift traffic away from the worst region, and keep a timeline as you go. root cause can wait until we're stable", "type": "operations", "lang": "en", "tags": ["mixed", "long"]}
+{"id": "c101", "prompt": "faz uma auditoria de segurança no endpoint de upload", "type": "review", "lang": "pt", "tags": []}
+{"id": "c102", "prompt": "disable the feature flag new_checkout in prod right now", "type": "operations", "lang": "en", "tags": []}
+{"id": "c103", "prompt": "check if the nightly backup job succeeded", "type": "operations", "lang": "en", "tags": []}
+{"id": "c104", "prompt": "extract the deploy logic from main.py into deploy.py", "type": "implementation", "lang": "en", "tags": ["mixed"]}
+{"id": "c105", "prompt": "TypeError: can't compare offset-naive and offset-aware datetimes - where is this coming from?", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c106", "prompt": "critique the error messages in cli.py, are they actionable?", "type": "review", "lang": "en", "tags": []}
+{"id": "c107", "prompt": "design the schema for the audit log table", "type": "planning", "lang": "en", "tags": []}
+{"id": "c108", "prompt": "dá uma olhada no meu diff antes do commit, tem algo errado?", "type": "review", "lang": "pt", "tags": []}
+{"id": "c109", "prompt": "what's new in the mcp spec this year? find the release notes", "type": "research", "lang": "en", "tags": []}
+{"id": "c110", "prompt": "explain the difference between keep-spec and brief-spec in two sentences", "type": "general", "lang": "en", "tags": ["product-name"]}
+{"id": "c111", "prompt": "agora que o plano foi aprovado, implementa a primeira etapa", "type": "implementation", "lang": "pt", "tags": ["mixed", "follow-up"]}
+{"id": "c112", "prompt": "não altera nada, só mapeia os módulos do pacote src/briefspec", "type": "exploration", "lang": "pt", "tags": ["negation"]}
+{"id": "c113", "prompt": "how should we structure the monorepo? propose a layout before we move files", "type": "planning", "lang": "en", "tags": []}
+{"id": "c114", "prompt": "why do people say you shouldn't use floats for money?", "type": "general", "lang": "en", "tags": []}
+{"id": "c115", "prompt": "restart the queue consumers on prod-2", "type": "operations", "lang": "en", "tags": []}
+{"id": "c116", "prompt": "quebra essa feature em tarefas pequenas pra sprint", "type": "planning", "lang": "pt", "tags": []}
+{"id": "c117", "prompt": "flush the redis cache in staging", "type": "operations", "lang": "en", "tags": []}
+{"id": "c118", "prompt": "whats teh difference between a mutex and a semaphore?", "type": "general", "lang": "en", "tags": []}
+{"id": "c119", "prompt": "the root cause is the missing await on line 88 of worker.py, go ahead and fix it", "type": "implementation", "lang": "en", "tags": ["mixed"]}
+{"id": "c120", "prompt": "quick question: is `status: sealed` ever valid in a task-spec leaf?", "type": "general", "lang": "en", "tags": ["product-name"]}
+{"id": "c121", "prompt": "dig up any known issues with sqlite wal mode on network filesystems", "type": "research", "lang": "en", "tags": []}
+{"id": "c122", "prompt": "something broke the markdown tables in the output, find it", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c123", "prompt": "hey, what's the point of a lockfile if I already pin versions in pyproject?", "type": "general", "lang": "en", "tags": []}
+{"id": "c124", "prompt": "now that research is done, outline the implementation steps", "type": "planning", "lang": "en", "tags": ["mixed", "follow-up"]}
+{"id": "c125", "prompt": "don't change anything, just show me how the parser handles nested lists", "type": "exploration", "lang": "en", "tags": ["negation"], "subject": "parser"}
+{"id": "c126", "prompt": "port the bash install script to python", "type": "implementation", "lang": "en", "tags": []}
+{"id": "c127", "prompt": "what's a monorepo", "type": "general", "lang": "en", "tags": ["terse"]}
+{"id": "c128", "prompt": "o pipeline de ci está verde na main?", "type": "operations", "lang": "pt", "tags": [], "subject": "ci"}
+{"id": "c129", "prompt": "propose a test strategy for the hooks module", "type": "planning", "lang": "en", "tags": []}
+{"id": "c130", "prompt": "don't touch the tests, just implement the missing `to_dict` method", "type": "implementation", "lang": "en", "tags": ["negation"]}
+{"id": "c131", "prompt": "don't merge anything, just publish the docs site", "type": "operations", "lang": "en", "tags": ["negation"], "subject": "docs"}
+{"id": "c132", "prompt": "what is a jsonl file", "type": "general", "lang": "en", "tags": ["terse"]}
+{"id": "c133", "prompt": "fix the typo in the error message: 'recieved' -> 'received'", "type": "implementation", "lang": "en", "tags": []}
+{"id": "c134", "prompt": "segfault when importing the c extension on m2, any idea why?", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c135", "prompt": "npm install fails with ERESOLVE on a fresh clone, why", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c136", "prompt": "our p99 latency doubled since monday. what changed and why?", "type": "debugging", "lang": "en", "tags": ["mixed"]}
+{"id": "c137", "prompt": "make a plan to fix all the flaky tests, prioritized", "type": "planning", "lang": "en", "tags": ["mixed"]}
+{"id": "c138", "prompt": "what does `set -euo pipefail` actually do?", "type": "general", "lang": "en", "tags": []}
+{"id": "c139", "prompt": "look up whether python 3.14 changed the default multiprocessing start method", "type": "research", "lang": "en", "tags": []}
+{"id": "c140", "prompt": "look for any cves reported against pyyaml in the last year", "type": "research", "lang": "en", "tags": []}
+{"id": "c141", "prompt": "review the deployment script for bugs", "type": "review", "lang": "en", "tags": ["mixed"]}
+{"id": "c142", "prompt": "audit our github actions workflows for overly broad permissions", "type": "review", "lang": "en", "tags": ["mixed"], "subject": "ci"}
+{"id": "c143", "prompt": "add a section to the brief-spec docs explaining the 8 work types", "type": "implementation", "lang": "en", "tags": ["product-name"], "subject": "docs"}
+{"id": "c144", "prompt": "desenha um plano de lançamento do v1.0 do brief-spec", "type": "planning", "lang": "pt", "tags": ["product-name", "mixed"], "subject": "release"}
+{"id": "c145", "prompt": "rotaciona as credenciais do banco de staging", "type": "operations", "lang": "pt", "tags": []}
+{"id": "c146", "prompt": "explain python's GIL briefly", "type": "general", "lang": "en", "tags": ["terse"]}
+{"id": "c147", "prompt": "publish v0.5.1 to pypi", "type": "operations", "lang": "en", "tags": ["terse"], "subject": "release"}
+{"id": "c148", "prompt": "show me where the release workflow is defined and what it triggers", "type": "exploration", "lang": "en", "tags": ["mixed"], "subject": "release"}
+{"id": "c149", "prompt": "check the pytest 9 changelog for breaking changes we should know about", "type": "research", "lang": "en", "tags": []}
+{"id": "c150", "prompt": "rename `WorkType.misc` to `WorkType.general` everywhere", "type": "implementation", "lang": "en", "tags": ["terse"]}
+{"id": "c151", "prompt": "how production-ready is task-spec right now? just your honest take", "type": "general", "lang": "en", "tags": ["product-name"]}
+{"id": "c152", "prompt": "what's the migration path from seamwise records to task-spec 3.10? plan it out", "type": "planning", "lang": "en", "tags": ["product-name"]}
+{"id": "c153", "prompt": "rotate the database credentials in the staging vault", "type": "operations", "lang": "en", "tags": []}
+{"id": "c154", "prompt": "i get 'permission denied (publickey)' when the deploy script runs git pull, why", "type": "debugging", "lang": "en", "tags": ["mixed"]}
+{"id": "c155", "prompt": "where is the hook payload parsed in this repo?", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c156", "prompt": "is it bad practice to commit .env.example?", "type": "general", "lang": "en", "tags": []}
+{"id": "c157", "prompt": "how should we roll out feature flags across the three services? plan only", "type": "planning", "lang": "en", "tags": []}
+{"id": "c158", "prompt": "which tests cover the freshness check?", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c159", "prompt": "second opinion on utils/retry.py please, it feels too clever", "type": "review", "lang": "en", "tags": []}
+{"id": "c160", "prompt": "go through the error handling in api/handlers.py and flag anything that swallows exceptions, retries forever, or logs secrets. i don't need fixes right now, just a ranked list of findings with file and line so i can decide what to tackle in the next sprint", "type": "review", "lang": "en", "tags": ["negation", "long"]}
+{"id": "c161", "prompt": "review my terraform for the new bucket before i apply", "type": "review", "lang": "en", "tags": ["mixed"]}
+{"id": "c162", "prompt": "draft a roadmap for v0.6 and v0.7", "type": "planning", "lang": "en", "tags": []}
+{"id": "c163", "prompt": "the brief-spec hook isn't firing in codex, what's wrong", "type": "debugging", "lang": "en", "tags": ["product-name"]}
+{"id": "c164", "prompt": "revisa o PR #57 e me diz se pode aprovar", "type": "review", "lang": "pt", "tags": [], "subject": "pull-request"}
+{"id": "c165", "prompt": "monitor the canary for the next hour and tell me if errors go up", "type": "operations", "lang": "en", "tags": []}
+{"id": "c166", "prompt": "what does the plugin manifest look like and where is it loaded", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c167", "prompt": "add a dark mode toggle to the settings page", "type": "implementation", "lang": "en", "tags": []}
+{"id": "c168", "prompt": "is the new caching layer correct under concurrent writes? review cache.py", "type": "review", "lang": "en", "tags": []}
+{"id": "c169", "prompt": "break the reading backlog into tasks we can ship in two weeks", "type": "planning", "lang": "en", "tags": []}
+{"id": "c170", "prompt": "find the official docs for claude code hooks and summarize the event types", "type": "research", "lang": "en", "tags": []}
+{"id": "c171", "prompt": "compare linear vs jira apis for webhook support", "type": "research", "lang": "en", "tags": []}
+{"id": "c172", "prompt": "plan the deploy of the new search cluster: order of steps, rollback points. do not deploy anything", "type": "planning", "lang": "en", "tags": ["mixed", "negation"]}
+{"id": "c173", "prompt": "do not fix anything. just list the problems you see in the parser", "type": "review", "lang": "en", "tags": ["negation"], "subject": "parser"}
+{"id": "c174", "prompt": "review the release notes draft for v0.6.0", "type": "review", "lang": "en", "tags": ["mixed"], "subject": "release"}
+{"id": "c175", "prompt": "gather evidence on whether multi-label beats single-label for intent routing", "type": "research", "lang": "en", "tags": []}
+{"id": "c176", "prompt": "explain the CAP theorem like I'm a junior dev", "type": "general", "lang": "en", "tags": []}
+{"id": "c177", "prompt": "research how codex cli exposes hooks compared to claude code", "type": "research", "lang": "en", "tags": []}
+{"id": "c178", "prompt": "how is the database session created and passed around in the api layer", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c179", "prompt": "how should we split this monolith into services? propose a plan", "type": "planning", "lang": "en", "tags": []}
+{"id": "c180", "prompt": "what does the latest owasp top 10 for llm apps say? summarize with sources", "type": "research", "lang": "en", "tags": []}
+{"id": "c181", "prompt": "faz o deploy da versão nova em produção", "type": "operations", "lang": "pt", "tags": []}
+{"id": "c182", "prompt": "getting `KeyError: 'session_id'` in hooks.py, what's going on", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c183", "prompt": "o task-spec já está pronto pra produção ou ainda é experimental?", "type": "general", "lang": "pt", "tags": ["product-name"]}
+{"id": "c184", "prompt": "check my test file for weak assertions", "type": "review", "lang": "en", "tags": []}
+{"id": "c185", "prompt": "refactor delivery.py so the formatting helpers live in their own module", "type": "implementation", "lang": "en", "tags": []}
+{"id": "c186", "prompt": "now that the release is out, explain what changed in plain english", "type": "general", "lang": "en", "tags": ["mixed", "follow-up"], "subject": "release"}
+{"id": "c187", "prompt": "give me a verdict on the design doc in docs/adr/007-queue.md, approve or not?", "type": "review", "lang": "en", "tags": ["mixed"]}
+{"id": "c188", "prompt": "não implementa nada ainda, só desenha a arquitetura do módulo de notificações", "type": "planning", "lang": "pt", "tags": ["negation"]}
+{"id": "c189", "prompt": "review the keep-spec surfaces doc, is anything stale or wrong?", "type": "review", "lang": "en", "tags": ["product-name"], "subject": "docs"}
+{"id": "c190", "prompt": "por que o teste de integração falha só no CI?", "type": "debugging", "lang": "pt", "tags": [], "subject": "ci"}
+{"id": "c191", "prompt": "list the cli subcommands and which function backs each", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c192", "prompt": "is there a maintained alternative to python-markdown that handles gfm tables? check pypi and github", "type": "research", "lang": "en", "tags": []}
+{"id": "c193", "prompt": "keep-spec observe crashes on files with emoji in the name, find the cause", "type": "debugging", "lang": "en", "tags": ["product-name"]}
+{"id": "c194", "prompt": "what licenses do the top 5 markdown renderers use? need it for a compliance note", "type": "research", "lang": "en", "tags": []}
+{"id": "c195", "prompt": "watch the taskmesh runner logs on the build box and restart it if it stalls", "type": "operations", "lang": "en", "tags": ["product-name"]}
+{"id": "c196", "prompt": "como o workhelm chama o binário do task-spec? mostra o caminho no código", "type": "exploration", "lang": "pt", "tags": ["product-name"]}
+{"id": "c197", "prompt": "users report the export button does nothing in safari. root cause?", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c198", "prompt": "publica a versão 0.5.1 no pypi", "type": "operations", "lang": "pt", "tags": [], "subject": "release"}
+{"id": "c199", "prompt": "does python dict preserve insertion order? since which version", "type": "general", "lang": "en", "tags": []}
+{"id": "c200", "prompt": "is O(n log n) the best you can do for comparison sorting?", "type": "general", "lang": "en", "tags": []}
+{"id": "c201", "prompt": "still failing after your change, same traceback. look again", "type": "debugging", "lang": "en", "tags": ["follow-up"]}
+{"id": "c202", "prompt": "find real-world examples of review checklists used by big oss projects", "type": "research", "lang": "en", "tags": ["mixed"]}
+{"id": "c203", "prompt": "also add tests for the empty-input case", "type": "implementation", "lang": "en", "tags": ["follow-up"]}
+{"id": "c204", "prompt": "where's the error message 'bundle digest mismatch' raised from?", "type": "exploration", "lang": "en", "tags": ["mixed", "ambiguous-but-labeled"]}
+{"id": "c205", "prompt": "set up a grafana alert for disk usage over 85%", "type": "operations", "lang": "en", "tags": []}
+{"id": "c206", "prompt": "what's the difference between a PR review and an audit, conceptually?", "type": "general", "lang": "en", "tags": ["mixed"]}
+{"id": "c207", "prompt": "how do tools like cursor and windsurf summarize agent work for the user? look it up", "type": "research", "lang": "en", "tags": []}
+{"id": "c208", "prompt": "think through how keep-spec should version surfaces before we build it", "type": "planning", "lang": "en", "tags": ["product-name"]}
+{"id": "c209", "prompt": "now that the review is approved, ship it", "type": "operations", "lang": "en", "tags": ["mixed", "follow-up", "ambiguous-but-labeled"]}
+{"id": "c210", "prompt": "bump the timeout in config/defaults.toml from 30 to 60", "type": "implementation", "lang": "en", "tags": []}
+{"id": "c211", "prompt": "add logging of the classified work type to the hook output, but only behind a --verbose flag so the default output stays clean. keep the existing tests passing, add one new test that checks the verbose line appears, and update the cli help text to mention the new flag", "type": "implementation", "lang": "en", "tags": ["long"]}
+{"id": "c212", "prompt": "code review the changes on this branch vs main", "type": "review", "lang": "en", "tags": []}
+{"id": "c213", "prompt": "deadlock in the payment service under load, help me find it", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c214", "prompt": "compare pydantic v2 vs attrs vs msgspec for validation speed, find benchmarks", "type": "research", "lang": "en", "tags": []}
+{"id": "c215", "prompt": "where is the rate limiter configured for the public api?", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c216", "prompt": "break this epic into atomic task-spec leaves", "type": "planning", "lang": "en", "tags": ["product-name"]}
+{"id": "c217", "prompt": "deploy the review app for PR #77", "type": "operations", "lang": "en", "tags": ["mixed"]}
+{"id": "c218", "prompt": "add a pre-commit hook config with ruff and black", "type": "implementation", "lang": "en", "tags": []}
+{"id": "c219", "prompt": "write a docstring for every public function in bundle.py", "type": "implementation", "lang": "en", "tags": []}
+{"id": "c220", "prompt": "should the classifier live in the hook or in a separate service? make the architecture call with tradeoffs", "type": "planning", "lang": "en", "tags": ["ambiguous-but-labeled"]}
+{"id": "c221", "prompt": "page the on-call and open an incident channel for the outage", "type": "operations", "lang": "en", "tags": []}
+{"id": "c222", "prompt": "investigate why the cron job ran twice last night", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c223", "prompt": "is sqlite fine for a single-user cli tool or am i overthinking it", "type": "general", "lang": "en", "tags": []}
+{"id": "c224", "prompt": "which vector databases support hybrid search? market scan with pricing", "type": "research", "lang": "en", "tags": []}
+{"id": "c225", "prompt": "add retry with exponential backoff to the webhook sender", "type": "implementation", "lang": "en", "tags": []}
+{"id": "c226", "prompt": "o que é um webhook, explica rapidinho", "type": "general", "lang": "pt", "tags": []}
+{"id": "c227", "prompt": "survey open source tools similar to brief-spec", "type": "research", "lang": "en", "tags": ["product-name"]}
+{"id": "c228", "prompt": "what's the right order to tackle BS-12, BS-18 and BS-30? sequence them", "type": "planning", "lang": "en", "tags": []}
+{"id": "c229", "prompt": "o que significa 'idempotente' na prática?", "type": "general", "lang": "pt", "tags": []}
+{"id": "c230", "prompt": "look at the last 3 commits and tell me if anything is risky", "type": "review", "lang": "en", "tags": []}
+{"id": "c231", "prompt": "convert these callbacks to async/await in src/sync.js", "type": "implementation", "lang": "en", "tags": []}
+{"id": "c232", "prompt": "existe algo parecido com o keep-spec no mercado? pesquisa", "type": "research", "lang": "pt", "tags": ["product-name"]}
+{"id": "c233", "prompt": "summarize in one paragraph what workhelm is for", "type": "general", "lang": "en", "tags": ["product-name"]}
+{"id": "c234", "prompt": "find the root cause after the last deploy. checkout returns 500 since then, only for logged-in users, and the logs show a sqlalchemy DetachedInstanceError right before the response. nothing in the diff looks obviously related, so i need you to work out what actually triggers it", "type": "debugging", "lang": "en", "tags": ["mixed", "long"]}
+{"id": "c235", "prompt": "scale the worker deployment to 6 replicas", "type": "operations", "lang": "en", "tags": []}
+{"id": "c236", "prompt": "after you fix it, redeploy and watch the error rate for 10 minutes", "type": "operations", "lang": "en", "tags": ["follow-up", "mixed"]}
+{"id": "c237", "prompt": "não corrige ainda, só me diz por que o login está falhando", "type": "debugging", "lang": "pt", "tags": ["negation"], "subject": "auth"}
+{"id": "c238", "prompt": "is this migration safe? check migrations/0042_add_index.sql", "type": "review", "lang": "en", "tags": []}
+{"id": "c239", "prompt": "outline how the 8 work types should map to report sections before i code it", "type": "planning", "lang": "en", "tags": []}
+{"id": "c240", "prompt": "now that the review is done, apply the fixes from the findings", "type": "implementation", "lang": "en", "tags": ["mixed", "follow-up"]}
+{"id": "c241", "prompt": "create a pydantic model for the hook payload", "type": "implementation", "lang": "en", "tags": []}
+{"id": "c242", "prompt": "what deployment platforms support python 3.13 out of the box? quick vendor scan", "type": "research", "lang": "en", "tags": ["mixed"]}
+{"id": "c243", "prompt": "adiciona validação de e-mail no formulário de cadastro", "type": "implementation", "lang": "pt", "tags": []}
+{"id": "c244", "prompt": "can you explain what a debounce is vs a throttle", "type": "general", "lang": "en", "tags": []}
+{"id": "c245", "prompt": "how does keep-spec ingest surfaces? point me at the code", "type": "exploration", "lang": "en", "tags": ["product-name"]}
+{"id": "c246", "prompt": "plan the rollout of the new auth system, including a fallback", "type": "planning", "lang": "en", "tags": ["mixed"], "subject": "auth"}
+{"id": "c247", "prompt": "why does the parser drop the last list item when there's no trailing newline?", "type": "debugging", "lang": "en", "tags": [], "subject": "parser"}
+{"id": "c248", "prompt": "the brief-spec release workflow needs to run again, trigger it", "type": "operations", "lang": "en", "tags": ["product-name"], "subject": "release"}
+{"id": "c249", "prompt": "apply the terraform plan for the new s3 bucket", "type": "operations", "lang": "en", "tags": ["mixed"]}
+{"id": "c250", "prompt": "cut the release branch for 0.6 and kick off the build", "type": "operations", "lang": "en", "tags": [], "subject": "release"}
+{"id": "c251", "prompt": "me explica como o fluxo de checkout funciona no código, do controller até o banco", "type": "exploration", "lang": "pt", "tags": []}
+{"id": "c252", "prompt": "is ci green on main?", "type": "operations", "lang": "en", "tags": ["terse"], "subject": "ci"}
+{"id": "c253", "prompt": "review the converge settlement code for places it could merge the user branch", "type": "review", "lang": "en", "tags": ["product-name"]}
+{"id": "c254", "prompt": "find out what the current recommended way to publish to pypi with trusted publishing is", "type": "research", "lang": "en", "tags": ["mixed"], "subject": "release"}
+{"id": "c255", "prompt": "escreve testes pro parser de markdown", "type": "implementation", "lang": "pt", "tags": [], "subject": "parser"}
+{"id": "c256", "prompt": "compare sentry vs honeycomb vs datadog for a small python service", "type": "research", "lang": "en", "tags": ["mixed"]}
+{"id": "c257", "prompt": "why is the classifier returning general for everything all of a sudden?", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c258", "prompt": "after that, plan the follow-up work for the review findings", "type": "planning", "lang": "en", "tags": ["follow-up", "mixed"]}
+{"id": "c259", "prompt": "find stats on how often developers write prompts in non-english languages", "type": "research", "lang": "en", "tags": []}
+{"id": "c260", "prompt": "take a critical pass at the api naming in client.py, is it consistent?", "type": "review", "lang": "en", "tags": []}
+{"id": "c261", "prompt": "drain node ip-10-0-3-17 and cordon it", "type": "operations", "lang": "en", "tags": []}
+{"id": "c262", "prompt": "is a code review the same thing as QA?", "type": "general", "lang": "en", "tags": ["mixed"]}
+{"id": "c263", "prompt": "which files touch the HMAC seal logic in task-spec?", "type": "exploration", "lang": "en", "tags": ["product-name"]}
+{"id": "c264", "prompt": "plan how we should migrate from sqlite to postgres", "type": "planning", "lang": "en", "tags": []}
+{"id": "c265", "prompt": "review the plan in PLAN.md before i start implementing it", "type": "review", "lang": "en", "tags": ["mixed"]}
+{"id": "c266", "prompt": "where do we load config from, env vars or the toml file or both?", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c267", "prompt": "review the root cause writeup in INCIDENT-221.md, is the analysis convincing?", "type": "review", "lang": "en", "tags": ["mixed"]}
+{"id": "c268", "prompt": "test_freshness is flaky, figure out why", "type": "debugging", "lang": "en", "tags": []}
+{"id": "c269", "prompt": "what's the structure of the tasks/ directory and who writes to it", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c270", "prompt": "now that the refactor landed, where does the markdown rendering live?", "type": "exploration", "lang": "en", "tags": ["follow-up", "mixed"]}
+{"id": "c271", "prompt": "update the ci pipeline secrets after the token rotation", "type": "operations", "lang": "en", "tags": [], "subject": "ci"}
+{"id": "c272", "prompt": "refatora o módulo de pagamentos pra usar injeção de dependência", "type": "implementation", "lang": "pt", "tags": []}
+{"id": "c273", "prompt": "how does the frontend talk to the backend here, rest, graphql, websockets?", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c274", "prompt": "now that the deploy is done, what's a canary release anyway?", "type": "general", "lang": "en", "tags": ["mixed", "follow-up"]}
+{"id": "c275", "prompt": "não faz deploy ainda, só revisa o script de migração", "type": "review", "lang": "pt", "tags": ["negation", "mixed"]}
+{"id": "c276", "prompt": "is converge meant to replace taskmesh? just answer from what you know", "type": "general", "lang": "en", "tags": ["product-name"]}
+{"id": "c277", "prompt": "lay out the swimlanes and legs for the converge dock rework", "type": "planning", "lang": "en", "tags": ["product-name"]}
+{"id": "c278", "prompt": "do I need to know rust to contribute to a pyo3 project? just curious", "type": "general", "lang": "en", "tags": []}
+{"id": "c279", "prompt": "revisa o README do brief-spec e aponta o que está desatualizado", "type": "review", "lang": "pt", "tags": ["product-name"], "subject": "docs"}
+{"id": "c280", "prompt": "where is the retry logic for the http client", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c281", "prompt": "what does semver say about breaking changes in 0.x versions?", "type": "general", "lang": "en", "tags": []}
+{"id": "c282", "prompt": "decide between a queue and a cron for the nightly sync, and plan the work", "type": "planning", "lang": "en", "tags": []}
+{"id": "c283", "prompt": "how does a prompt flow from the UserPromptSubmit hook all the way to the final report that gets printed? trace it through every module it touches, including where the work type gets attached and where the markdown is assembled, i want file and function names for each step", "type": "exploration", "lang": "en", "tags": ["long"]}
+{"id": "c284", "prompt": "implement the plan we agreed on, step 1 first", "type": "implementation", "lang": "en", "tags": ["mixed", "follow-up"]}
+{"id": "c285", "prompt": "what does 'fail closed' mean", "type": "general", "lang": "en", "tags": ["terse"]}
+{"id": "c286", "prompt": "we have 3 devs and 6 weeks and the payments rewrite touches billing, invoicing, the webhook consumer and the admin ui. how do we sequence it so nothing ships half-done, what can run in parallel, and where are the decision points we need to settle before anyone starts coding?", "type": "planning", "lang": "en", "tags": ["long"]}
+{"id": "c287", "prompt": "qual a ordem certa pra atacar esses itens do backlog? monta um plano", "type": "planning", "lang": "pt", "tags": []}
+{"id": "c288", "prompt": "rebase ou merge, qual você prefere e por quê?", "type": "general", "lang": "pt", "tags": []}
+{"id": "c289", "prompt": "thanks, that makes sense. so what's the tradeoff between the two approaches you mentioned?", "type": "general", "lang": "en", "tags": ["follow-up"]}
+{"id": "c290", "prompt": "does the workhelm backlog schema make sense? critique it", "type": "review", "lang": "en", "tags": ["product-name"]}
+{"id": "c291", "prompt": "compara os preços de postgres gerenciado: rds, neon, supabase", "type": "research", "lang": "pt", "tags": []}
+{"id": "c292", "prompt": "ok cool. and what does exit code 137 usually mean?", "type": "general", "lang": "en", "tags": ["follow-up", "ambiguous-but-labeled"]}
+{"id": "c293", "prompt": "o hook do brief-spec não está rodando no claude code, o que pode ser?", "type": "debugging", "lang": "pt", "tags": ["product-name"]}
+{"id": "c294", "prompt": "i'm new to this codebase, give me a tour of src/ and what each module does", "type": "exploration", "lang": "en", "tags": []}
+{"id": "c295", "prompt": "rerun the failed github actions job on PR #301", "type": "operations", "lang": "en", "tags": [], "subject": "ci"}
+{"id": "c296", "prompt": "don't look anything up, just tell me from memory: what's a bloom filter?", "type": "general", "lang": "en", "tags": ["negation", "mixed"]}
+{"id": "c297", "prompt": "explain what idempotent means for an HTTP PUT", "type": "general", "lang": "en", "tags": []}
+{"id": "c298", "prompt": "we need to deprecate the v1 api. plan the steps and timeline", "type": "planning", "lang": "en", "tags": []}
+{"id": "c299", "prompt": "quais arquivos chamam a função `parse_hook_input`?", "type": "exploration", "lang": "pt", "tags": []}
+{"id": "c300", "prompt": "the release workflow failed at the publish step, why?", "type": "debugging", "lang": "en", "tags": ["mixed", "ambiguous-but-labeled"], "subject": "release"}

@@ -25,9 +25,10 @@ retain the Outcome Brief or Session Checkpoint as the shared terminal contract.
    current task text. Do not send task text to another model or network service.
 4. Use `general` when signals conflict or remain ambiguous.
 5. Normalize the subject to a short slug, such as `pull-request`, `codebase`, `bug`, or `release`.
-6. Keep the selection stable for the task. Change it only for an explicit override, a new task, or a
-   clear user pivot; tool choice alone is not a pivot. A valid Outcome Brief closes the task, so
-   the next substantive request is classified again.
+6. Keep the selection stable for the task. Change it for an explicit override, a new task, a
+   clear user pivot, or a new request whose main verb names another type ("review the folder
+   structure" during a release task). Short follow-ups and tool choice are not pivots. A valid
+   Outcome Brief closes the task, so the next substantive request is classified again.
 7. Treat background task notifications, system reminders, and hook feedback as host text, not as
    a new request from the user.
 8. Read exactly one matching profile:
@@ -53,6 +54,8 @@ retain the Outcome Brief or Session Checkpoint as the shared terminal contract.
 ## Preserve the shared contract
 
 - Use the profile for the main explanation; do not force all work into one generic narrative.
+- You may add one final `### Assessment` section after the profile sections for your own
+  interpretation, so it stays separate from the facts in Proof.
 - Keep direct, derived, and reported evidence distinct.
 - Do not imply that classification proves the answer.
 - End substantive terminal work with `outcome-brief`. A short DONE answer with nothing left for

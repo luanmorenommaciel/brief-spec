@@ -129,7 +129,7 @@ def test_host_context_precedes_intent_and_ambiguous_intent_falls_back() -> None:
         "pull-request",
         "host",
     )
-    ambiguous = classify_task("Review and research this item for me.")
+    ambiguous = classify_task("Something about this item, maybe.")
     assert (ambiguous.work_type, ambiguous.confidence, ambiguous.origin) == (
         "general",
         "low",
@@ -158,7 +158,7 @@ def test_classification_is_bounded_private_and_deterministic(
     [
         (
             "Please review this project and compile a plan. Do not implement or modify code.",
-            "general",
+            "review",
             "general",
         ),
         ("Do not open a PR. Just explain the configuration.", "general", "general"),
@@ -288,7 +288,7 @@ def test_task_classification_is_sticky_until_a_clear_pivot(
     second_event, second_payload = _event(
         EventType.USER_PROMPT,
         session="sticky",
-        prompt="Review pull request #42 for merge risk.",
+        prompt="Also check the pull request #42 notes while you map it.",
         minute=1,
     )
     second = process_event(second_event, second_payload)

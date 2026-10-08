@@ -27,6 +27,7 @@ from briefspec.delivery import (
     sha256_bytes,
     validate_delivery,
 )
+from briefspec.freshness import freshness
 from briefspec.models import VerificationLevel
 from briefspec.renderers import available_renderers
 
@@ -690,6 +691,20 @@ def verify_target(
             allow_outside_workspace=allow_outside_workspace,
             allow_large_artifact=allow_large_artifact,
         )
+    if delivery is not None:
+        source = delivery.get("source") if isinstance(delivery.get("source"), dict) else {}
+        state = freshness(source.get("source_revision"), workspace)
+        if state is not None:
+            if state["status"] == "fresh":
+                _check(checks, "freshness", "PASS", f"brief matches HEAD {state['head'][:12]}")
+            else:
+                since = state.get("commits_since")
+                detail = f"brief describes {state['recorded'][:12]}; HEAD is {state['head'][:12]}"
+                if state["status"] == "diverged":
+                    detail += " (that commit is not in HEAD's history)"
+                elif since is not None:
+                    detail += f" ({since} commit(s) later)"
+                _check(checks, "freshness", "WARN", detail)
     if level is VerificationLevel.DELIVERED and not target.name.endswith(".receipt.json"):
         receipt = target.with_suffix(target.suffix + ".receipt.json")
         if receipt.is_file():

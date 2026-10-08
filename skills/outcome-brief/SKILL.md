@@ -53,8 +53,11 @@ Open:
 ```
 
 Keep `None` explicit; never omit a field in the full form. A `DONE` brief cannot contain required
-human action or unresolved gaps. `REVIEW`, `DECIDE`, and `BLOCKED` require human action. `BLOCKED`
-and `FAILED` require a gap and a next action. `DECIDE` requires an open decision.
+human action or unresolved gaps, needs at least one `[direct/pass]` proof that you observed
+yourself, and cannot include any `fail` proof; use `REVIEW` when the evidence is only derived or
+reported. `REVIEW`, `DECIDE`, and `BLOCKED` require human action. `BLOCKED` and `FAILED` require a
+gap and a next action. `DECIDE` requires an open decision; write it as a decision card:
+`Options: A; B — Recommendation: A — Reversible: yes — Needed by: <date>`.
 
 ## Compact form
 

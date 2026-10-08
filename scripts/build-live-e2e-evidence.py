@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import subprocess
+import tomllib
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -28,6 +29,11 @@ FINGERPRINT_ROOTS = (
     "src",
 )
 FINGERPRINT_FILES = ("plugin.json", "pyproject.toml")
+
+
+def _version() -> str:
+    with (ROOT / "pyproject.toml").open("rb") as handle:
+        return str(tomllib.load(handle)["project"]["version"])
 
 
 def _sha256(path: Path) -> str:
@@ -194,13 +200,13 @@ def main() -> int:
             "core_wheel_sha256": next(
                 item["sha256"]
                 for item in json.loads(manifest.read_text(encoding="utf-8"))["files"]
-                if item["filename"] == "brief_spec-0.5.0-py3-none-any.whl"
+                if item["filename"] == f"brief_spec-{_version()}-py3-none-any.whl"
             ),
         }
     value = {
         "schema_version": "1.0",
         "kind": "brief-spec-live-e2e-evidence",
-        "version": "0.5.0",
+        "version": _version(),
         "created_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         "source_revision_base": revision,
         "source_state": "dirty-worktree-candidate",

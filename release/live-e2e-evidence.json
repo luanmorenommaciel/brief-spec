@@ -1,37 +1,30 @@
 {
-  "candidate_artifacts": {
-    "core_wheel_sha256": "f13c375dd9544299df3ac6625a79218eaaa57401df20293e3a417bd118401630",
-    "path": "release-manifest.json",
-    "sha256": "c46cdf378574c91dad062a560d11a1f6f00eb4b6858eb88c9487a67ecf597a1f"
-  },
-  "created_at": "2026-09-16T21:39:01.500373Z",
+  "candidate_artifacts": null,
+  "created_at": "2026-10-08T23:07:54.416511Z",
   "hosts": {
     "claude": {
       "failures": [],
       "host": "claude",
-      "host_version": "2.1.273 (Claude Code)",
+      "host_version": "2.1.294 (Claude Code)",
       "passed": 8,
       "required": 8,
       "scenarios": [
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "8d9664e10ffd7956ef9171c5553baa89eb234134b2e675cab2056f7636e30172",
-          "canonical_sha256": "fb5d35376ec5e3fbce3af084b6f7a71a57d3ebea1c5d8c075e517bdcd2f7b3d6",
+          "bundle_sha256": "9a66994fbd4d70e3198f1a15813bc66f79781203b364fac6713cc174e7d44446",
+          "canonical_sha256": "65a28db1de892a8bd18f6751a9c911e0fa8a0cfae9e3003316926090a2785cd0",
           "classification_matches": true,
-          "cost_usd": 0.0505956,
+          "cost_usd": 0.049638999999999996,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "outcome",
           "models": [
-            "claude-haiku-4-5-20251001",
-            "claude-sonnet-5"
+            "claude-sonnet-5-5"
           ],
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "148fd9350186f663384c9a3ef413444b379456afc5ee2ab4e24fade92afaf373",
-            "41765cb79b8b446a5c4f8758b115b749b1ef3ddf659e83f8c1329aa8d5d52418",
-            "85cad8871a7a237cd1f56961267f48c6ba59ec2124a823382cee31b066fd0a3c"
+            "fbc937992cee0be67e4423903b31d4422f9471bd9692dc84dee395a192dcb4ea"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -40,24 +33,20 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "938394378cdb0c0cef3bf881fc91207b6fb15010b4aebb295ddb6ede29d9325b",
-          "canonical_sha256": "cd9d0c8ffa2972685283fd6a713600ede9580e9bbcff5e71a6ce680035e99832",
+          "bundle_sha256": "656fd29359c262da26e612b2b59d5834379cfa1b13c1d183006c99962a648e9c",
+          "canonical_sha256": "9fafdd7e736db6a97fce5a6ced958489770120583ac47d12192c4c766f84444f",
           "classification_matches": true,
-          "cost_usd": 0.0788504,
+          "cost_usd": 0.048283000000000006,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "orient",
           "models": [
-            "claude-haiku-4-5-20251001",
-            "claude-sonnet-5"
+            "claude-sonnet-5-5"
           ],
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "41765cb79b8b446a5c4f8758b115b749b1ef3ddf659e83f8c1329aa8d5d52418",
-            "c7f016d925199a92c3cf05a0990a4e53a4ed19fa186e495f1b7e247dfe6830f8",
-            "d0d2c791aa01a1b85bc141b8d68f2a8cbc93245adda0e7d10bd75c1522e0cd79",
-            "f21225d04b02fbf3d395ec105c9039876ddf0c56b52ac82128577a17b1d7f422"
+            "71bd633bb270bc4c9e8e87e1c442c3003ac7ab111d6be3705e56db9537477e60"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -66,23 +55,21 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "976b7483b885e974a45d3af3884338ae490459ffafc0941fb5893dd329eae074",
-          "canonical_sha256": "22e283f59c762582201a892afd5a4a59297ecf963cd2b95bb6cf9a2cb55d68af",
+          "bundle_sha256": "b19d67461b498d0e043b0f4202f621ae58569688ca14cab88e0565310a280820",
+          "canonical_sha256": "45bff5caa8f2c2fccecd0a7efd0e2110fd0887a8184ebdd06e8e800be6572590",
           "classification_matches": true,
-          "cost_usd": 0.0626018,
+          "cost_usd": 0.0439582,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "outcome",
           "models": [
-            "claude-haiku-4-5-20251001",
-            "claude-sonnet-5"
+            "claude-sonnet-5-5"
           ],
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "41765cb79b8b446a5c4f8758b115b749b1ef3ddf659e83f8c1329aa8d5d52418",
-            "87a093e5626a606985d5f502b0f50140ffadad840b555462adf2f310c9d9f4be",
-            "f21225d04b02fbf3d395ec105c9039876ddf0c56b52ac82128577a17b1d7f422"
+            "57d8bfa013882a2fa53374b09ee8c9fcd058e343c4027c7f5ad9191c471f4481",
+            "c37388fa84be7ec6a174ad4c5a27aa9f837f674b0701f6ee36f7b0492468967c"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -91,23 +78,20 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "95a7dc649bfcef66beef1fb206039ed0cf29125248a2b8466afa3b9927bfcf39",
-          "canonical_sha256": "b28550fdd8fd932976ebb75aefc625a036ee0d535f2f91adb7527f345e68c176",
+          "bundle_sha256": "f5f37bd4a5f43790736ac8c0a4a02ac1ab786507cf53df1e7b8cb783148aaa47",
+          "canonical_sha256": "db0327cc5a06053d2301f1972d1af90e7b6500df866f0c53e34039152306cf0f",
           "classification_matches": true,
-          "cost_usd": 0.0947608,
+          "cost_usd": 0.0627948,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "spoken",
           "models": [
-            "claude-haiku-4-5-20251001",
-            "claude-sonnet-5"
+            "claude-sonnet-5-5"
           ],
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "41765cb79b8b446a5c4f8758b115b749b1ef3ddf659e83f8c1329aa8d5d52418",
-            "85cad8871a7a237cd1f56961267f48c6ba59ec2124a823382cee31b066fd0a3c",
-            "db40f8eb08e1c8b19351b3d34aeb62cfb0419b6e0fdbfaeeff8a561b09ad2795"
+            "908829572619a2e1900cfb0207d6929f3e81b36853fcb485ef38fb1f4bb4c22a"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -116,25 +100,20 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "a638e0687a6e61e4be158d5e585c7f99601f3ed6324369e2f483e3383fbf8c11",
-          "canonical_sha256": "bd2d718e7bf4166687f0d0b86eddbcaddc108f2b5b308302c9a9769cb7d3576a",
+          "bundle_sha256": "660e44d9d1e5034e325a676b25746138d29faf0fdbfc1485ca09a992fc435d46",
+          "canonical_sha256": "d1458c038cb0106c1b44ebad918fcaeb4cd5f06bfc031e742da0d83c9f22e1ac",
           "classification_matches": true,
-          "cost_usd": 0.08349899999999999,
+          "cost_usd": 0.058656200000000006,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "spoken",
           "models": [
-            "claude-haiku-4-5-20251001",
-            "claude-sonnet-5"
+            "claude-sonnet-5-5"
           ],
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "41765cb79b8b446a5c4f8758b115b749b1ef3ddf659e83f8c1329aa8d5d52418",
-            "7f395658cbe9dcfceaec974af869de320fe87e00b4fdc8d1ccaab629d6e5829d",
-            "85cad8871a7a237cd1f56961267f48c6ba59ec2124a823382cee31b066fd0a3c",
-            "ae8776daedcca566499dcf89b87e88872d492e7a70461fa3c0702e2909a802b2",
-            "d0d2c791aa01a1b85bc141b8d68f2a8cbc93245adda0e7d10bd75c1522e0cd79"
+            "17b15cc8c6731362fd5375f06bd4dfc29ed91b79a12098aa874943c9e43652a4"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -143,24 +122,20 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "42af1fdf66a9fdb0c43b080ae8e2d1fd87bf84febaade9c9cb644b2b13de130b",
-          "canonical_sha256": "470b979d54c95e59f9f8a93ef2e7a849c68477f0d24cb8ef0ca591f768bb2e5f",
+          "bundle_sha256": "7cde7d63561118ec01cc1286a0ef4c4d34f70d1146c5991ff6159f1652976c6b",
+          "canonical_sha256": "49c7a8ee27157422b79ad506c2b3208f50da207ae8398b0b025e49c511c2ace5",
           "classification_matches": true,
-          "cost_usd": 0.0765204,
+          "cost_usd": 0.0531958,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "orient",
           "models": [
-            "claude-haiku-4-5-20251001",
-            "claude-sonnet-5"
+            "claude-sonnet-5-5"
           ],
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "1c79d8c09d5a6e3c207e4a1c7748c80ad8b27d9c96cd08189ffa6f29d21b4295",
-            "41765cb79b8b446a5c4f8758b115b749b1ef3ddf659e83f8c1329aa8d5d52418",
-            "85cad8871a7a237cd1f56961267f48c6ba59ec2124a823382cee31b066fd0a3c",
-            "d0d2c791aa01a1b85bc141b8d68f2a8cbc93245adda0e7d10bd75c1522e0cd79"
+            "44fa2ede838b1f07d7c8637cb0d64540a77f0aef9e391e9add3eb273f6ab11a1"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -169,24 +144,20 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "b3e87e0b1d11dca4ef768daad7827219af80d35602366ba55febd19c61d39533",
-          "canonical_sha256": "bd3f0651cef60a472ddb0fe142d657ae5aaa85d63c358f0ceda34e08e9d74ee1",
+          "bundle_sha256": "31351905b71b968b3a8f78247925c3ca89469dea97a779f0bdff3160fa24d137",
+          "canonical_sha256": "6f7c4cc4a9f1aedc97ba90426481ecb141d592ba3087ddb44af6a14ad7fbef61",
           "classification_matches": true,
-          "cost_usd": 0.0768226,
+          "cost_usd": 0.0488276,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "teach",
           "models": [
-            "claude-haiku-4-5-20251001",
-            "claude-sonnet-5"
+            "claude-sonnet-5-5"
           ],
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "41765cb79b8b446a5c4f8758b115b749b1ef3ddf659e83f8c1329aa8d5d52418",
-            "5d00c5b6b1930289d263c48c73cacd841ea32e2ad9c7f6963162838d26ebacc4",
-            "85cad8871a7a237cd1f56961267f48c6ba59ec2124a823382cee31b066fd0a3c",
-            "d0d2c791aa01a1b85bc141b8d68f2a8cbc93245adda0e7d10bd75c1522e0cd79"
+            "1cf6946dd481255b510b3ee16e3153be4eaaa51ca631b01b697d97d6766705cf"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -195,24 +166,21 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "50fab4a2def60ffc4317a564c2ead07292ae0e3504dcfe856ce024e6ec4a0f5a",
-          "canonical_sha256": "ed917ac7bb5f3a04e430b417d1c85d0da6809e11ca8cd0b4bed6098010535a99",
+          "bundle_sha256": "aad30424514bb9f827314ab909a1c80ac245ba3a49be10afbb0b6437acc19d9d",
+          "canonical_sha256": "e4c1d85c738e494c6b770491b6dd18381355d0f1c0934087232bfec3dd69e1ff",
           "classification_matches": true,
-          "cost_usd": 0.07327159999999999,
+          "cost_usd": 0.049437800000000004,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "teach",
           "models": [
-            "claude-haiku-4-5-20251001",
-            "claude-sonnet-5"
+            "claude-sonnet-5-5"
           ],
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "3e978bb9c2336973a299d1d0b223b6207d959234e723a8da6b8e6d7bb408c714",
-            "41765cb79b8b446a5c4f8758b115b749b1ef3ddf659e83f8c1329aa8d5d52418",
-            "85cad8871a7a237cd1f56961267f48c6ba59ec2124a823382cee31b066fd0a3c",
-            "d0d2c791aa01a1b85bc141b8d68f2a8cbc93245adda0e7d10bd75c1522e0cd79"
+            "27341969426413cb5cb179c303e4dc9002bb69c019326e53ad7d10bc1bc1eddf",
+            "c37388fa84be7ec6a174ad4c5a27aa9f837f674b0701f6ee36f7b0492468967c"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -221,19 +189,19 @@
         }
       ],
       "status": "PASS",
-      "summary_sha256": "6fbffc4c62dda4e778bd4957ab3b4f36b3edab7cc8f285ffca9ffe2f6f81bbf1"
+      "summary_sha256": "663c89ae6168e413b10ede363cf33e8908a4b3769897f88959bf245e16fa219c"
     },
     "codex": {
       "failures": [],
       "host": "codex",
-      "host_version": "codex-cli 0.154.0",
+      "host_version": "codex-cli 0.161.0",
       "passed": 8,
       "required": 8,
       "scenarios": [
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "ff2c036c4f2e2872c6ea196df13fc5571b030c2cbbe192f43eb8e75e9454abea",
-          "canonical_sha256": "b7750f1c6f996d1508ab8dfbe828585be425542bc4b61c6edc6a026265ffd077",
+          "bundle_sha256": "0a811b6fc06141c0f3be1a8dda03a6d1aef1645e978531d9d469e482fe9a94b2",
+          "canonical_sha256": "4497426a9bfff9d04914ea6ac18c24c557ee116ccf81669626707546272db255",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
@@ -243,8 +211,7 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "47e4fce1bffbd39a99624596816e18f8ba3659cedfaab8c5f1275b7a330f6fba",
-            "e50cf53a622c04c28c7ca98130713d43e36b720cf8b5d50f894853f0d40c1a40"
+            "70583b14e4a6f89f495620f0cd6fc1c6518743ad597a848acc562cc088f034aa"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -253,8 +220,8 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "420fa7eb26b689d3215ce124dac662385ed542768a42aa56181d0a5dbc30b651",
-          "canonical_sha256": "62e4012b8d967a99292793a33fb066c42a2cf65259143974649033916238b2f7",
+          "bundle_sha256": "7b205787829f5eada4fb2a1fa7ef0e644ddfea12a15d8383bd8c870efcbe1a01",
+          "canonical_sha256": "0f56ebb5e2c5bd6fa1eded820c1eaad2b77d4129c174a6383f019d9f24804209",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
@@ -264,8 +231,7 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "7fb606c449c6f0962df22804c4cb03f79782452b3e3277c00ee6c5a91b1a44c4",
-            "e50cf53a622c04c28c7ca98130713d43e36b720cf8b5d50f894853f0d40c1a40"
+            "fde0f93c5b1f9a7500eb572b334c7e7fc96665f2c2a2069a320c3844886d7588"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -274,8 +240,8 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "f08da043e58891ac9a8a6f0d33a9c2b0a9906ed7290608aa24c3908512bf1b38",
-          "canonical_sha256": "10fd9a7d7a2192f411e707526aa0eebcc6a885bcdad832d0754d87bdf09612d2",
+          "bundle_sha256": "6b2a99b46a64e44965e61b677f22ff65920ea2d74cfddc4b3c0cc1adfbf51b7c",
+          "canonical_sha256": "d4bef31409b8ab73121fc16b54eeed24b71d385397c1d9b20e6ab95004ec5093",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
@@ -285,7 +251,7 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "af50fc5758ed86fd1812c25d7687ee764153eaa0f829b5619dfaab8f3f223d2b"
+            "152f5b996d0ffb78f5fa2a7fc094b8f63e6c576ed7a7007e6449df1e6b04d2c6"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -294,8 +260,8 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "01d98a8b9116b8cfc49d80b27c7b44b51364cf41538cb96578a139ca994a9705",
-          "canonical_sha256": "289c3d806d8feb57803130a6ca6ed31d91e8b2b2a68e7d7f8d44e61e843257bb",
+          "bundle_sha256": "e0df6787fe34301169731de0d5b108b08030e2a18e8de4961486181c73aedfc4",
+          "canonical_sha256": "f7de69491f454bdb5ec52babac87bb457921c33110303f9d32c9b942d16c7a8d",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
@@ -305,7 +271,7 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "c7d815052442ad72280e51a8f7267e49573446e3a4c73eef6f4d5af754ccf5ae"
+            "97589879b002dd533f01abd8e1691755ef1dddb9f81fd400e0d7fc4cc6aaa9d1"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -314,8 +280,8 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "649567055ff239f218d5249eff9a4ab304aea9cec744c26c5a6e7136bffb5459",
-          "canonical_sha256": "181b383ccc426048a7f4d657cda74e9a243f6a86ea7a57af1f942f182142b2d5",
+          "bundle_sha256": "f571c25041c46bd72da33781f4a83663bdfe21c444a3c7e14f60d60b4b37fdfb",
+          "canonical_sha256": "c719325b43056b39420d9c388ec47676f5b39cec2908de3a09d35f5b3de27a36",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
@@ -325,7 +291,7 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "59dbcdbdfe86360c984c338f5a3ef8fe10a784b84447ce8f6bd08fe81649ecdb"
+            "4b759f017353aed81c2872826db0f00f51f8a8788e2c528fa0f294873e7e25e4"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -334,8 +300,8 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "6642f6b2eb1fdb7bc37d7ff3712e76021c21e0d0b0dacfcd5d3b9e8b0d039ae3",
-          "canonical_sha256": "3b2f987c4460d83077fe04e8915625003f6f40c5ea7f5e740fad13f964125063",
+          "bundle_sha256": "bfa9cbad20f3b24296601d6e309108b8ce428a21e034c7254ff85ed61d614c64",
+          "canonical_sha256": "78364694f28418707e9d2110cac9c944ea34bd13f32808a97629080fc0cea998",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
@@ -345,7 +311,7 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "4ef1add43849cc209fa130ae8a6a523d7dd0b9a45ec0fe46c860876bc49af8c4"
+            "f2455f1d5998865c571d28821be022c3ce0dfb19a4627e764e2978e3f9f7f208"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -354,8 +320,8 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "78241ddf891642c1aba14d746b0c854f8195de06f7165efd71d83f4011ed0d1f",
-          "canonical_sha256": "b4f09f6717ca7b9fcba6f5094ac6b54527d9c8a09e458815ea4769119e49f6ef",
+          "bundle_sha256": "38251a85316011014724d4ef3303ec2538baa9edea622b29b3e9c264618346ce",
+          "canonical_sha256": "bfc24f329be90b932e2318c71c27d0d346b8ab0704f00b056edeec6456eca6cb",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
@@ -365,9 +331,7 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "2b4fa3aae82af3b202610dd8b16c12436835b41572a7910d8768b51d8100a76d",
-            "92c3aed1fe71a3e3b0a11a58ddae88c8e72558db328d50c07ea98d0393ab07e5",
-            "e50cf53a622c04c28c7ca98130713d43e36b720cf8b5d50f894853f0d40c1a40"
+            "6d8c5d342ede7235b4f7fcfa40378215b91775adbf1d0e4c60f542dd98a648e6"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -376,8 +340,8 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "72fcbe3499305a1341f28b969ab5968d52cd6d621660d94f9ae894bf841e4e0e",
-          "canonical_sha256": "6889f90cb2daf129b2aac4805efd371bcd8ff22a2a81437801e10322487dd80f",
+          "bundle_sha256": "11d4ef46c8808f1a96fe1b6c19e8730bb2c465c00df829e7e0e2be3c914c2d36",
+          "canonical_sha256": "d5ff9845d9bb3b4aea46cbc1f4c20ec27b8e48f7a4825206f2d2f0b25b99b09b",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
@@ -387,8 +351,7 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "67daef5de559f1f6e7b2e18c131241a38c2a8f97a9f60648bec719a8836b1523",
-            "e50cf53a622c04c28c7ca98130713d43e36b720cf8b5d50f894853f0d40c1a40"
+            "7f4d622e1295b3f046ef21d934b5243463548abdf8e91602619bf90415bc1fee"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -397,21 +360,21 @@
         }
       ],
       "status": "PASS",
-      "summary_sha256": "e52d142449d80587259cc8653718b998065111af376467769598c570d3fc1f36"
+      "summary_sha256": "8656e23e9ff84ea8819d4db002a20c13c202ed05b99d0595cd836df687d76eed"
     },
     "grok": {
       "failures": [],
       "host": "grok",
-      "host_version": "grok 1.0.34 (3736acbc8658) [alpha]",
+      "host_version": "grok 1.0.46 (2765805b9442) [stable]",
       "passed": 4,
       "required": 4,
       "scenarios": [
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "c42aca24efd2fb0dd3a112a163a18470526f9f9727a5a536a13a4709ad912661",
-          "canonical_sha256": "f4d5e55f6da8294751790242e19d0ee3005c537502d85b0cf72828fd8dd82b63",
+          "bundle_sha256": "a7ca5986dbd845e5e1c92a9ac054c621f8710e8211555fdd5d1b8d6450fed08e",
+          "canonical_sha256": "6c96fe191ca4c2fc3cdd2771aa0dd298b29ef51f3493a1adbe4bd1546b46c3ed",
           "classification_matches": true,
-          "cost_usd": 0.024819048,
+          "cost_usd": 0.016576768,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "outcome",
@@ -421,7 +384,7 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "45a3d17e115ab5eea0c56722b5e0e68fdc2bcbcfe24e2fc63a1a85d5f3cdec86"
+            "62409464d004705ef8f729c5f68b9942a0d9a74ce2934067254f95fab4ad42c6"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -430,10 +393,10 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "d295bbc9ea63079e0173150bac9dfac280224b2766f3edfb76719506eba40a56",
-          "canonical_sha256": "a684f94430c0a046e972cb87325d0a1b0fd60b85aa19cb5fb04cc86d50337788",
+          "bundle_sha256": "53913897d7e51d1b878b057bd0ea01c034b480d7d417eb2b203c3c0e84ec87de",
+          "canonical_sha256": "9a7cc1903f74e88f9452b8bc8510c5fa28244bba51d7da7e0c0a5134d02b04d4",
           "classification_matches": true,
-          "cost_usd": 0.026239704,
+          "cost_usd": 0.023567304,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "orient",
@@ -443,7 +406,7 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "8f598aa0f111afc54d740b26c478c294fb69c32c4145c53ecb650222450a8fd1"
+            "cb2dc0c7d7521d3e84ef29e2793e6311254d5e608808b6ba045d46034fc846ff"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -452,10 +415,10 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "4b3d106551507579181dc9477fb3a441d28d7da3f803f3f49f48ad81efdcbefc",
-          "canonical_sha256": "3bcd72818cd9b0ae077334a635e6236fa7ecbb872ed436f31ab69b13e8226470",
+          "bundle_sha256": "cd54bfb71501324221019e4705b8847c947769cbc0b7eb018d6d8a22741cba8a",
+          "canonical_sha256": "bdba9fc1a71f895dbce1e42e40ed323a59ee39989b94c22506d2691afade5465",
           "classification_matches": true,
-          "cost_usd": 0.01915288,
+          "cost_usd": 0.017982056,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "spoken",
@@ -465,7 +428,7 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "6f1e681f39f4968e72efae2156ac37ea9cfa41f473ec74195ed183baf6536b85"
+            "d91477f23ab507880ff4cd9634baf54fa2c26e806243e34d8a883cf64639d14a"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -474,10 +437,10 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "6f34eb5246e4ed035a452feb0c125644b09eda4ec4ed8cddda502f4a71b7dc21",
-          "canonical_sha256": "01d5c4d5595609ac6cc310f1f73a8acb434de6399089fcc3bb4a56600cd24e1f",
+          "bundle_sha256": "a76f5dd69323573936a4c57f305cb8887a8667a192321e10867028a86fbbcba7",
+          "canonical_sha256": "ca78d0d86e27148b2bf0a532ad5f879381361303a298b2293e94c64a437752a2",
           "classification_matches": true,
-          "cost_usd": 0.01294856,
+          "cost_usd": 0.019455208,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "teach",
@@ -487,7 +450,8 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "632b44ccbb3a7d635420f298487839f97d7efe78dc16fab1b87bfd701eda171e"
+            "b7a63bf875c8b11382823aa725a529a0cc500f92d824520f060875417da8c35a",
+            "d5ee9173ed162f9de9cc05f6194e95ee7c21bd2890f024c71abcee738dcd89fb"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -496,19 +460,19 @@
         }
       ],
       "status": "PASS",
-      "summary_sha256": "750d161d5b8f9dca43431bb579d2fd8416d6e8250b49c17049181c060814878b"
+      "summary_sha256": "033438964dc6e932d50784be5cd494b2e61ba2bc701a152949163bcbda1c0f53"
     },
     "kimi": {
       "failures": [],
       "host": "kimi",
-      "host_version": "0.43.1",
+      "host_version": "2.1.1",
       "passed": 4,
       "required": 4,
       "scenarios": [
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "d517c3569a7407e79c32686b8411ce177f6da1f3e940cdef7293fd7cd6fe3a95",
-          "canonical_sha256": "d7d3ed64aa6dd29a38a06c7dc046e62f8baa9afeade94c03494a8b591bcdb820",
+          "bundle_sha256": "79e5f9601606b151634be2229a7bfda395a0fe1d9460ef2e61bbff4b1a0668b5",
+          "canonical_sha256": "b16e66f8e4749f3505dd64b0ddf6e1c166dc4096e228af446568506955c3b594",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
@@ -518,7 +482,7 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "c2846dc7f64a06f98e704b600e418a1884d5305f6b291766aae1c2607f9f5153"
+            "881f44af534a16f7c88480e821fb7952090fef6acffb8df4759d277f8cab2e6e"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -527,8 +491,8 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "c306c59f8352c65f2830feb0ae6f80fda59a0772ddd7af3dcd8c546e7111e396",
-          "canonical_sha256": "c25350ebb27bb28345ce900083484e35ad4247fef14267af2201956999a20571",
+          "bundle_sha256": "b8bfc351778dfc2e9de6bda88d8992a176fe55418d1936eb2abe8cc80e5b1322",
+          "canonical_sha256": "ae3c22e5d45222819ae54cb82c82158e9c32ec2e04f2b76486cad17f2a9b07de",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
@@ -538,7 +502,7 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "e08a5b8047218adca9de74c9b1a23d7a53bfc579ca7aadc1e9ca1f16b8c8dbd5"
+            "e810482de1168a5db7096c5c7a844fd80c045549892bd0439a25729ad8a1c8be"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -547,8 +511,8 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "f99c738cdd02b3e2e4919123ed2f102a4349472d29f21e8c10ce6ce37b7b44a1",
-          "canonical_sha256": "924b1c56e51ac433196b06c92ffbf9d4e0ad755bbb8c4489f0d90b52292282a4",
+          "bundle_sha256": "1f87fd6c7f30e58584ed96f3f1d99176205f68b013d9730475ff042afb14ce05",
+          "canonical_sha256": "821126533430213c99ce030e65e8aba35efb6a5db1101c04b2b5e5145f6dd22c",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
@@ -558,7 +522,7 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "69d60c43d6a05a9b012b128ef09d4ec2b8580caa878bb35afd44bb3c43008057"
+            "b6eef81ea16c371c137ff2083390760e9b40a353743d956480859c1cfa111e0f"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -567,8 +531,8 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "3e35431fe3cdea0ca118c3cd6c1777f6fddc4bbc5fea334e6c0276ea666a93e6",
-          "canonical_sha256": "ebef44aee68408ba2628a097543288beb079f495079831a1e87638b901819c0c",
+          "bundle_sha256": "3637ecfbb2882c1cb880d02312a7a6288195420ebc7baa347b95bb268e27bec2",
+          "canonical_sha256": "b3e7b20b2c897fbb0fedacdcc584f097dd79723ef6a33f8233278daee771520d",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
@@ -578,7 +542,7 @@
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "04b7010b70adb0596f5f340f31953fc44a67860791608b13ef4f9d2194320807"
+            "bb03eba4f556c4c45531e72b4135b39d944cdd98bdea3a8b3beab2f5f5e5a0c0"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -587,32 +551,32 @@
         }
       ],
       "status": "PASS",
-      "summary_sha256": "3b5e8bc7247c347de2a5430bb45deb936bdc4df95be5714b53ed6de8289a1a8b"
+      "summary_sha256": "f99e95ce4c407035df96530c7592ddf65f6222cda573526dd395de3eb04be543"
     },
     "omp": {
       "failures": [],
       "host": "omp",
-      "host_version": "omp/18.2.2",
+      "host_version": "omp/18.8.4",
       "passed": 4,
       "required": 4,
       "scenarios": [
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "bef8af00ed65d65c247c282baa74d951092c926666bd8664e13e5f4aceca16b4",
-          "canonical_sha256": "143a04e69e80f59549a1501d7cb66aa05de69e0f2d192b06b8bb021a612e77ca",
+          "bundle_sha256": "dec45685e4ea6d2a1321c91b4a8b36b470342c3e4712c4cd4e59e4c955bd0738",
+          "canonical_sha256": "1b3ed733b68d7fb740e4d16bda1b1a5c81f390b85edeb9ddffb975e4f702c45c",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "outcome",
           "models": [
-            "k3"
+            "grok-4.6"
           ],
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "43d5944798e30073e0c14d4ef9b2e3796ce9515a4eecb2c2abf8c64a1c0d8a14",
-            "a1a39b1eea0b21961069af0d43c48e42edc9d22843e9af6e1b35cdbb37895a8a"
+            "07fc07bc24f58b7d64ac1d757f94dc0a268993a66ae4d4df99f6575843781fac",
+            "6d2f803bfa0e8595497618f3de384810100e9a3978c57b2d7f76ecf6dfa8377f"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -621,21 +585,21 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "65e524249d32588fff34da7e492b5f5cebb99c3528358ee58a17f7b05fa5348b",
-          "canonical_sha256": "46b88a32cc6cd4f9f5e32a0a197c522114ab7c5e1a4d87904ee2b9133386b910",
+          "bundle_sha256": "82d258b1429d1ee11367ed65d79af3461d6fb67655fc6c74c81a1dc3f0b4dae7",
+          "canonical_sha256": "3212c5db066fc227b82a595916412cd3abcacd0be5351a051ccd000bb8f56296",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "orient",
           "models": [
-            "k3"
+            "grok-4.6"
           ],
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "b398987b6f5b3740554ce062ddcab4d8499bfdcb73b5c6b7332398015ee1c096",
-            "f4fbe7d4f0db1517344882e0c0b3f8aa6089b9ebd2bd87a68d8768d10911e65a"
+            "3d7340ba3f85a2878b4bbea756547592a455ddba71c79329776f6ac7f6db618a",
+            "5c15efdb85774c593fe418bb721105c97dadcdef5f6ab1337b2669768d07b386"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -644,21 +608,21 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "662a8c992855693dfef07a3d5aa5e75e3402b8a38f419ad27250052845d97594",
-          "canonical_sha256": "6367532398d77542856776976c5343f03bd57bacf950f817f4367ab7fcd795c1",
+          "bundle_sha256": "559b73b7d9bd115b77234c614bdd1a86ddd4f13d91b5edd388efc71e061741b4",
+          "canonical_sha256": "788d04c6a82208c078d255a738b82f3272974a365cfe031d827baed6ca04614d",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "spoken",
           "models": [
-            "k3"
+            "grok-4.6"
           ],
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "7db5085fe159550a0b37a06b2c18626d265cf7bc6d3be0191f847f333d1ec219",
-            "d2012aa7a72795103ee76503e9bae006aa6aec21b6b171db8b342600d846ab0a"
+            "111d745087831a0ce29b3e6f9643b77e25d0647d1e3a7ba1179356149347e18c",
+            "b1ce1c133df50bc53c71599dfe9634146b0efe5f049e2b72324742a45fcf56fa"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -667,21 +631,21 @@
         },
         {
           "authorized_changes_only": true,
-          "bundle_sha256": "a3a452f57a2c927edfc432b6e8843215734e0b353e231eb609eaa224a9ced802",
-          "canonical_sha256": "5173fef29c247adc750ba4553996d5c92257bfada9128ea1fca4322e3f68f648",
+          "bundle_sha256": "5d89c45f58c98c136142e41b36e89206ebe7551b5c744f3f6d604e1916f43e99",
+          "canonical_sha256": "48bccc587a05a201c3b1caa4c113a94931104a9701f14751c5a68b94d395f182",
           "classification_matches": true,
           "cost_usd": null,
           "delivered": "PASS",
           "hook_observed": true,
           "mode": "teach",
           "models": [
-            "k3"
+            "grok-4.6"
           ],
           "rendered": "PASS",
           "resolved": "PASS",
           "session_ref_sha256": [
-            "e04047c480291ae0d6d19e9bbfdbbadda68ae355cfd1ad5a6d79a97189e4e744",
-            "f9fb731bbbaf5305b8c1e6f9b23ce4cb7e57e0e32eaf5f604fe8fdea6e0827c5"
+            "5bcb6c7a221bbe77bd6f27ae601cd3fbf7a97041181bf282af63e2daff514456",
+            "858d54e6e68026364a3477730666affa45e54d9d203c2b93dd3f0a306e830445"
           ],
           "status": "PASS",
           "strict_validation": "PASS",
@@ -690,7 +654,7 @@
         }
       ],
       "status": "PASS",
-      "summary_sha256": "61c3ae83af536ddb526216fa88e09fdf6f32d48c68c1ac3b98fd17e09ab9e5c6"
+      "summary_sha256": "b0f9a207070cedacbe41ba8b6e289a335f2b4f31de1b5070a67256d4c7d1e582"
     }
   },
   "kind": "brief-spec-live-e2e-evidence",
@@ -703,9 +667,9 @@
     "kimi"
   ],
   "schema_version": "1.0",
-  "source_revision_base": "4573c6011db7f3a9f55192348a7170f402b6ea9e",
+  "source_revision_base": "9cab11d439a091f94cb6f6e9042c5951492f636b",
   "source_state": "dirty-worktree-candidate",
-  "source_worktree_fingerprint": "3fc35e034e6be4687d2849c9f42445d9aae4064e310e13656a3cf2cb453b9c30",
+  "source_worktree_fingerprint": "75b5477c8fbc62d895a63d229362b1b1bc60fc02dba051474a13fd005caa2a0f",
   "status": "authorized",
-  "version": "0.5.0"
+  "version": "0.6.0"
 }

@@ -74,5 +74,9 @@ def test_capabilities_advertise_human_frame_without_authority(capsys) -> None:
     assert capability["contracts"] == {
         "human_frame_request": "BriefSpecFrameRequest/v1",
         "human_frame_receipt": "BriefSpecFrameReceipt/v1",
+        "notify_receipt": "brief-spec-notify-receipt/1.0",
+        "ack_receipt": "brief-spec-ack-receipt/1.0",
     }
     assert capability["authority"] == {"approval": False, "dispatch": False}
+    assert capability["outputs"]["direction"] == "one-way"
+    assert capability["outputs"]["network_consent_required"] is True

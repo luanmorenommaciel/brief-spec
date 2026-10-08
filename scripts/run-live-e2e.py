@@ -576,8 +576,9 @@ enabled = false
 """,
         encoding="utf-8",
     )
+    # Grok 1.0.46 resolves its signed-in session through the real HOME; isolating HOME makes it
+    # exit before any model call. GROK_HOME alone keeps skills, hooks, and config isolated.
     return {
-        "HOME": str(isolated_home),
         "GROK_HOME": str(grok_home),
         "GROK_AUTH_PATH": str(source_home / "auth.json"),
         "BRIEF_SPEC_HOME": str(briefspec_home()),
@@ -772,8 +773,13 @@ def run_scenario(
             raise ValueError("delivery classification differs from the parsed typed marker")
         explanation = delivery.get("explanation", {})
         expected_sections = [section.section_id for section in type_profile(work_type).sections]
-        expected_origin = "fallback" if work_type == "general" else "inferred"
-        expected_confidence = "low" if work_type == "general" else "medium"
+        # Classifier 1.3 has positive general rules ("answer what…"), so a general request may be
+        # inferred at medium confidence as well as reached by fallback at low confidence.
+        expected_pairs = (
+            {("fallback", "low"), ("inferred", "medium")}
+            if work_type == "general"
+            else {("inferred", "medium")}
+        )
         hook_classification = (
             {
                 "work_type": hook_state.get("work_type"),
@@ -789,8 +795,8 @@ def run_scenario(
         classification_matches = (
             hook_classification.get("work_type") == work_type
             and hook_classification.get("subject") == expected_subject
-            and hook_classification.get("origin") == expected_origin
-            and hook_classification.get("confidence") == expected_confidence
+            and (hook_classification.get("origin"), hook_classification.get("confidence"))
+            in expected_pairs
             and all(
                 marker.get(name) == hook_classification.get(name) for name in hook_classification
             )

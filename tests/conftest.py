@@ -61,7 +61,7 @@ def outcome_text() -> Callable[..., str]:
         status: str = "DONE",
         outcome: str = "The requested work is complete.",
         human_action: str = "None",
-        proof: tuple[str, ...] = ("[direct/info] `tests/test_contract.py` — direct evidence",),
+        proof: tuple[str, ...] = ("[direct/pass] `tests/test_contract.py` — direct evidence",),
         gaps: tuple[str, ...] = ("None",),
         next_items: tuple[str, ...] = ("None",),
         open_items: tuple[str, ...] = ("None",),

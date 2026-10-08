@@ -10,9 +10,16 @@ uv sync --group dev
 uv run ruff check .
 uv run ruff format --check .
 uv run pytest
+uv run brief-spec eval   # classifier accuracy on the bundled labeled prompts
 uv run python scripts/run-pilot.py
 uv build
 ```
+
+When you change classifier rules, check all three corpora with `brief-spec eval
+src/briefspec/data/<file>.jsonl`. `classification-test.jsonl` is never used for training; the
+regression floors in `tests/test_classifier_eval.py` must hold. If you change
+`classification-corpus.jsonl`, `classification-heldout.jsonl`, or `model_features`, retrain the
+fallback model with `uv run python scripts/train-classifier.py`.
 
 Run the release verifier and both plugin validators before submitting a change. The Codex check
 uses a throwaway `CODEX_HOME`, the same way CI does:

@@ -33,6 +33,7 @@ from briefspec.work_types import (
     classify_task,
     explicit_type_requested,
     is_clear_pivot,
+    is_decisive_shift,
     is_soft_pivot,
     is_substantive,
     type_profile,
@@ -43,7 +44,13 @@ SESSION_CONTEXT = (
     "and subject and keep them until the task closes or the user clearly pivots. When the task "
     "ends, close with outcome-brief inside the typed wrapper; a DONE result with nothing left "
     "open may use the compact form (Status, Outcome, Proof). Use session-checkpoint only at a "
-    "natural boundary. Preserve proof and explicit gaps; never infer success."
+    "natural boundary. Preserve proof and explicit gaps; never infer success: DONE needs at "
+    "least one [direct/pass] proof and no failing proof."
+)
+REENTRY_CONTEXT = (
+    "Brief-Spec: the context was just compacted while a {work_type} + {subject} task is open. "
+    "Start your next reply with a short Orient re-entry in plain text (where the task stands, "
+    "what changed, the next move) using only evidence still visible, then continue the task."
 )
 
 # Text the host inserts into the prompt stream on the user's behalf: background task
@@ -284,12 +291,14 @@ def process_event(
                 if reclassify:
                     _apply_classification(state, classify())
                     classification_changed = True
-                elif is_soft_pivot(prompt):
+                else:
                     candidate = classify()
-                    if (
-                        candidate.origin != ClassificationOrigin.FALLBACK.value
+                    soft_switch = (
+                        is_soft_pivot(prompt)
+                        and candidate.origin != ClassificationOrigin.FALLBACK.value
                         and candidate.work_type != state.work_type
-                    ):
+                    )
+                    if soft_switch or is_decisive_shift(candidate, state.work_type, prompt):
                         _apply_classification(state, candidate)
                         classification_changed = True
             method_due = (
@@ -333,8 +342,24 @@ def process_event(
                 checkpoint_policy is not Policy.OFF or outcome_policy is not Policy.OFF
             ):
                 contexts.append(SESSION_CONTEXT)
-            elif event.type is EventType.USER_PROMPT and task_open:
-                full = not state.guidance_delivered or event.runtime in _FULL_CONTEXT_EVERY_TURN
+                if str(payload.get("source", "")).lower() == "compact" and task_open:
+                    contexts.append(
+                        REENTRY_CONTEXT.format(work_type=state.work_type, subject=state.subject)
+                    )
+            elif (
+                event.type is EventType.USER_PROMPT
+                and task_open
+                and (
+                    state.last_prompt_substantive
+                    or classification_changed
+                    or event.runtime in _FULL_CONTEXT_EVERY_TURN
+                )
+            ):
+                full = (
+                    not state.guidance_delivered
+                    or classification_changed
+                    or event.runtime in _FULL_CONTEXT_EVERY_TURN
+                )
                 contexts.append(
                     _classification_context(state) if full else _classification_reminder(state)
                 )
@@ -404,7 +429,29 @@ def process_event(
                         and typed[0].get("subject") == state.subject
                         and typed[0].get("decision_id") == state.classification_decision_id
                     )
+                    reported = typed[0].get("work_type") if typed is not None else None
+                    state.reported_work_type = (
+                        str(reported) if reported and reported != state.work_type else None
+                    )
+                    if state.reported_work_type and notice is None:
+                        notice = (
+                            f"Brief-Spec: the brief calls this {state.reported_work_type} work; "
+                            f"the classifier chose {state.work_type}."
+                        )
 
+                if has_outcome or has_checkpoint:
+                    try:
+                        from briefspec.notify import spawn_background_notify
+
+                        spawn_background_notify(
+                            assistant,
+                            cwd=event.cwd,
+                            created_at=event.occurred_at.astimezone(UTC)
+                            .isoformat()
+                            .replace("+00:00", "Z"),
+                        )
+                    except Exception as exc:  # notification must never affect the host
+                        diagnostics.append(f"notify skipped: {type(exc).__name__}")
                 if has_outcome:
                     state.outcome_expected = False
                     state.task_closed = True

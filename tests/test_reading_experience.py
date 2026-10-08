@@ -120,10 +120,11 @@ def test_soft_pivot_switches_only_to_a_confident_different_type(
 ) -> None:
     session = Session(Runtime.CLAUDE, "soft")
     session.prompt("Explore this codebase and map its entry points.")
-    stay = session.prompt("Review pull request #42 for merge risk.")
+    stay = session.prompt("Also read the pull request #42 notes while mapping the modules.")
     assert "exploration + codebase" in (stay.context or "")
     vague = session.prompt("Now that we are here, let's keep going with the same thing please.")
-    assert "exploration + codebase" in (vague.context or "")
+    assert vague.context is None
+    assert session.state.work_type == "exploration"
     moved = session.prompt(
         "Now that the map is done, let's research how other tools summarize agent output."
     )
@@ -145,15 +146,45 @@ def test_full_guidance_once_then_short_reminder_until_compaction(
 ) -> None:
     session = Session(Runtime.CLAUDE, "guidance")
     first = session.prompt("Explore this codebase and map its entry points.").context or ""
-    second = session.prompt("Keep mapping the hook module please, then continue.").context or ""
+    second = session.prompt("Map the hook module entry points next, then continue.").context or ""
     assert first.startswith("Brief-Spec classified this task as exploration + codebase")
     assert "Method context" not in second and "method context" not in second
     assert second.startswith("Brief-Spec task: exploration + codebase")
     assert "decision_id=" in second
     assert len(second) < len(first) / 2
     session.send("PreCompact")
-    third = session.prompt("Keep mapping the hook module please, then continue.").context or ""
+    third = session.prompt("Map the hook module entry points next, then continue.").context or ""
     assert third.startswith("Brief-Spec classified this task as")
+
+
+def test_plain_new_request_with_a_request_verb_switches_type(
+    isolated_homes: dict[str, Path],
+) -> None:
+    session = Session(Runtime.CLAUDE, "decisive")
+    session.prompt("Publish the release to PyPI and fix the failing deploy.")
+    first_type = session.state.work_type
+    moved = session.prompt("Review the folder structure and tell me what each item is for.")
+    assert session.state.work_type == "review" != first_type
+    assert (moved.context or "").startswith("Brief-Spec classified this task as review")
+
+
+def test_short_follow_up_keeps_type_and_gets_no_reminder(
+    isolated_homes: dict[str, Path],
+) -> None:
+    session = Session(Runtime.CLAUDE, "follow-up")
+    session.prompt("Explore this codebase and map its entry points.")
+    follow = session.prompt("ok go ahead")
+    assert follow.context is None
+    assert session.state.work_type == "exploration"
+
+
+def test_sibling_product_names_are_not_task_vocabulary() -> None:
+    from briefspec.work_types import classify_task
+
+    assert not any(
+        rule.startswith("planning.") for rule in classify_task("how mature is task-spec").rule_ids
+    )
+    assert classify_task("Plan the keep-spec rollout sequence").work_type == "planning"
 
 
 def test_omp_receives_full_guidance_every_turn(isolated_homes: dict[str, Path]) -> None:
@@ -452,7 +483,7 @@ CORPUS = [
     ("Pesquise as ferramentas mais recentes de hooks para agentes", "research"),
     ("Planeje a próxima release com as etapas e os gates", "planning", "release"),
     ("Explore o repositório e mapeie os pontos de entrada", "exploration", "codebase"),
-    ("Review and research this item for me.", "general", "general"),
+    ("Review and research this item for me.", "review", "general"),
     ("Revise the README wording for clarity and update the install section", "implementation"),
 ]
 

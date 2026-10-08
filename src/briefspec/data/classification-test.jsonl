@@ -1,0 +1,150 @@
+{"id": "t001", "prompt": "is the brief-spec SKILL.md well written? be honest", "type": "review", "lang": "en", "tags": ["product-name"], "subject": "docs"}
+{"id": "t002", "prompt": "and the same for the delete handler", "type": "implementation", "lang": "en", "tags": ["follow-up"]}
+{"id": "t003", "prompt": "qual seria uma boa estratégia pra testar o app inteiro antes do lançamento? só o plano", "type": "planning", "lang": "pt", "tags": ["mixed"]}
+{"id": "t004", "prompt": "what would you say is the main benefit of type hints in python?", "type": "general", "lang": "en", "tags": []}
+{"id": "t005", "prompt": "I think it'd be nicer if the report used relative paths. could you change that?", "type": "implementation", "lang": "en", "tags": []}
+{"id": "t006", "prompt": "once the review is approved, can you push the brief-spec 0.6.0 tag and publish?", "type": "operations", "lang": "en", "tags": ["product-name", "mixed"], "subject": "release"}
+{"id": "t007", "prompt": "before we debug anything else, can you sanity-check the test I added in test_cache.py? it may be wrong itself", "type": "review", "lang": "en", "tags": ["mixed"]}
+{"id": "t008", "prompt": "why on earth does `len(results)` change between two identical runs?", "type": "debugging", "lang": "en", "tags": []}
+{"id": "t009", "prompt": "I'm not asking for a fix yet, I just want to understand why the tests deadlock on CI", "type": "debugging", "lang": "en", "tags": ["negation"], "subject": "ci"}
+{"id": "t010", "prompt": "how do you pronounce 'nginx'? genuinely asking", "type": "general", "lang": "en", "tags": []}
+{"id": "t011", "prompt": "can we get rid of the duplicate date-parsing helpers and keep just one?", "type": "implementation", "lang": "en", "tags": []}
+{"id": "t012", "prompt": "I wrote this migration last night and I'm a little nervous, does migrations/0051_split_names.py look ok?", "type": "review", "lang": "en", "tags": []}
+{"id": "t013", "prompt": "what's the community consensus on uv replacing poetry? any recent threads or posts?", "type": "research", "lang": "en", "tags": []}
+{"id": "t014", "prompt": "curious how other teams handle prompt classification for coding agents, can you look around?", "type": "research", "lang": "en", "tags": []}
+{"id": "t015", "prompt": "do you know what the current best practices are for signing python wheels? check the latest guidance", "type": "research", "lang": "en", "tags": ["mixed"], "subject": "release"}
+{"id": "t016", "prompt": "ok, the root cause makes sense now. can you go ahead and put the lock around the write?", "type": "implementation", "lang": "en", "tags": ["mixed", "follow-up"]}
+{"id": "t017", "prompt": "do github actions caches get shared across forks? find what the docs say", "type": "research", "lang": "en", "tags": [], "subject": "ci"}
+{"id": "t018", "prompt": "o build quebrou com 'cannot find module' do nada, sabe por quê?", "type": "debugging", "lang": "pt", "tags": []}
+{"id": "t019", "prompt": "what happens, code-wise, when a user clicks 'resend invite'? trace it end to end", "type": "exploration", "lang": "en", "tags": []}
+{"id": "t020", "prompt": "thanks for the fix earlier. by the way, what's the difference between a shallow and a deep copy?", "type": "general", "lang": "en", "tags": ["mixed", "follow-up"]}
+{"id": "t021", "prompt": "could you add input validation to the signup form? emails and password length", "type": "implementation", "lang": "en", "tags": []}
+{"id": "t022", "prompt": "what would be a good order for the brief-spec backlog items BS-40 to BS-47?", "type": "planning", "lang": "en", "tags": ["product-name"]}
+{"id": "t023", "prompt": "so how does the converge settle loop know a leaf is done? just reading for now", "type": "exploration", "lang": "en", "tags": ["product-name"]}
+{"id": "t024", "prompt": "morning. the dashboards show gaps every night around 2am, could you look into why?", "type": "debugging", "lang": "en", "tags": ["mixed"]}
+{"id": "t025", "prompt": "if we wanted keep-spec to support a second docs tree, how should we design it?", "type": "planning", "lang": "en", "tags": ["product-name"]}
+{"id": "t026", "prompt": "curious how taskmesh actually resolves leaf dependencies, can you walk the code with me?", "type": "exploration", "lang": "en", "tags": ["product-name"]}
+{"id": "t027", "prompt": "ugh, prod is throwing 502s again. can you fail over the db while I look at the logs?", "type": "operations", "lang": "en", "tags": ["mixed"]}
+{"id": "t028", "prompt": "I think the cert on example.test expires this weekend, can we renew it before then?", "type": "operations", "lang": "en", "tags": []}
+{"id": "t029", "prompt": "is regex really the wrong tool for parsing html, or is that just a meme?", "type": "general", "lang": "en", "tags": []}
+{"id": "t030", "prompt": "oi! dá pra adicionar um botão de exportar pdf na tela de relatórios?", "type": "implementation", "lang": "pt", "tags": []}
+{"id": "t031", "prompt": "ok that worked. out of curiosity, why did the order of the decorators matter?", "type": "general", "lang": "en", "tags": ["follow-up"]}
+{"id": "t032", "prompt": "o usuário reclama que o carrinho esvazia sozinho, o que pode estar causando?", "type": "debugging", "lang": "pt", "tags": []}
+{"id": "t033", "prompt": "we should probably have someone look over the iam policy changes in infra/iam.tf. could you?", "type": "review", "lang": "en", "tags": ["mixed"]}
+{"id": "t034", "prompt": "você sabe se existe alguma comparação recente entre fastapi e litestar? procura pra mim", "type": "research", "lang": "pt", "tags": []}
+{"id": "t035", "prompt": "where would I even look if I wanted to change how the report headings are ordered?", "type": "exploration", "lang": "en", "tags": []}
+{"id": "t036", "prompt": "would this pass a security review? it's the password reset flow in auth/reset.py", "type": "review", "lang": "en", "tags": [], "subject": "auth"}
+{"id": "t037", "prompt": "acho que esse código de paginação ficou meio confuso, o que você acha?", "type": "review", "lang": "pt", "tags": []}
+{"id": "t038", "prompt": "converge keeps reporting LOCAL_SETTLED even when a leaf failed, can you track down why?", "type": "debugging", "lang": "en", "tags": ["product-name"]}
+{"id": "t039", "prompt": "how are teams measuring the accuracy of brief-spec-style report classifiers? any public writeups?", "type": "research", "lang": "en", "tags": ["product-name"]}
+{"id": "t040", "prompt": "and the second commit?", "type": "review", "lang": "en", "tags": ["follow-up", "terse"]}
+{"id": "t041", "prompt": "I'd love to know how stripe and github version their public apis, can you dig that up?", "type": "research", "lang": "en", "tags": []}
+{"id": "t042", "prompt": "how does the readme read to someone who's never heard of keep-spec?", "type": "review", "lang": "en", "tags": ["product-name"], "subject": "docs"}
+{"id": "t043", "prompt": "do you think the new error types in errors.py make sense, or is it overkill?", "type": "review", "lang": "en", "tags": []}
+{"id": "t044", "prompt": "hey! random question, why do people say naming things is hard?", "type": "general", "lang": "en", "tags": []}
+{"id": "t045", "prompt": "hey, would you mind taking a look at PR #640? I'm not sure about the locking", "type": "review", "lang": "en", "tags": [], "subject": "pull-request"}
+{"id": "t046", "prompt": "the webhook signatures stopped validating after we rotated the secret, why would that be?", "type": "debugging", "lang": "en", "tags": ["mixed"]}
+{"id": "t047", "prompt": "I've been staring at this for an hour: `AttributeError: 'NoneType' object has no attribute 'split'` in loaders.py line 40. what am I missing?", "type": "debugging", "lang": "en", "tags": []}
+{"id": "t048", "prompt": "morning. what's the actual difference between a process and a thread? I always mix them up", "type": "general", "lang": "en", "tags": []}
+{"id": "t049", "prompt": "we just released and now the cli can't find its templates. what broke?", "type": "debugging", "lang": "en", "tags": ["mixed"], "subject": "release"}
+{"id": "t050", "prompt": "how do other tools in this space price per-seat vs usage? a quick scan would help", "type": "research", "lang": "en", "tags": []}
+{"id": "t051", "prompt": "any thoughts on how to stage the database upgrade so we avoid downtime? I mean the plan, not the actual upgrade", "type": "planning", "lang": "en", "tags": ["mixed"]}
+{"id": "t052", "prompt": "the on-call phone is going off about disk space on db-1, can you clear old wal archives?", "type": "operations", "lang": "en", "tags": []}
+{"id": "t053", "prompt": "curious, is tail call optimization a thing in python?", "type": "general", "lang": "en", "tags": []}
+{"id": "t054", "prompt": "I think there's a second config path somewhere besides settings.toml, can you find where it's read?", "type": "exploration", "lang": "en", "tags": []}
+{"id": "t055", "prompt": "hey, the taskmesh run stopped halfway with no error. could you work out what happened?", "type": "debugging", "lang": "en", "tags": ["product-name"]}
+{"id": "t056", "prompt": "na sua opinião, monorepo ou vários repositórios pra um time pequeno?", "type": "general", "lang": "pt", "tags": []}
+{"id": "t057", "prompt": "hey, is staging up? the last deploy looked weird", "type": "operations", "lang": "en", "tags": []}
+{"id": "t058", "prompt": "can you give me the lay of the land in the ingest/ package? no changes please", "type": "exploration", "lang": "en", "tags": []}
+{"id": "t059", "prompt": "nope, same error after the change", "type": "debugging", "lang": "en", "tags": ["follow-up"]}
+{"id": "t060", "prompt": "we don't need to deploy this, just add the feature flag check around the new banner", "type": "implementation", "lang": "en", "tags": ["negation", "mixed"]}
+{"id": "t061", "prompt": "I'm a bit confused about what 'atomic' means for a task-spec leaf, can you explain?", "type": "general", "lang": "en", "tags": ["product-name"]}
+{"id": "t062", "prompt": "how is the http server wired up here, is it flask or something custom?", "type": "exploration", "lang": "en", "tags": []}
+{"id": "t063", "prompt": "quais opções de fila gerenciada existem na aws e no gcp? faz um apanhado", "type": "research", "lang": "pt", "tags": []}
+{"id": "t064", "prompt": "before I write the fix tomorrow, could you figure out which functions touch the cache key format?", "type": "exploration", "lang": "en", "tags": ["mixed"]}
+{"id": "t065", "prompt": "would you mind converting the remaining tests in tests/legacy to pytest style?", "type": "implementation", "lang": "en", "tags": []}
+{"id": "t066", "prompt": "so in a post-incident review, what's 'blameless' supposed to mean?", "type": "general", "lang": "en", "tags": ["mixed"]}
+{"id": "t067", "prompt": "acho que seria bom ter testes pro serviço de frete, consegue escrever?", "type": "implementation", "lang": "pt", "tags": []}
+{"id": "t068", "prompt": "what's your take on squash merges vs keeping full history?", "type": "general", "lang": "en", "tags": []}
+{"id": "t069", "prompt": "can we turn the new_search flag on for 10% of users in prod?", "type": "operations", "lang": "en", "tags": []}
+{"id": "t070", "prompt": "and do the same in eu-west", "type": "operations", "lang": "en", "tags": ["follow-up"]}
+{"id": "t071", "prompt": "oi, pode dar uma olhada no PR #212 e me dizer se tem algo preocupante?", "type": "review", "lang": "pt", "tags": [], "subject": "pull-request"}
+{"id": "t072", "prompt": "I suspect the old deploy helpers aren't used anymore, can you see what still imports them?", "type": "exploration", "lang": "en", "tags": ["mixed"]}
+{"id": "t073", "prompt": "I'd like the keep-spec export to include timestamps, can you wire that in?", "type": "implementation", "lang": "en", "tags": ["product-name"]}
+{"id": "t074", "prompt": "we need to rebuild the docker images on the patched base image and redeploy everything", "type": "operations", "lang": "en", "tags": []}
+{"id": "t075", "prompt": "how would you design the permissions system for workhelm workspaces?", "type": "planning", "lang": "en", "tags": ["product-name", "ambiguous-but-labeled"]}
+{"id": "t076", "prompt": "I read that taskmesh can't widen scope, what does widening scope even mean here?", "type": "general", "lang": "en", "tags": ["product-name"]}
+{"id": "t077", "prompt": "como o workhelm decide qual item do backlog pegar? dá uma olhada no código", "type": "exploration", "lang": "pt", "tags": ["product-name"]}
+{"id": "t078", "prompt": "hey, before the sprint starts, could you help me sequence the open items in the backlog?", "type": "planning", "lang": "en", "tags": []}
+{"id": "t079", "prompt": "hmm, the stamp step worked yesterday and today it says 'invalid signature'. any idea what changed?", "type": "debugging", "lang": "en", "tags": []}
+{"id": "t080", "prompt": "given what we found during the review, what's the plan of attack?", "type": "planning", "lang": "en", "tags": ["follow-up", "mixed"]}
+{"id": "t081", "prompt": "and where are those defaults coming from?", "type": "exploration", "lang": "en", "tags": ["follow-up"]}
+{"id": "t082", "prompt": "mind checking whether the nightly pipeline went through?", "type": "operations", "lang": "en", "tags": [], "subject": "ci"}
+{"id": "t083", "prompt": "are there any studies on how long developers actually read agent summaries?", "type": "research", "lang": "en", "tags": []}
+{"id": "t084", "prompt": "I'm not asking you to change it, but is the dependency injection in app/container.py reasonable?", "type": "review", "lang": "en", "tags": ["negation"]}
+{"id": "t085", "prompt": "is there a meaningful difference between `pip install -e .` and a regular install?", "type": "general", "lang": "en", "tags": []}
+{"id": "t086", "prompt": "how should we break the onboarding redesign into task-spec leaves? thinking out loud", "type": "planning", "lang": "en", "tags": ["product-name"]}
+{"id": "t087", "prompt": "would you consider json lines a good format for logs? just thinking out loud", "type": "general", "lang": "en", "tags": []}
+{"id": "t088", "prompt": "pode ver se o certificado do domínio de staging ainda é válido?", "type": "operations", "lang": "pt", "tags": []}
+{"id": "t089", "prompt": "hey, I just cloned this and I'm totally lost. where should I start reading?", "type": "exploration", "lang": "en", "tags": []}
+{"id": "t090", "prompt": "it'd be great to have a short troubleshooting section in the brief-spec docs, could you write it?", "type": "implementation", "lang": "en", "tags": ["product-name"], "subject": "docs"}
+{"id": "t091", "prompt": "como você planejaria a migração do monólito pra microsserviços aos poucos?", "type": "planning", "lang": "pt", "tags": []}
+{"id": "t092", "prompt": "você sabe onde é feita a validação do payload do webhook?", "type": "exploration", "lang": "pt", "tags": []}
+{"id": "t093", "prompt": "please don't touch the code, just roll staging back to yesterday's build", "type": "operations", "lang": "en", "tags": ["negation"]}
+{"id": "t094", "prompt": "I don't want code yet. how would you structure the new reporting module?", "type": "planning", "lang": "en", "tags": ["negation"]}
+{"id": "t095", "prompt": "tô curioso, por que o python usa indentação em vez de chaves?", "type": "general", "lang": "pt", "tags": []}
+{"id": "t096", "prompt": "I don't need you to look anything up, but roughly what's the difference between oauth and saml?", "type": "general", "lang": "en", "tags": ["negation"], "subject": "auth"}
+{"id": "t097", "prompt": "something's off with timezone handling, users in tokyo see tomorrow's date. can you find out why?", "type": "debugging", "lang": "en", "tags": []}
+{"id": "t098", "prompt": "is it possible the cache is why stale prices show up? can you confirm what's causing it?", "type": "debugging", "lang": "en", "tags": []}
+{"id": "t099", "prompt": "is the converge settlement report accurate compared to what actually ran?", "type": "review", "lang": "en", "tags": ["product-name", "ambiguous-but-labeled"]}
+{"id": "t100", "prompt": "could you look into how the big monorepos at google and meta handle code ownership? sources please", "type": "research", "lang": "en", "tags": []}
+{"id": "t101", "prompt": "hey, we should probably have a `--quiet` flag on the stamp command, can you add it?", "type": "implementation", "lang": "en", "tags": []}
+{"id": "t102", "prompt": "como outras empresas fazem revisão de código com ia? pesquisa uns exemplos", "type": "research", "lang": "pt", "tags": ["mixed"]}
+{"id": "t103", "prompt": "I'm wondering whether anyone has benchmarked msgpack vs cbor in python recently", "type": "research", "lang": "en", "tags": []}
+{"id": "t104", "prompt": "será que a política de cors do gateway tá permissiva demais? confere pra mim", "type": "review", "lang": "pt", "tags": []}
+{"id": "t105", "prompt": "hi there, can you explain what trunk-based development is? nothing to do with our repo", "type": "general", "lang": "en", "tags": []}
+{"id": "t106", "prompt": "should the api versioning come before or after the auth refactor? help me decide and lay out the order", "type": "planning", "lang": "en", "tags": [], "subject": "auth"}
+{"id": "t107", "prompt": "oi! comecei agora no projeto, como o código está organizado?", "type": "exploration", "lang": "pt", "tags": []}
+{"id": "t108", "prompt": "what are folks using these days for local model evals? would love a roundup with links", "type": "research", "lang": "en", "tags": []}
+{"id": "t109", "prompt": "I'm curious which parts of keep-spec read from tasks/ and which write to it", "type": "exploration", "lang": "en", "tags": ["product-name"]}
+{"id": "t110", "prompt": "the investigation showed the env var name is wrong in settings.py, please correct it to DATABASE_URL", "type": "implementation", "lang": "en", "tags": ["mixed"]}
+{"id": "t111", "prompt": "hey, is there anything out there like taskmesh that only runs pre-authorized work?", "type": "research", "lang": "en", "tags": ["product-name"]}
+{"id": "t112", "prompt": "before we plan anything, can you research which hook events codex supports today?", "type": "research", "lang": "en", "tags": ["mixed"]}
+{"id": "t113", "prompt": "hey, the github token for the release job got rotated, can you update the repo secret?", "type": "operations", "lang": "en", "tags": [], "subject": "ci"}
+{"id": "t114", "prompt": "hi! small thing: the 404 page should link back home. can you do that?", "type": "implementation", "lang": "en", "tags": []}
+{"id": "t115", "prompt": "my teammate says this retry loop is fine and I'm not convinced. what do you think of fetch_with_retry in client/http.py?", "type": "review", "lang": "en", "tags": []}
+{"id": "t116", "prompt": "acho que tem vazamento de conexão no pool do banco, consegue investigar?", "type": "debugging", "lang": "pt", "tags": []}
+{"id": "t117", "prompt": "we should probably get the release out today, can you kick it off?", "type": "operations", "lang": "en", "tags": [], "subject": "release"}
+{"id": "t118", "prompt": "I think the markdown parser might be leaking memory on big files, can you see what's up?", "type": "debugging", "lang": "en", "tags": [], "subject": "parser"}
+{"id": "t119", "prompt": "bom dia! uma dúvida rápida: o que é um ORM?", "type": "general", "lang": "pt", "tags": []}
+{"id": "t120", "prompt": "do you have any idea why the keep-spec ingest skips some markdown files?", "type": "debugging", "lang": "en", "tags": ["product-name"]}
+{"id": "t121", "prompt": "we're about to publish, but first could you read through CHANGELOG.md and tell me if anything is misleading?", "type": "review", "lang": "en", "tags": ["mixed"], "subject": "docs"}
+{"id": "t122", "prompt": "after looking it over I think `do_stuff()` needs a meaningful name, go ahead and rename it", "type": "implementation", "lang": "en", "tags": ["mixed"]}
+{"id": "t123", "prompt": "bom dia! dá pra subir a versão nova em staging?", "type": "operations", "lang": "pt", "tags": []}
+{"id": "t124", "prompt": "we should probably figure out how to sunset the legacy xml export without angering partners, any plan?", "type": "planning", "lang": "en", "tags": []}
+{"id": "t125", "prompt": "I wonder how the session id gets from the hook into the bundle, could you follow it for me?", "type": "exploration", "lang": "en", "tags": []}
+{"id": "t126", "prompt": "quick sanity check, a sha256 digest is always 64 hex chars, right?", "type": "general", "lang": "en", "tags": []}
+{"id": "t127", "prompt": "I'm thinking about splitting the cli into plugins. what would a sensible plan look like?", "type": "planning", "lang": "en", "tags": []}
+{"id": "t128", "prompt": "is there a way to see if the converge factory runner is healthy right now? check it", "type": "operations", "lang": "en", "tags": ["product-name"]}
+{"id": "t129", "prompt": "ok, and after phase 1 what comes next?", "type": "planning", "lang": "en", "tags": ["follow-up"]}
+{"id": "t130", "prompt": "honestly, would you call 0.5 a stable version number for a cli?", "type": "general", "lang": "en", "tags": ["mixed"], "subject": "release"}
+{"id": "t131", "prompt": "curious how you'd phase out the in-house queue in favor of sqs", "type": "planning", "lang": "en", "tags": []}
+{"id": "t132", "prompt": "how do open source projects usually pick their release cadence? find a few examples", "type": "research", "lang": "en", "tags": ["mixed"], "subject": "release"}
+{"id": "t133", "prompt": "o deploy de ontem precisa ser revertido, consegue fazer?", "type": "operations", "lang": "pt", "tags": []}
+{"id": "t134", "prompt": "do you know which part of the code decides when a checkpoint is eligible?", "type": "exploration", "lang": "en", "tags": []}
+{"id": "t135", "prompt": "just wondering, does keep-spec ever dispatch work or is that someone else's job?", "type": "general", "lang": "en", "tags": ["product-name"]}
+{"id": "t136", "prompt": "has anyone written up a good comparison of sqlc and sqlalchemy core? I'd like a summary", "type": "research", "lang": "en", "tags": []}
+{"id": "t137", "prompt": "a colleague's plan for the cache rewrite is in docs/cache-plan.md, does it hold up?", "type": "review", "lang": "en", "tags": ["mixed"]}
+{"id": "t138", "prompt": "I keep hearing 'shift left' in meetings, what does it mean?", "type": "general", "lang": "en", "tags": []}
+{"id": "t139", "prompt": "antes de começar, me ajuda a dividir esse épico em tarefas?", "type": "planning", "lang": "pt", "tags": []}
+{"id": "t140", "prompt": "I think step 2 of the plan is ready, mind implementing it?", "type": "implementation", "lang": "en", "tags": ["mixed", "follow-up"]}
+{"id": "t141", "prompt": "can you double-check that the task-spec leaves in tasks/search/ actually match the accepted topology?", "type": "review", "lang": "en", "tags": ["product-name"]}
+{"id": "t142", "prompt": "is there any place where we shell out to git? I'd like a list", "type": "exploration", "lang": "en", "tags": []}
+{"id": "t143", "prompt": "could the merge queue be why PRs sit in 'pending' forever? figure out what's blocking them", "type": "debugging", "lang": "en", "tags": []}
+{"id": "t144", "prompt": "could you bump the web pods back to 4 now that traffic is normal?", "type": "operations", "lang": "en", "tags": []}
+{"id": "t145", "prompt": "we've been talking about moving orders to event sourcing. how would you approach it if we did?", "type": "planning", "lang": "en", "tags": []}
+{"id": "t146", "prompt": "what's a realistic milestone plan for getting the mobile app to beta by march?", "type": "planning", "lang": "en", "tags": []}
+{"id": "t147", "prompt": "e faz o mesmo pro módulo de estoque", "type": "implementation", "lang": "pt", "tags": ["follow-up"]}
+{"id": "t148", "prompt": "so is brief-spec meant for humans or for other tools to consume?", "type": "general", "lang": "en", "tags": ["product-name"]}
+{"id": "t149", "prompt": "is a planning poker estimate supposed to be time or complexity?", "type": "general", "lang": "en", "tags": ["mixed"]}
+{"id": "t150", "prompt": "can you make the workhelm backlog command sort by priority by default?", "type": "implementation", "lang": "en", "tags": ["product-name"]}

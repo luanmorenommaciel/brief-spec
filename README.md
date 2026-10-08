@@ -10,37 +10,45 @@ Brief-Spec is a type-aware, evidence-backed delivery contract for AI coding harn
 
 <p align="center">
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.11%2B-A56BFF?labelColor=111720" alt="Python 3.11+"></a>
-  <a href="https://github.com/luanmorenommaciel/brief-spec/releases/tag/v0.5.0"><img src="https://img.shields.io/badge/public_release-v0.5.0-070A0F?labelColor=111720" alt="Public release v0.5.0"></a>
-  <a href="https://pypi.org/project/brief-spec/"><img src="https://img.shields.io/badge/pypi-brief--spec_0.5.0-29313A?labelColor=111720" alt="PyPI brief-spec 0.5.0"></a>
+  <a href="https://github.com/luanmorenommaciel/brief-spec/releases/tag/v0.6.0"><img src="https://img.shields.io/badge/public_release-v0.6.0-070A0F?labelColor=111720" alt="Public release v0.6.0"></a>
+  <a href="https://pypi.org/project/brief-spec/"><img src="https://img.shields.io/badge/pypi-brief--spec_0.6.0-29313A?labelColor=111720" alt="PyPI brief-spec 0.6.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-29313A?labelColor=111720" alt="MIT License"></a>
 </p>
 
-**Public release v0.5.0** on GitHub and PyPI · MIT
+**Public release v0.6.0** on GitHub and PyPI · MIT
 
-- Public release: `v0.5.0` on GitHub with wheels, sdists, schemas, and signed manifests.
-- PyPI: `brief-spec`, `brief-spec-renderer-pdf`, and `brief-spec-renderer-audio` 0.5.0, the same bytes as the GitHub release.
+- Public release: `v0.6.0` on GitHub with wheels, sdists, schemas, and signed manifests.
+- PyPI: `brief-spec`, `brief-spec-renderer-pdf`, and `brief-spec-renderer-audio` 0.6.0, the same bytes as the GitHub release.
 
-[What's new](#whats-new-in-050) · [The problem](#the-problem) · [How it works](#how-it-works) · [Outcome Brief](#outcome-brief) · [Docs](#documentation) · [Skills](#why-the-skills-exist) · [Harness](#harness-support) · [CLI](#cli) · [Install](#install)
+[What's new](#whats-new-in-060) · [Notifications](#notifications) · [The problem](#the-problem) · [How it works](#how-it-works) · [Outcome Brief](#outcome-brief) · [Docs](#documentation) · [Skills](#why-the-skills-exist) · [Harness](#harness-support) · [CLI](#cli) · [Install](#install)
 
 ---
 
-## What's new in 0.5.0
+## What's new in 0.6.0
 
-0.5.0 is the first release since v0.2.0. It also includes the unpublished 0.3.0 and 0.4.0 candidates.
+0.6.0 makes a valid brief mean something true, keeps the task type in step with the conversation,
+and lets a brief reach people where they already work.
 
-- **New name and command.** The package and command are now `brief-spec`. The old `briefspec` command still works until 1.0 and prints a notice.
-- **Eight work types.** Each task is classified locally, with no network call, as general, exploration, review, implementation, debugging, planning, research, or operations. Each type has its own explanation order. Run `brief-spec types list` and `brief-spec classify`. Rules cover English and Portuguese prompts.
-- **Typed wrapper.** A terminal brief is wrapped in a `brief-spec:typed:v1` marker that records the type, subject, confidence, and decision ID.
-- **Compact Outcome Brief.** A `DONE` result with nothing left for the human can use only Status, Outcome, and Proof.
-- **Five required harnesses.** Codex, Claude Code, OMP, Grok Build, and Kimi Code are installed by `brief-spec setup` and pass a live host matrix. Copilot, Cursor Agent, and Goose are experimental.
-- **Quieter guidance.** Full guidance is sent once per context window. Later prompts get a one-line reminder. A valid Outcome Brief closes the task, so the next request is classified from scratch.
-- **Invalid-brief warning.** Every stop now validates the final message. Claude Code shows a one-line warning when a brief is present but invalid.
-- **Codex hook approval check.** `brief-spec doctor codex` reports whether each Brief-Spec hook has been approved in Codex `/hooks`.
-- **Exports and verification.** `export`, `bundle`, `verify`, and `deliver` produce Markdown, JSON, offline HTML, ZIP, spoken text, and SSML. Optional packages add PDF and MP3. Every bundle has a SHA-256 manifest and a delivery receipt.
-- **Human Frames.** `brief-spec frame` renders a presentation-only brief for an external coordinator. The coordinator does not hand over approval or dispatch.
-- **Experimental Chronicle and video.** These are separate, opt-in packages for project continuity. They are not part of the 0.5.0 release.
+- **Notifications.** `brief-spec notify` posts a brief to Slack, Microsoft Teams, Discord, Google
+  Chat, or a signed webhook. Follow-ups for the same task go to one thread, and nothing is posted
+  without `--consent-network`. See [Notifications](#notifications).
+- **DONE means directly verified.** A DONE brief now needs at least one `[direct/pass]` proof and
+  no failing proof. Use REVIEW when the evidence is only derived or reported.
+- **Better classification.** On an independent set of conversational prompts, accuracy rose from
+  30.7% to 69.3%. A new request such as "review the folder structure" now switches the task type,
+  while nouns and questions do not. `brief-spec eval` measures it.
+- **Freshness.** Exports record the Git commit they describe, and `verify` says whether `HEAD` has
+  moved on since.
+- **Secret scan.** Export, bundle, verify, and notify refuse a brief that contains a token, key,
+  or webhook URL.
+- **Decisions you can acknowledge.** DECIDE briefs can carry a decision card (options,
+  recommendation, reversibility, deadline), and `brief-spec ack` records what you chose.
+- **Re-entry after compaction.** When the host compacts the context mid-task, the agent first gives
+  a short Orient re-entry.
 
-The full list is in the [changelog](CHANGELOG.md#050---2026-10-08).
+The 0.5.0 highlights (the `brief-spec` name, eight work types, typed wrapper, five required
+harnesses, exports and verification) are in the [changelog](CHANGELOG.md#050---2026-10-08). The
+full 0.6.0 list is in the [changelog](CHANGELOG.md#060---2026-10-08).
 
 ---
 
@@ -143,7 +151,7 @@ Status → Outcome → Human action → Proof → Gaps → Next → Open
 
 | Status | Meaning | Constraints |
 | --- | --- | --- |
-| `DONE` | Requested outcome achieved and directly verified | No required action, no unresolved gaps |
+| `DONE` | Requested outcome achieved and directly verified | No required action, no unresolved gaps, at least one `[direct/pass]` proof, no failing proof |
 | `REVIEW` | Implementation ready for human inspection | Requires human action |
 | `DECIDE` | A meaningful choice is required | Requires human action and an open decision |
 | `BLOCKED` | External dependency prevents continuation | Requires a gap and a next action |
@@ -174,7 +182,14 @@ Open:
 <!-- /briefspec -->
 ```
 
-Proof items are prefixed `[direct|derived|reported]/[pass|fail|info]`. See [`schemas/`](schemas/) for the machine-readable contracts.
+Proof items are prefixed `[direct|derived|reported]/[pass|fail|info]`. `direct` means you observed it yourself; `derived` means you inferred it; `reported` means someone else said so. See [`schemas/`](schemas/) for the machine-readable contracts.
+
+A DECIDE brief works best with a decision card in Open:
+
+```text
+Open:
+- Options: SQS; Redis streams — Recommendation: SQS — Reversible: yes — Needed by: 2026-10-12
+```
 
 A `DONE` result with nothing left for the human may use the compact form, which keeps only Status, Outcome, and Proof. Brief-Spec reads the missing fields as `None`, so the canonical object is the same as the full form. Every other status needs all seven fields.
 
@@ -324,13 +339,13 @@ A `.claude-plugin/` directory is present in this repository for local plugin dev
 
 ### First journey
 
-The journey below uses the published `0.5.0` release; see [Install](#install). The older
+The journey below uses the published `0.6.0` release; see [Install](#install). The older
 `v0.2.0` release installs only the `briefspec` command with `install`, `uninstall`, `doctor`,
 `validate`, `config`, and `state`.
 
 ```bash
-# Install the published release from its tag
-uv tool install git+https://github.com/luanmorenommaciel/brief-spec.git@v0.5.0
+# Install the published release
+uv tool install brief-spec
 
 # Verify the installation
 brief-spec --version
@@ -340,6 +355,9 @@ brief-spec types list
 
 # Classify bounded task text (no network)
 echo "Review the authentication module" | brief-spec classify - --json
+
+# Measure the classifier on the bundled labeled prompts
+brief-spec eval
 
 # Validate an Outcome Brief
 brief-spec validate outcome path/to/handoff.md
@@ -376,7 +394,69 @@ brief-spec verify /path/to/deliveries/handoff.zip.receipt.json --level delivered
 
 Verification levels are cumulative: `structural` → `resolved` → `rendered` → `delivered`. See [docs/delivery.md](docs/delivery.md) for the complete export and verification reference.
 
+Exports record the current Git commit. When `verify` runs inside the same repository, a
+`freshness` check reports whether the brief still describes `HEAD`.
+
 `brief-spec frame request.json --output frame.md` renders a Human Frame from a `BriefSpecFrameRequest/v1` request. It writes Markdown and a receipt. It does not approve or dispatch anything.
+
+## Notifications
+
+`brief-spec notify` posts a brief to a chat channel or a webhook. It is one-way: Brief-Spec never
+reads replies and never approves or starts work.
+
+| Kind | Where it posts | Threads follow-ups | Updates the first message | Attachments |
+| --- | --- | --- | --- | --- |
+| `slack-webhook` | Slack incoming webhook | No | No | No |
+| `slack-bot` | Slack `chat.postMessage` with a bot token | Yes | Yes | Yes (`--attach`) |
+| `teams-workflow` | Microsoft Teams Workflows webhook (Adaptive Card) | No | No | No |
+| `discord` | Discord webhook | Via `target` thread id | No | No |
+| `google-chat` | Google Chat webhook | Yes | No | No |
+| `webhook` | Any HTTPS endpoint, signed per Standard Webhooks | n/a | n/a | n/a |
+
+Configure channels in `~/.local/state/brief-spec/config.toml` or a project `.brief-spec.toml`.
+Config files may only name environment variables. Brief-Spec refuses a config that contains a
+URL or token, so the file is safe to commit.
+
+```toml
+[channels.eng]
+kind = "slack-bot"
+target = "C0123ABCD"               # channel id, not a secret
+secret_env = "BRIEF_SPEC_SLACK_TOKEN"
+when_status = ["BLOCKED", "DECIDE", "REVIEW"]
+
+[channels.ops]
+kind = "teams-workflow"
+secret_env = "BRIEF_SPEC_TEAMS_URL"
+
+[channels.ci]
+kind = "webhook"
+url_env = "BRIEF_SPEC_HOOK_URL"
+secret_env = "BRIEF_SPEC_HOOK_SECRET"  # whsec_… signing secret, optional
+```
+
+```bash
+brief-spec channels list
+brief-spec notify handoff.md --to eng --dry-run          # show the exact payload, send nothing
+brief-spec notify handoff.md --to eng --consent-network  # post it
+brief-spec notify handoff.md --to all --consent-network  # every channel whose when_status matches
+brief-spec ack decide.md --choice "SQS" --by luan        # record your decision
+```
+
+The chat card is Orient-style: status, outcome, human action, gaps, and next steps. Use
+`template = "full"` to include proof. A local send log prevents duplicate posts; `--resend` posts
+again. Receipts record the channel, message id, permalink, and hashes, never the secret.
+
+To post every valid brief automatically when an agent stops, opt in explicitly:
+
+```toml
+[notify]
+on_stop = true
+consent_network = true
+channels = ["eng"]
+```
+
+The Stop hook then starts a detached `brief-spec notify` process. A slow or failing channel never
+blocks or breaks the agent session.
 
 ### Configuration
 
@@ -419,8 +499,8 @@ pip install brief-spec brief-spec-renderer-pdf brief-spec-renderer-audio
 ```
 
 The PyPI files are byte-identical to the wheels and sdists attached to the
-[v0.5.0 GitHub release](https://github.com/luanmorenommaciel/brief-spec/releases/tag/v0.5.0), and each
-carries a build attestation. To pin the version, use `brief-spec==0.5.0`.
+[v0.6.0 GitHub release](https://github.com/luanmorenommaciel/brief-spec/releases/tag/v0.6.0), and each
+carries a build attestation. To pin the version, use `brief-spec==0.6.0`.
 
 ### 2. Connect your harnesses
 
@@ -433,6 +513,17 @@ brief-spec doctor all --scope user --probe
 
 - **Codex:** open Codex, run `/hooks`, and approve the five Brief-Spec hooks. Codex skips unapproved hooks without an error. `brief-spec doctor codex` shows which hooks are still unapproved.
 - **Claude Code:** start a new session. The hooks load from `~/.claude/settings.json`.
+
+### Upgrading from 0.5.0
+
+```bash
+uv tool upgrade brief-spec          # or: pip install --upgrade brief-spec
+brief-spec setup all --scope user   # refresh the hooks and skills each harness runs
+brief-spec doctor all --scope user --probe
+```
+
+DONE briefs now need a `[direct/pass]` proof; briefs exported by 0.5.0 still verify, with a
+warning.
 
 ### Upgrading from v0.2.0
 
@@ -516,12 +607,17 @@ The JSON schemas in [`schemas/`](schemas/) define the portable data contracts.
 - Spoken Brief is text until a separate text-to-speech system renders it.
 - Automatic checkpoint thresholds are heuristics and remain configurable.
 - Brief-Spec reduces reading friction; high-risk changes still deserve direct inspection.
+- Classification is local and approximate. On 150 independent conversational prompts it chooses
+  the right type 69% of the time; run `brief-spec eval` to measure your own prompts. Use an
+  explicit `type: review` (or any type) when it matters.
+- Notifications are one-way. A Slack incoming webhook cannot thread or edit; use a bot token for
+  that. Teams Workflows posts as the Flow bot and belongs to the user who created the flow.
 
 ---
 
 ## Experimental: Human Continuity
 
-The source tree contains an optional, independently versioned Chronicle extension. It does not change the frozen Outcome Brief or Session Checkpoint `1.0` contracts and is not part of the public 0.5.0 publication claims.
+The source tree contains an optional, independently versioned Chronicle extension. It does not change the frozen Outcome Brief or Session Checkpoint `1.0` contracts and is not part of the public 0.6.0 publication claims.
 
 Chronicle is never activated globally. It records what Brief-Spec observed; it does not replace Seamwise intent, Task-Spec acceptance, Converge authorization, Git evidence, or reviewed durable knowledge.
 
@@ -533,7 +629,8 @@ Read the complete [Human Continuity architecture](docs/human-continuity.md).
 
 | Version | State | Notes |
 | --- | --- | --- |
-| v0.5.0 | Published on GitHub and PyPI | Latest public release |
+| v0.6.0 | Published on GitHub and PyPI | Latest public release |
+| v0.5.0 | Published on GitHub and PyPI | Previous release |
 | v0.2.0 | Published GitHub release | Historical release |
 | 0.3.0, 0.4.0 | Unpublished | Folded into 0.5.0 |
 
@@ -552,6 +649,10 @@ src/brief_spec/          Canonical Python import
 src/briefspec/
   adapters/              Host payload normalization
   delivery.py            Canonical envelope and core renderers
+  notify.py              One-way Slack, Teams, Discord, Google Chat, and webhook posts
+  work_types.py          Local classifier rules and the shipped Naive Bayes fallback
+  evaluation.py          `brief-spec eval` scoring
+  data/                  Classifier model and labeled evaluation prompts
   verification.py        Structural through delivered verification
   hooks.py               Safe-boundary and one-repair control
   installers.py          Transactional user/project integration

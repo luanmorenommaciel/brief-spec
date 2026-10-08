@@ -20,6 +20,7 @@ from briefspec.markdown import (
     validate_outcome,
 )
 from briefspec.models import AccessLevel, ValidationResult, WorkActivity
+from briefspec.secret_scan import scan_value
 from briefspec.state import atomic_write_many
 from briefspec.work_types import (
     PROFILE_VERSION,
@@ -427,24 +428,40 @@ def load_delivery(
     )
     if typed is None:
         warnings.append("Legacy untyped brief loaded as general + general")
-    return (
-        new_delivery(
-            brief,
-            source_path=source_path,
-            runtime=runtime,
-            harness=harness,
-            session_ref=session_ref,
-            host_version=host_version,
-            adapter_version=adapter_version,
-            source_revision=source_revision,
-            model_provider=model_provider,
-            model=model,
-            created_at=created_at,
-            classification=classification,
-            explanation=explanation,
-        ),
-        warnings,
+    delivery = new_delivery(
+        brief,
+        source_path=source_path,
+        runtime=runtime,
+        harness=harness,
+        session_ref=session_ref,
+        host_version=host_version,
+        adapter_version=adapter_version,
+        source_revision=source_revision,
+        model_provider=model_provider,
+        model=model,
+        created_at=created_at,
+        classification=classification,
+        explanation=explanation,
     )
+    result = validate_delivery(delivery)
+    if not result.valid:
+        raise ValueError("; ".join(result.errors))
+    return delivery, list(dict.fromkeys([*warnings, *result.warnings]))
+
+
+_V06_DONE_RULES = (
+    "DONE requires at least one [direct/pass]",
+    "DONE cannot include failing proof",
+)
+
+
+def _older_than(source: Any, version: tuple[int, int]) -> bool:
+    raw = str(source.get("brief_spec_version", "")) if isinstance(source, dict) else ""
+    parts = raw.split(".")
+    try:
+        return (int(parts[0]), int(parts[1])) < version
+    except (IndexError, ValueError):
+        return False
 
 
 def validate_delivery(value: dict[str, Any]) -> ValidationResult:
@@ -587,7 +604,14 @@ def validate_delivery(value: dict[str, Any]) -> ValidationResult:
                 if brief.get("kind") == "outcome-brief"
                 else validate_checkpoint(markdown)
             )
-            errors.extend(result.errors)
+            legacy = _older_than(value.get("source", {}), (0, 6))
+            for error in result.errors:
+                # v0.6 made DONE require a direct pass. Deliveries made by earlier versions stay
+                # verifiable; the stricter rule is reported as a warning for them.
+                if legacy and error.startswith(_V06_DONE_RULES):
+                    warnings.append(f"{error} (made by Brief-Spec < 0.6; accepted)")
+                else:
+                    errors.append(error)
             warnings.extend(result.warnings)
 
         proof = brief.get("proof", [])
@@ -618,15 +642,11 @@ def validate_delivery(value: dict[str, Any]) -> ValidationResult:
                 for name in ("label", "locator"):
                     if not str(evidence.get(name, "")).strip():
                         errors.append(f"brief.proof[{index}].{name} is required")
-        if brief.get("kind") == "outcome-brief" and brief.get("status") == "DONE":
-            supported = any(
-                isinstance(item, dict)
-                and item.get("result") == "pass"
-                and item.get("basis") in {"direct", "derived"}
-                for item in proof
-            )
-            if not supported:
-                errors.append("DONE requires direct or derived passing proof")
+
+    for path, kind in scan_value(
+        {name: value.get(name) for name in ("brief", "explanation", "provenance", "artifacts")}
+    ):
+        errors.append(f"{path} looks like it contains a {kind}; remove it before sharing")
 
     provenance = value.get("provenance", [])
     if not isinstance(provenance, list):

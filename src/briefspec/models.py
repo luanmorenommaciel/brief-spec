@@ -251,6 +251,9 @@ class SessionState:
     last_brief_at: str | None = None
     briefs_validated: int = 0
     briefs_invalid: int = 0
+    # Type written in the agent's typed wrapper when it differs from the classifier's choice.
+    # The agent's report is one vote; both are kept so a reader can see the conflict.
+    reported_work_type: str | None = None
 
     @classmethod
     def new(cls, runtime: Runtime, session_id: str, now: datetime) -> SessionState:

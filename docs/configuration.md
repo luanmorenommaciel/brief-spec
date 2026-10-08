@@ -68,8 +68,43 @@ state. Claude Code also shows a one-line warning when a brief is present but inv
 checkpoint or Outcome Brief, not since the session started. `cooldown_minutes` and
 `minimum_turns_after_checkpoint` still apply after a checkpoint.
 
-With `sticky = true`, the work type stays fixed until an explicit override, a clear pivot, or a valid
-Outcome Brief closes the task. With `sticky = false`, every substantive prompt is classified.
+With `sticky = true`, the work type stays fixed until an explicit override, a clear pivot, a new
+request whose main verb names another type (for example "review the folder structure" during a
+release task), or a valid Outcome Brief closes the task. Nouns ("the restart path") and questions
+("is this correct?") do not switch it. With `sticky = false`, every substantive prompt is
+classified. Run `brief-spec eval` to measure the classifier on the bundled labeled prompts, or
+`brief-spec eval your-prompts.jsonl` on your own (one JSON object per line with `prompt` and
+`type`).
+
+## Output channels
+
+`brief-spec notify` reads `[channels.<name>]` tables from the same user and project config files.
+A channel table may only reference environment variables; a literal URL or token makes the config
+invalid.
+
+| Key | Required | Meaning |
+| --- | --- | --- |
+| `kind` | yes | `slack-webhook`, `slack-bot`, `teams-workflow`, `discord`, `google-chat`, or `webhook` |
+| `secret_env` | yes, except `webhook` | Environment variable holding the webhook URL or bot token; for `webhook`, the optional `whsec_` signing secret |
+| `url_env` | `webhook` only | Environment variable holding the HTTPS endpoint |
+| `target` | `slack-bot` | Slack channel id (for example `C0123ABCD`); for `discord`, an optional thread id |
+| `template` | no | `card` (default: status, outcome, human action, gaps, next) or `full` (adds proof) |
+| `when_status` | no | Statuses this channel receives with `--to all` or from the Stop hook; add `CHECKPOINT` to receive checkpoints |
+| `thread_by` | no | `task` (default: follow-ups for the same task share a thread) or `none` |
+| `mention` | no | Text placed above the card, for example `<@U0123ABCD>` or `@here` |
+
+The optional `[notify]` table turns on posting from the Stop hook:
+
+```toml
+[notify]
+on_stop = true
+consent_network = true      # explicit, persistent consent for these channels
+channels = ["eng"]
+```
+
+The hook starts a detached `brief-spec notify` process for every valid brief and never waits for
+it. Sends, threads, acknowledgments, and receipts are kept under
+`$BRIEF_SPEC_HOME/notify/` (default `~/.local/state/brief-spec/notify/`).
 
 ## State operations
 

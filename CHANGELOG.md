@@ -5,8 +5,70 @@ This project uses semantic versioning.
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-08
+
+### Added
+
+- `brief-spec notify` posts a brief to Slack (incoming webhook or bot token), Microsoft Teams
+  (Workflows webhook), Discord, Google Chat, or any HTTPS endpoint signed per the Standard
+  Webhooks spec. It is one-way and needs `--consent-network`; `--dry-run` shows the exact payload.
+  Channels live in `[channels.<name>]` config tables that may only name environment variables,
+  so a config file can be committed safely. The default card is Orient-style: Status, Outcome,
+  Human action, Gaps, Next. Follow-ups for the same task reply in one thread (Slack bot, Google
+  Chat), the Slack bot edits the root message to the latest status and can attach a file, and a
+  local send log prevents duplicate posts. Retries happen only on 429 and 5xx and honor
+  `Retry-After`; a timeout is reported as "may or may not have posted" and is not retried.
+- An opt-in Stop-hook trigger: with `[notify] on_stop = true`, `consent_network = true`, and a
+  channel list, every valid brief is posted by a detached process that never blocks the host.
+  Each channel's `when_status` filters which statuses it receives.
+- `brief-spec channels list` shows configured channels and whether their secret is set, never
+  the value.
+- `brief-spec ack <brief> --choice …` records that a human read a DECIDE, BLOCKED, or REVIEW brief
+  and what they chose, bound to the brief's content hash.
+- `brief-spec eval [corpus]` scores the classifier against a labeled prompt set and prints
+  accuracy, per-type precision and recall, fallback rate, and mismatches. `--min-accuracy` makes
+  it a gate. Three independent corpora ship: 300 development prompts, 150 held-out prompts, and
+  150 conversational test prompts (about 15% Brazilian Portuguese).
+- A freshness stamp: `export` and `bundle` record the current Git commit, and `verify` reports
+  whether the brief still matches `HEAD` (fresh), describes an older commit (stale, with the
+  number of commits since), or a commit outside `HEAD`'s history.
+- A secret scan on brief content. `export`, `bundle`, `verify`, and `notify` refuse briefs that
+  contain a private key, cloud or API key, GitHub or Slack token, webhook URL, bearer token, or
+  credentials in a URL, and name the field without echoing the value.
+- After a context compaction (`SessionStart` with `source=compact`), an open task gets a request
+  for a short Orient re-entry before the agent continues.
+- When the type in the agent's typed wrapper differs from the classifier's choice, both are kept
+  and Claude Code shows a one-line notice.
+- An optional final `### Assessment` section in the typed wrapper keeps the agent's
+  interpretation apart from the facts in Proof.
+- A DECIDE decision card: Open can state Options, Recommendation, Reversible, and Needed by; a
+  DECIDE without a recommendation gets a warning.
+
 ### Changed
 
+- **DONE is stricter.** A DONE Outcome Brief now needs at least one `[direct/pass]` proof and no
+  `fail` proof, in the hook, `validate`, `export`, and `verify` alike. Use REVIEW when the evidence
+  is only derived or reported. Deliveries made by Brief-Spec before 0.6 still verify, with a
+  warning.
+- Classifier 1.3. A wider rule table, ties broken by the first request verb (so "review the plan"
+  is review and "implement the plan" is implementation), file paths and sibling product names
+  (task-spec, keep-spec, workhelm, seamwise, taskmesh) masked, "don't X, just Y" and "before we X"
+  clauses read correctly, and a small Naive Bayes model, shipped as JSON weights with no
+  dependency, used only when no request verb decides. Accuracy on the independent conversational
+  test set rose from 30.7% (0.5.0) to 69.3%; on the held-out set from 43.3% to 95.3% (that set
+  was later used for training). Rules read only the first 8 KB of a prompt, and every pattern is
+  bounded, so a 64 KB adversarial prompt classifies in well under a second.
+- A sticky task type now also switches when a new prompt asks for a different kind of work with a
+  request verb at the start of a clause ("review the folder structure" during a release task).
+  Nouns ("the restart path") and questions ("is this correct?") do not switch it.
+- Short follow-ups that are not substantive ("ok go ahead") no longer receive the per-turn
+  reminder; OMP and Grok still receive guidance every turn because they rebuild it each turn. A
+  type change sends the full guidance for the new type.
+- The router and outcome skills, and the debugging, operations, implementation, and review
+  profiles, describe the new rules: impact numbers and a timeline for operations and debugging,
+  contributing factors apart from the trigger, a "Read first" list for implementation, and the
+  files actually read in a review's Scope.
+- The PDF and audio renderers are version-aligned at 0.6.0 and require `brief-spec>=0.6,<0.7`.
 - The repository now follows Task-Spec 3.10, which retires Seamwise and decomposes intent itself.
   The finished `seamwise/`, `tasks/done/`, and `.taskspec/acceptance/` records from September 2026
   were removed; they remain in Git history. `OPERATING.md` and the repository layout describe the
@@ -14,6 +76,14 @@ This project uses semantic versioning.
 
 ### Fixed
 
+- Upgrading no longer aborts on Goose (and other capability files): their content records the
+  installing version, so every upgrade changed their bytes and the installer refused to overwrite
+  them as foreign files.
+- Markdown briefs were exported without running the full delivery validator, so `export` accepted
+  a brief that `verify` later rejected. Every path now runs the same validation.
+- `deliver` no longer ignores an unreadable bundle manifest; the receipt helpers
+  `artifacts.build_receipt` and `verify_receipt` are now used by notification and acknowledgment
+  receipts.
 - v0.5.0 is now on PyPI. `brief-spec`, `brief-spec-renderer-pdf`, and `brief-spec-renderer-audio`
   were published through Trusted Publishing from the same CI-tested bytes as the GitHub release,
   and the README and install guide now install from PyPI.

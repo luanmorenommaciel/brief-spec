@@ -1,7 +1,7 @@
 # Human Continuity Fabric and Project Chronicle
 
 Status: experimental source implementation. `brief-spec-chronicle` is not part of the frozen
-`0.5.0` public-release gate and has not been published.
+`0.6.0` public-release gate and has not been published.
 
 ## Purpose
 

@@ -910,3 +910,39 @@ def test_diagnostics_are_emitted_to_stderr(
         "brief-spec: first",
         "brief-spec: second",
     ]
+
+
+def test_reported_type_disagreement_is_kept_and_shown(
+    isolated_homes: dict[str, Path],
+    outcome_text: Callable[..., str],
+) -> None:
+    config = policy_config()
+    prompt, payload = event(
+        Runtime.CLAUDE, "UserPromptSubmit", "disagree", prompt="Implement the login endpoint."
+    )
+    process_event(prompt, payload, config)
+    state = load_session(Runtime.CLAUDE, "disagree", NOW)
+    assert state.work_type == "implementation"
+    explanation = "\n".join(
+        f"### {section.label}\nContent for {section.label}.\n"
+        for section in type_profile("review").sections
+    )
+    assistant = (
+        f"<!-- brief-spec:typed:v1 type=review subject={state.subject} "
+        f"confidence={state.classification_confidence} origin={state.classification_origin} "
+        f"classified_at={state.classified_at} profile=1.0 "
+        f"decision_id={state.classification_decision_id} -->\n"
+        f"{explanation}\n{outcome_text()}\n<!-- /brief-spec -->"
+    )
+    stop, payload = event(
+        Runtime.CLAUDE,
+        "Stop",
+        "disagree",
+        timestamp=NOW + timedelta(seconds=1),
+        last_assistant_message=assistant,
+    )
+    decision = process_event(stop, payload, config)
+    assert decision.notice == (
+        "Brief-Spec: the brief calls this review work; the classifier chose implementation."
+    )
+    assert load_session(Runtime.CLAUDE, "disagree", NOW).reported_work_type == "review"

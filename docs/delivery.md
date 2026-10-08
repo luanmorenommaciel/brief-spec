@@ -73,6 +73,36 @@ ratio. Traversal, absolute paths, duplicate names, links, and special members
 fail before extraction. Local evidence hashing is capped at 256 MiB unless
 `--allow-large-artifact` is explicit.
 
+### Freshness and secrets
+
+`export` and `bundle` record the current Git commit as `source.source_revision` (pass
+`--source-revision none` to omit it). When `verify` runs inside a repository that contains that
+commit, a `freshness` check reports PASS when the brief describes `HEAD`, and WARN when `HEAD` has
+moved on (with the number of commits since) or when the commit is not in `HEAD`'s history.
+
+Every delivery is scanned for credential shapes: private keys, cloud and API keys, GitHub and
+Slack tokens, Slack, Discord, Teams, and Google Chat webhook URLs, `whsec_` signing secrets,
+bearer tokens, and credentials embedded in URLs. A match fails validation and names the field,
+never the value.
+
+### DONE needs direct proof
+
+From 0.6, a DONE Outcome needs at least one `[direct/pass]` proof item and no `fail` item.
+Deliveries whose `source.brief_spec_version` is older than 0.6 still verify; the rule is reported
+as a warning for them.
+
+## Notifications
+
+`brief-spec notify <brief> --to <channel>` renders the brief for the channel and posts it once
+`--consent-network` is given; `--dry-run` prints the exact payload instead. Each send writes a
+`brief-spec-notify-receipt` with the channel, message id, permalink, thread reference, payload
+SHA-256, and the brief's content hash. A send log keyed by the brief's content, the channel, the
+template, and the thread prevents duplicate posts; `--resend` overrides it. Configuration is in
+[configuration.md](configuration.md#output-channels).
+
+`brief-spec ack <brief> --choice …` writes a `brief-spec-ack-receipt` for a DECIDE, BLOCKED, or
+REVIEW brief, bound to the same content hash.
+
 ## Optional renderers
 
 Renderer packages register under the canonical `brief_spec.renderers` Python entry-point

@@ -4,14 +4,14 @@ build-backend = "hatchling.build"
 
 [project]
 name = "brief-spec-renderer-pdf"
-version = "0.5.0"
+version = "0.6.0"
 description = "Verified Playwright PDF rendering for Brief-Spec deliveries."
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 authors = [{ name = "Luan Moreno Maciel" }]
 dependencies = [
-  "brief-spec>=0.5,<0.6",
+  "brief-spec>=0.6,<0.7",
   "playwright>=1.54",
 ]
 

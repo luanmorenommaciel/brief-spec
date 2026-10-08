@@ -13,14 +13,14 @@ Brief-Spec has no runtime Python dependencies and performs no network calls from
 
 ## Published and checkout installation
 
-The current public release is `v0.5.0`. It is on PyPI and on GitHub, and the PyPI files are
+The current public release is `v0.6.0`. It is on PyPI and on GitHub, and the PyPI files are
 byte-identical to the wheels and sdists attached to the GitHub release. Install the pinned
 distributions, including the optional renderers:
 
 ```bash
-uv tool install --force "brief-spec==0.5.0" \
-  --with "brief-spec-renderer-pdf==0.5.0" \
-  --with "brief-spec-renderer-audio==0.5.0"
+uv tool install --force "brief-spec==0.6.0" \
+  --with "brief-spec-renderer-pdf==0.6.0" \
+  --with "brief-spec-renderer-audio==0.6.0"
 brief-spec setup all --scope user --require codex,claude,omp,grok,kimi
 brief-spec doctor all --scope user --probe --all-scopes
 ```
@@ -30,7 +30,7 @@ inside a virtual environment. The renderers are separate packages, not extras, s
 `brief-spec[pdf]` does not install them. To build from the tagged source instead:
 
 ```bash
-uv tool install git+https://github.com/luanmorenommaciel/brief-spec.git@v0.5.0
+uv tool install git+https://github.com/luanmorenommaciel/brief-spec.git@v0.6.0
 ```
 
 New installations use the `brief-spec` command. The legacy `briefspec` alias remains
@@ -218,7 +218,7 @@ codex plugin add brief-spec@brief-spec
 ```
 
 The marketplace tracks the default branch; pass a local checkout path instead to pin exact
-bytes. The `v0.5.0` tag marks the released revision.
+bytes. The `v0.6.0` tag marks the released revision.
 
 ### Claude Code
 

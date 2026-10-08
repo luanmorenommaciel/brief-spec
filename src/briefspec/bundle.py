@@ -32,6 +32,8 @@ def build_zipapp(destination: Path) -> str:
             continue
         if path.suffix in {".pyc", ".pyo"}:
             continue
+        if path.suffix == ".jsonl" and path.name.startswith("classification-"):
+            continue  # evaluation corpora are for `brief-spec eval`, not for host hooks
         relative = path.relative_to(package_root)
         files.append((path, f"briefspec/{relative.as_posix()}"))
 
@@ -323,8 +325,8 @@ def deliver_bundle(
         receipt["renderer_versions"] = sorted(
             {str(item.get("renderer_version")) for item in manifest.get("files", [])}
         )
-    except (OSError, KeyError, json.JSONDecodeError, zipfile.BadZipFile):
-        pass
+    except (OSError, KeyError, json.JSONDecodeError, zipfile.BadZipFile) as exc:
+        raise ValueError(f"Bundle manifest became unreadable during delivery: {exc}") from exc
     receipt_content = json.dumps(receipt, indent=2, sort_keys=True).encode("utf-8") + b"\n"
     atomic_write_many(
         [

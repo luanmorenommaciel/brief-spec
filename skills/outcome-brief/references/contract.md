@@ -4,9 +4,11 @@
 
 Choose the strongest status supported by current evidence, not the most optimistic label.
 
-- `DONE` requires direct verification of the requested outcome.
+- `DONE` requires direct verification of the requested outcome: at least one `[direct/pass]`
+  proof item and no `fail` item. Derived or reported passes alone mean `REVIEW`.
 - `REVIEW` means the implementation is complete enough for inspection but acceptance remains human.
-- `DECIDE` means implementation should not continue until a choice is made.
+- `DECIDE` means implementation should not continue until a choice is made. State the options,
+  your recommendation, whether the choice is reversible, and when it is needed.
 - `BLOCKED` means the same objective remains active but an external condition prevents progress.
 - `FAILED` means the attempted route did not achieve the objective.
 
