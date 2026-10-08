@@ -64,3 +64,37 @@ def test_release_badge_markdown(check_badge: Callable[[str], list[str]]) -> None
 )
 def test_release_badge_mismatch(check_badge: Callable[[str], list[str]], markup: str) -> None:
     assert check_badge(markup)
+
+
+def test_published_release_badge(check_badge: Callable[[str], list[str]]) -> None:
+    assert (
+        check_badge(
+            '<a href="https://github.com/o/r/releases/tag/v1.2.3"><img '
+            'src="https://img.shields.io/badge/public_release-v1.2.3-070A0F" '
+            'alt="Public release v1.2.3"></a>'
+        )
+        == []
+    )
+
+
+def test_lagging_release_badge_is_allowed_beside_candidate(
+    check_badge: Callable[[str], list[str]],
+) -> None:
+    assert (
+        check_badge(
+            '<img src="https://img.shields.io/badge/public_release-v1.0.0-070A0F" '
+            'alt="Public release v1.0.0">'
+            '<img src="https://img.shields.io/badge/source_candidate-1.2.3-29313A" '
+            'alt="Source candidate 1.2.3">'
+        )
+        == []
+    )
+
+
+def test_stale_release_badge_without_candidate_fails(
+    check_badge: Callable[[str], list[str]],
+) -> None:
+    assert check_badge(
+        '<img src="https://img.shields.io/badge/public_release-v1.0.0-070A0F" '
+        'alt="Public release v1.0.0">'
+    )

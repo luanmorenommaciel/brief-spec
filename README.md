@@ -20,7 +20,27 @@ Brief-Spec is a type-aware, evidence-backed delivery contract for AI coding harn
 - Public release: `v0.5.0` on GitHub with wheels, sdists, schemas, and signed manifests.
 - PyPI: pending trusted-publisher registration; install from the tag until `brief-spec==0.5.0` lands there.
 
-[The problem](#the-problem) · [How it works](#how-it-works) · [Outcome Brief](#outcome-brief) · [Docs](#documentation) · [Skills](#why-the-skills-exist) · [Harness](#harness-support) · [CLI](#cli) · [Install](#install)
+[What's new](#whats-new-in-050) · [The problem](#the-problem) · [How it works](#how-it-works) · [Outcome Brief](#outcome-brief) · [Docs](#documentation) · [Skills](#why-the-skills-exist) · [Harness](#harness-support) · [CLI](#cli) · [Install](#install)
+
+---
+
+## What's new in 0.5.0
+
+0.5.0 is the first release since v0.2.0. It also includes the unpublished 0.3.0 and 0.4.0 candidates.
+
+- **New name and command.** The package and command are now `brief-spec`. The old `briefspec` command still works until 1.0 and prints a notice.
+- **Eight work types.** Each task is classified locally, with no network call, as general, exploration, review, implementation, debugging, planning, research, or operations. Each type has its own explanation order. Run `brief-spec types list` and `brief-spec classify`. Rules cover English and Portuguese prompts.
+- **Typed wrapper.** A terminal brief is wrapped in a `brief-spec:typed:v1` marker that records the type, subject, confidence, and decision ID.
+- **Compact Outcome Brief.** A `DONE` result with nothing left for the human can use only Status, Outcome, and Proof.
+- **Five required harnesses.** Codex, Claude Code, OMP, Grok Build, and Kimi Code are installed by `brief-spec setup` and pass a live host matrix. Copilot, Cursor Agent, and Goose are experimental.
+- **Quieter guidance.** Full guidance is sent once per context window. Later prompts get a one-line reminder. A valid Outcome Brief closes the task, so the next request is classified from scratch.
+- **Invalid-brief warning.** Every stop now validates the final message. Claude Code shows a one-line warning when a brief is present but invalid.
+- **Codex hook approval check.** `brief-spec doctor codex` reports whether each Brief-Spec hook has been approved in Codex `/hooks`.
+- **Exports and verification.** `export`, `bundle`, `verify`, and `deliver` produce Markdown, JSON, offline HTML, ZIP, spoken text, and SSML. Optional packages add PDF and MP3. Every bundle has a SHA-256 manifest and a delivery receipt.
+- **Human Frames.** `brief-spec frame` renders a presentation-only brief for an external coordinator. The coordinator does not hand over approval or dispatch.
+- **Experimental Chronicle and video.** These are separate, opt-in packages for project continuity. They are not part of the 0.5.0 release.
+
+The full list is in the [changelog](CHANGELOG.md#050---2026-10-08).
 
 ---
 
@@ -356,6 +376,8 @@ brief-spec verify /path/to/deliveries/handoff.zip.receipt.json --level delivered
 
 Verification levels are cumulative: `structural` → `resolved` → `rendered` → `delivered`. See [docs/delivery.md](docs/delivery.md) for the complete export and verification reference.
 
+`brief-spec frame request.json --output frame.md` renders a Human Frame from a `BriefSpecFrameRequest/v1` request. It writes Markdown and a receipt. It does not approve or dispatch anything.
+
 ### Configuration
 
 Create user or project configuration:
@@ -372,20 +394,59 @@ Project values override user values. See [docs/configuration.md](docs/configurat
 
 ## Install
 
-Brief-Spec requires **Python 3.11+**.
+Brief-Spec requires **Python 3.11+**. The core package has no runtime dependencies.
 
-### Public release (v0.5.0)
+### 1. Install the command
+
+The recommended path is `uv`. It installs the exact v0.5.0 wheels attached to the GitHub release, the same bytes that CI tested:
 
 ```bash
-uv tool install git+https://github.com/luanmorenommaciel/brief-spec.git@v0.5.0
-brief-spec setup all --scope user --require codex,claude,omp,grok,kimi
-brief-spec doctor all --scope user --probe --all-scopes
+uv tool install https://github.com/luanmorenommaciel/brief-spec/releases/download/v0.5.0/brief_spec-0.5.0-py3-none-any.whl
 ```
 
-The release page also carries the core and renderer wheels plus signed manifests. PyPI
-distributions (`brief-spec==0.5.0` with `brief-spec-renderer-pdf` and
-`brief-spec-renderer-audio`) are staged and will replace the tagged URL once the
-trusted-publisher registration completes.
+To add the optional PDF and MP3 renderers in the same environment:
+
+```bash
+R=https://github.com/luanmorenommaciel/brief-spec/releases/download/v0.5.0
+uv tool install "$R/brief_spec-0.5.0-py3-none-any.whl" \
+  --with "$R/brief_spec_renderer_pdf-0.5.0-py3-none-any.whl" \
+  --with "$R/brief_spec_renderer_audio-0.5.0-py3-none-any.whl"
+```
+
+With `pipx` or `pip`, pass the same wheel URLs:
+
+```bash
+pipx install https://github.com/luanmorenommaciel/brief-spec/releases/download/v0.5.0/brief_spec-0.5.0-py3-none-any.whl
+# or, inside a virtual environment
+pip install https://github.com/luanmorenommaciel/brief-spec/releases/download/v0.5.0/brief_spec-0.5.0-py3-none-any.whl
+```
+
+`uv tool install git+https://github.com/luanmorenommaciel/brief-spec.git@v0.5.0` also works. It builds from the tagged source instead of using the published wheel.
+
+`pip install brief-spec` does **not** work yet. The PyPI upload is waiting for trusted-publisher registration, and this section will switch to PyPI once `brief-spec==0.5.0` is there.
+
+### 2. Connect your harnesses
+
+```bash
+brief-spec setup all --scope user --require codex,claude
+brief-spec doctor all --scope user --probe
+```
+
+`--require` stops setup if a listed harness is not installed. Add `omp`, `grok`, or `kimi` if you use them. Then:
+
+- **Codex:** open Codex, run `/hooks`, and approve the five Brief-Spec hooks. Codex skips unapproved hooks without an error. `brief-spec doctor codex` shows which hooks are still unapproved.
+- **Claude Code:** start a new session. The hooks load from `~/.claude/settings.json`.
+
+### Upgrading from v0.2.0
+
+```bash
+uv tool uninstall briefspec
+uv tool install https://github.com/luanmorenommaciel/brief-spec/releases/download/v0.5.0/brief_spec-0.5.0-py3-none-any.whl
+brief-spec setup all --scope user
+brief-spec doctor all --scope user --probe
+```
+
+The command is now `brief-spec`; `briefspec` remains an alias. `setup` replaces `install`, which still works. State moves to `~/.local/state/brief-spec`, or to `$BRIEF_SPEC_HOME` if set. The old state, receipts, and markers stay readable through 0.x.
 
 ### Dogfood from checkout
 

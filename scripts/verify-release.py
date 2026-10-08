@@ -172,9 +172,14 @@ ROOT_REFERENCE = re.compile(
 )
 EVENT_ARGUMENT = re.compile(r"(?:^|\s)--event\s+(?P<event>[A-Za-z][A-Za-z0-9]*)")
 README_VERSION_BADGE = re.compile(
-    r"\[!\[Source candidate (?P<label>\d+\.\d+\.\d+)\]"
-    r"\(https://img\.shields\.io/badge/source_candidate-(?P<badge>\d+\.\d+\.\d+)-"
+    r"\[!\[(?P<label>(?:Source candidate |Public release v)\d+\.\d+\.\d+)\]"
+    r"\(https://img\.shields\.io/badge/(?P<kind>source_candidate|public_release)-v?"
+    r"(?P<badge>\d+\.\d+\.\d+)-"
 )
+README_BADGE_PREFIXES = {
+    "https://img.shields.io/badge/source_candidate-": "source_candidate",
+    "https://img.shields.io/badge/public_release-v": "public_release",
+}
 VERIFICATION_MARKER = re.compile(
     r"<!-- briefspec:verification:v1 version=(?P<version>\d+\.\d+\.\d+) -->"
 )
@@ -187,18 +192,22 @@ ACTION_REFERENCE = re.compile(
 class _ReadmeBadgeParser(HTMLParser):
     def __init__(self) -> None:
         super().__init__()
-        self.badges: list[tuple[str, str]] = []
+        self.badges: list[tuple[str, str, str]] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         if tag != "img":
             return
         attributes = dict(attrs)
         source = attributes.get("src") or ""
-        prefix = "https://img.shields.io/badge/source_candidate-"
-        if source.startswith(prefix):
-            self.badges.append(
-                (attributes.get("alt") or "", source.removeprefix(prefix).partition("-")[0])
-            )
+        for prefix, kind in README_BADGE_PREFIXES.items():
+            if source.startswith(prefix):
+                self.badges.append(
+                    (
+                        kind,
+                        attributes.get("alt") or "",
+                        source.removeprefix(prefix).partition("-")[0],
+                    )
+                )
 
 
 class Verifier:
@@ -427,17 +436,24 @@ def check_versioned_release_evidence(verifier: Verifier, version: str) -> None:
     parser = _ReadmeBadgeParser()
     parser.feed(readme)
     parser.badges.extend(
-        (f"Source candidate {badge.group('label')}", badge.group("badge"))
+        (badge.group("kind"), badge.group("label"), badge.group("badge"))
         for badge in README_VERSION_BADGE.finditer(readme)
     )
-    verifier.require(bool(parser.badges), "README.md: version badge is missing or malformed")
-    for label, badge_version in parser.badges:
+    expected_labels = {
+        "source_candidate": f"Source candidate {version}",
+        "public_release": f"Public release v{version}",
+    }
+    candidates = [badge for badge in parser.badges if badge[0] == "source_candidate"]
+    # Before publication the candidate badge carries the version and the release badge may lag.
+    checked = candidates or parser.badges
+    verifier.require(bool(checked), "README.md: version badge is missing or malformed")
+    for kind, label, badge_version in checked:
         verifier.require(
-            label == f"Source candidate {version}" and badge_version == version,
+            label == expected_labels[kind] and badge_version == version,
             f"README.md: version badge must match {version}",
         )
     verifier.require(
-        "Public release:" in readme and "Source candidate:" in readme,
+        "Public release:" in readme and ("Source candidate:" in readme or "PyPI:" in readme),
         "README.md: publication and source candidate boundaries must be explicit",
     )
 
