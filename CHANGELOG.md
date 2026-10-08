@@ -5,6 +5,13 @@ This project uses semantic versioning.
 
 ## [Unreleased]
 
+### Changed
+
+- The repository now follows Task-Spec 3.10, which retires Seamwise and decomposes intent itself.
+  The finished `seamwise/`, `tasks/done/`, and `.taskspec/acceptance/` records from September 2026
+  were removed; they remain in Git history. `OPERATING.md` and the repository layout describe the
+  new flow, with plans under `tasks/.plans/<initiative>/`.
+
 ### Fixed
 
 - The release verifier accepts the published-release README badge (`public_release-v<version>`)

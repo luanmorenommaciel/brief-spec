@@ -9,10 +9,10 @@ WorkHelm is the everyday plane (nuances, backlog, RPI). It calls the binaries be
 ## Everyday
 
 1. Talk to an LLM about intent.
-2. Seamwise compiles a recipe into a TaskPlan (seams, swimlanes, legs).
+2. TaskSpec native decomposition compiles a recipe into a TaskPlan (seams, swimlanes, legs).
    It does not write `tasks/`. It does not auto-approve topology.
 3. A human accepts the topology.
-4. `taskspec plan` / `taskspec batch` writes leaves under `tasks/`.
+4. `taskspec plan` previews; `taskspec batch` writes leaves under `tasks/`.
 5. A human seals ready leaves with `taskspec gate --stamp` (HMAC v3).
    After a valid stamp the leaf stays `status: ready` and `signed_off: true`.
    That HMAC is the engine seal. `status: sealed` is forbidden.
@@ -36,8 +36,8 @@ Default is LOCAL_SETTLED. It never merges the user branch.
 
 | Repo | Owns | Must not |
 | --- | --- | --- |
-| seamwise | TaskPlan + lineage | Import Task-Spec. Write `tasks/`. Accept work |
-| task-spec | Seal, eval, accept, TaskMesh | Cut seams. Merge the user branch |
+| seamwise | Retired decomposition source; explicit workspace import only | Dispatch, accept, or act as a parallel engine |
+| task-spec | Native decomposition, lineage, atomic contracts, seal, eval, accept, TaskMesh | Merge the user branch or silently widen signed work |
 | workhelm | Everyday RPI, backlog | Vendor the engines. Skip the HMAC seal |
 | keep-spec | Picture, owned surfaces | Merge, approve, dispatch |
 | brief-spec | Human handoff | Become a renderer other products import |
