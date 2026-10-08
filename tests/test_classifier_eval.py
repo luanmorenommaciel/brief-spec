@@ -56,19 +56,23 @@ def test_load_corpus_rejects_bad_rows(tmp_path: Path) -> None:
         load_corpus(bad)
 
 
-@pytest.mark.parametrize(
-    "text",
-    [
-        "how is the value passed here and what gets handled next " * 2000,
-        "which tools " * 8000,
-        "a-" * 40000,
-        "x." * 40000,
-        "a/" * 40000,
-    ],
-)
-def test_classifier_stays_fast_on_adversarial_input(text: str) -> None:
+# Short ids: pytest exports the node id in PYTEST_CURRENT_TEST, and Windows caps an
+# environment variable at 32,767 characters.
+ADVERSARIAL = {
+    "unpunctuated-how": ("how is the value passed here and what gets handled next ", 2000),
+    "which-tools": ("which tools ", 8000),
+    "dashes": ("a-", 40000),
+    "dots": ("x.", 40000),
+    "slashes": ("a/", 40000),
+}
+
+
+@pytest.mark.parametrize("name", ADVERSARIAL)
+def test_classifier_stays_fast_on_adversarial_input(name: str) -> None:
     import time
 
+    unit, count = ADVERSARIAL[name]
+    text = unit * count
     started = time.perf_counter()
     classify_task(text)
     assert time.perf_counter() - started < 1.0
