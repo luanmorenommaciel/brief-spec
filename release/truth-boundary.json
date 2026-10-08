@@ -3,11 +3,11 @@
   "kind": "brief-spec-truth-boundary",
   "version": "0.6.0",
   "updated_at": "2026-10-08",
-  "source_revision": "fed417b42d5369f287ae7c1fb1bb89dd001845f1",
+  "source_revision": "1e048ce23a8e94ecbf98d1e5b8f32b80a81f6cee",
   "repository": "luanmorenommaciel/brief-spec",
   "repository_visibility": "public",
-  "latest_public_release": "v0.5.0",
-  "candidate_state": "Release candidate committed; the tag's hosted CI full gate and the Trusted Publishing release workflow publish it",
+  "latest_public_release": "v0.6.0",
+  "candidate_state": "Published as GitHub release v0.6.0 and on PyPI from the same exact-SHA CI-tested bytes",
   "local_evidence": {
     "tests": 709,
     "release_checks": 429,
@@ -15,14 +15,14 @@
     "coverage_percent": 86.55,
     "python": "3.14.6",
     "platform": "macOS",
-    "current_state": "Lint, formatting, release verification, 709 tests, coverage, the renderer package tests, a clean-room wheel install across all eight harnesses, and classifier evaluation pass locally; browser, PDF, and audio gates run in the tag's hosted full gate"
+    "current_state": "Lint, formatting, release verification, 709 tests, coverage, the renderer package tests, a clean-room wheel install across all eight harnesses, and classifier evaluation pass locally; browser, PDF, and audio gates passed in hosted run 37858469486"
   },
   "candidate_artifacts": {
     "directory": "built by the tag's hosted CI release job",
     "release_manifest_sha256": "c46cdf378574c91dad062a560d11a1f6f00eb4b6858eb88c9487a67ecf597a1f",
     "core_wheel_sha256": "f13c375dd9544299df3ac6625a79218eaaa57401df20293e3a417bd118401630",
     "schema_bundle_sha256": "bcf216a45136afd643055d4e343fe4564b7058c844d9817626c7c1a9bebc86b8",
-    "state": "Local 0.6.0 wheels and sdists were built and the core wheel passed byte-for-byte resource projection (510 checks); the published bytes come from the tag's CI build, recorded in its release manifest"
+    "state": "Built once by hosted CI run 37858469486 for the tag; the six PyPI files are hash-identical to the GitHub release SHA256SUMS and carry PyPI attestations from release.yml"
   },
   "local_rollout": {
     "components": "Core, PDF, audio, Chronicle, and video",
@@ -32,9 +32,9 @@
     "rollback": "Snapshot ~/.local/state/brief-spec/backups/20261008T223642Z/manifest.json holds the Brief-Spec-owned paths from 0.5.0; the restore was not exercised"
   },
   "optional_gates": {
-    "browser": "Runs in the tag's hosted full gate",
-    "pdf": "Runs in the tag's hosted full gate; renderer package tests pass locally",
-    "local_macos_audio": "Runs in the tag's hosted full gate (macOS); renderer package tests pass locally",
+    "browser": "PASS in hosted run 37858469486",
+    "pdf": "PASS in hosted run 37858469486",
+    "local_macos_audio": "PASS in hosted run 37858469486 (macOS)",
     "video": "Not rerun for this release; last PASS 2026-08-15",
     "openai_audio": "Not run because OPENAI_API_KEY is absent; mocked coverage passed"
   },
@@ -83,20 +83,20 @@
     }
   },
   "hosted_ci": {
-    "run_id": 0,
-    "revision": "fed417b42d5369f287ae7c1fb1bb89dd001845f1",
-    "status": "pending",
-    "steps_executed": false,
-    "blocker": "the full gate runs when the v0.6.0 tag is pushed"
+    "run_id": 37858469486,
+    "revision": "1e048ce23a8e94ecbf98d1e5b8f32b80a81f6cee",
+    "status": "passed",
+    "steps_executed": true,
+    "blocker": ""
   },
   "publication": {
-    "github_release": "not-published",
-    "pypi_core": "not-published",
-    "pypi_pdf": "not-published",
-    "pypi_audio": "not-published",
+    "github_release": "published",
+    "pypi_core": "published",
+    "pypi_pdf": "published",
+    "pypi_audio": "published",
     "pypi_chronicle": "not-published",
     "pypi_video": "not-published",
-    "authorized": false
+    "authorized": true
   },
   "schemas": {
     "namespace": "GitHub v0.5.0 release assets",
@@ -104,7 +104,6 @@
     "published": true
   },
   "account_gates": [
-    "Push the v0.6.0 tag; the release workflow publishes to GitHub and PyPI through the existing Trusted Publishers",
     "Register separate publishers for Chronicle/video only when those experimental packages are promoted"
   ]
 }

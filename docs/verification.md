@@ -3,7 +3,7 @@
 # Brief-Spec 0.6.0 verification truth boundary
 
 Updated: `2026-10-08`
-Source basis: `fed417b42d5369f287ae7c1fb1bb89dd001845f1`
+Source basis: `1e048ce23a8e94ecbf98d1e5b8f32b80a81f6cee`
 Canonical repository: [github.com/luanmorenommaciel/brief-spec](https://github.com/luanmorenommaciel/brief-spec)
 
 This document separates implementation, validation, host evidence, and publication. A local or
@@ -13,19 +13,19 @@ globally installed candidate is not a public release.
 
 | Boundary | Evidence | Status |
 | --- | --- | --- |
-| Source candidate | Version `0.6.0` derived from `fed417b42d5369f287ae7c1fb1bb89dd001845f1` | Release candidate committed; the tag's hosted CI full gate and the Trusted Publishing release workflow publish it |
+| Source candidate | Version `0.6.0` derived from `1e048ce23a8e94ecbf98d1e5b8f32b80a81f6cee` | Published as GitHub release v0.6.0 and on PyPI from the same exact-SHA CI-tested bytes |
 | Repository | `public` canonical repository | Canonical public repository confirmed |
-| Latest GitHub release | `v0.5.0` | Published historical release |
-| Local gates | 709 tests, 429 source checks, 510 wheel checks, 86.55% coverage on macOS / Python 3.14.6 | Lint, formatting, release verification, 709 tests, coverage, the renderer package tests, a clean-room wheel install across all eight harnesses, and classifier evaluation pass locally; browser, PDF, and audio gates run in the tag's hosted full gate |
-| Hosted CI | [run 0](https://github.com/luanmorenommaciel/brief-spec/actions/runs/0) for `fed417b42d5369f287ae7c1fb1bb89dd001845f1` | pending; steps executed: `false` |
+| Latest GitHub release | `v0.6.0` | Published current release |
+| Local gates | 709 tests, 429 source checks, 510 wheel checks, 86.55% coverage on macOS / Python 3.14.6 | Lint, formatting, release verification, 709 tests, coverage, the renderer package tests, a clean-room wheel install across all eight harnesses, and classifier evaluation pass locally; browser, PDF, and audio gates passed in hosted run 37858469486 |
+| Hosted CI | [run 37858469486](https://github.com/luanmorenommaciel/brief-spec/actions/runs/37858469486) for `1e048ce23a8e94ecbf98d1e5b8f32b80a81f6cee` | passed; steps executed: `true` |
 | Live harness evidence | Sanitized disposable-repository results retained locally | 2026-10-08 matrix on the installed 0.6.0 candidate: Codex 8/8, Claude 8/8, OMP 4/4, Grok 4/4, and Kimi 4/4 on first attempt. The first run exposed two classifier regressions on harness prompts and a Grok 1.0.46 harness HOME issue; all were fixed, Codex and Claude were rerun in full, and OMP, Grok, and Kimi (whose scenarios exclude the general type) were not affected by the later harness-only expectation change; the evidence was rebound to the committed source bytes after two ignored .ruff_cache folders were found in the local fingerprint |
 | Live release authorization | `release/live-e2e-evidence.json`; source fingerprint `c0a517cb385587cf00d7cf1de891943d7105a0f99e35487bb6a5c40feecb0b38` | authorized by `the 2026-10-08 live matrix, 28/28 scenarios` |
-| GitHub `v0.5.0` | Release API and workflow state | not-published |
-| PyPI core/PDF/audio | PyPI project/file lookup | not-published / not-published / not-published |
+| GitHub `v0.5.0` | Release API and workflow state | published |
+| PyPI core/PDF/audio | PyPI project/file lookup | published / published / published |
 | PyPI Chronicle/video | Independent extension project/file lookup | not-published / not-published |
 | Canonical schemas | `GitHub v0.5.0 release assets` plus `brief-spec-schemas.bundle.json` | published |
 
-The hosted failure is infrastructure evidence, not repository test evidence: GitHub rejected the jobs before any step ran because of the recorded the full gate runs when the v0.6.0 tag is pushed condition. The five required local live-host gates are authorized. Public release remains blocked on the exact-SHA live, hosted, and account-owned publication gates.
+The recorded hosted run executed repository jobs on the exact release revision, and the release workflow reused those tested bytes unchanged for the published GitHub release. The five required local live-host gates are authorized. All account-owned publication gates hold.
 
 ## Harness evidence tiers
 
@@ -69,7 +69,7 @@ release authorization fails closed unless all required hosts pass.
 
 | Boundary | Retained evidence | Status |
 | --- | --- | --- |
-| Distribution set | `built by the tag's hosted CI release job`; manifest `c46cdf378574c91dad062a560d11a1f6f00eb4b6858eb88c9487a67ecf597a1f` | Local 0.6.0 wheels and sdists were built and the core wheel passed byte-for-byte resource projection (510 checks); the published bytes come from the tag's CI build, recorded in its release manifest |
+| Distribution set | `built by the tag's hosted CI release job`; manifest `c46cdf378574c91dad062a560d11a1f6f00eb4b6858eb88c9487a67ecf597a1f` | Built once by hosted CI run 37858469486 for the tag; the six PyPI files are hash-identical to the GitHub release SHA256SUMS and carry PyPI attestations from release.yml |
 | Core wheel | SHA-256 `f13c375dd9544299df3ac6625a79218eaaa57401df20293e3a417bd118401630` | Installed globally from these exact bytes |
 | Offline schemas | SHA-256 `bcf216a45136afd643055d4e343fe4564b7058c844d9817626c7c1a9bebc86b8` | Published as a GitHub release asset |
 | Global tool | Core, PDF, audio, Chronicle, and video | Core/PDF/audio 0.6.0 plus Chronicle/video 0.1.0 installed on 2026-10-08 from this checkout |
@@ -85,9 +85,9 @@ release workflow must reuse those hosted bytes unchanged.
 
 | Gate | Local result |
 | --- | --- |
-| Self-contained HTML | Runs in the tag's hosted full gate |
-| Playwright PDF | Runs in the tag's hosted full gate; renderer package tests pass locally |
-| Offline macOS audio | Runs in the tag's hosted full gate (macOS); renderer package tests pass locally |
+| Self-contained HTML | PASS in hosted run 37858469486 |
+| Playwright PDF | PASS in hosted run 37858469486 |
+| Offline macOS audio | PASS in hosted run 37858469486 (macOS) |
 | Offline Chronicle video | Not rerun for this release; last PASS 2026-08-15 |
 | Explicit-consent OpenAI audio | Not run because OPENAI_API_KEY is absent; mocked coverage passed |
 
@@ -106,7 +106,6 @@ release workflow must reuse those hosted bytes unchanged.
 
 ## Account-owned release gates
 
-- Push the v0.6.0 tag; the release workflow publishes to GitHub and PyPI through the existing Trusted Publishers
 - Register separate publishers for Chronicle/video only when those experimental packages are promoted
 
 The repository-owned implementation may prepare these gates but cannot truthfully mark them complete.
