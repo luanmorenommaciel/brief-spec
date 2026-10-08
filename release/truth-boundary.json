@@ -7,7 +7,7 @@
   "repository": "luanmorenommaciel/brief-spec",
   "repository_visibility": "public",
   "latest_public_release": "v0.5.0",
-  "candidate_state": "Published as GitHub release v0.5.0 from exact-SHA CI-tested bytes; PyPI publication pending trusted-publisher registration",
+  "candidate_state": "Published as GitHub release v0.5.0 and on PyPI from the same exact-SHA CI-tested bytes",
   "local_evidence": {
     "tests": 620,
     "release_checks": 427,
@@ -91,12 +91,12 @@
   },
   "publication": {
     "github_release": "published",
-    "pypi_core": "not-published",
-    "pypi_pdf": "not-published",
-    "pypi_audio": "not-published",
+    "pypi_core": "published",
+    "pypi_pdf": "published",
+    "pypi_audio": "published",
     "pypi_chronicle": "not-published",
     "pypi_video": "not-published",
-    "authorized": false
+    "authorized": true
   },
   "schemas": {
     "namespace": "GitHub v0.5.0 release assets",
@@ -104,8 +104,6 @@
     "published": true
   },
   "account_gates": [
-    "Register PyPI Trusted Publishers for brief-spec and the PDF/audio renderers",
-    "Rerun the release workflow to publish the staged PyPI bytes and verify the clean install",
     "Register separate publishers for Chronicle/video only when those experimental packages are promoted"
   ]
 }

@@ -14,6 +14,9 @@ This project uses semantic versioning.
 
 ### Fixed
 
+- v0.5.0 is now on PyPI. `brief-spec`, `brief-spec-renderer-pdf`, and `brief-spec-renderer-audio`
+  were published through Trusted Publishing from the same CI-tested bytes as the GitHub release,
+  and the README and install guide now install from PyPI.
 - The release verifier accepts the published-release README badge (`public_release-v<version>`)
   with a `PyPI:` status line, so CI no longer fails after a version moves from source candidate
   to public release.

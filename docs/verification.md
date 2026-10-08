@@ -13,7 +13,7 @@ globally installed candidate is not a public release.
 
 | Boundary | Evidence | Status |
 | --- | --- | --- |
-| Source candidate | Version `0.5.0` derived from `3781d0d36f1608eeffdd1f3e7225bc1d18096c46` | Published as GitHub release v0.5.0 from exact-SHA CI-tested bytes; PyPI publication pending trusted-publisher registration |
+| Source candidate | Version `0.5.0` derived from `3781d0d36f1608eeffdd1f3e7225bc1d18096c46` | Published as GitHub release v0.5.0 and on PyPI from the same exact-SHA CI-tested bytes |
 | Repository | `public` canonical repository | Canonical public repository confirmed |
 | Latest GitHub release | `v0.5.0` | Published current release |
 | Local gates | 620 tests, 427 source checks, 508 wheel checks, 86.32% coverage on macOS / Python 3.14.6 | Lint, formatting, release verification, 620 tests, coverage, Chronicle E2E, browser, PDF, and audio gates pass locally; the video gate was not rerun for this candidate |
@@ -21,11 +21,11 @@ globally installed candidate is not a public release.
 | Live harness evidence | Sanitized disposable-repository results retained locally | 2026-09-16 matrix on the exact deployed candidate: Codex 8/8, Claude 8/8, OMP 4/4, Grok 4/4, and Kimi 4/4 passed on first attempt; experimental Cursor and Goose smokes returned valid briefs, but no Cursor hook fired and Goose metadata came from its Codex child |
 | Live release authorization | `release/live-e2e-evidence.json`; source fingerprint `3fc35e034e6be4687d2849c9f42445d9aae4064e310e13656a3cf2cb453b9c30` | authorized by `the 2026-09-16 live matrix, 28/28 scenarios on first attempt` |
 | GitHub `v0.5.0` | Release API and workflow state | published |
-| PyPI core/PDF/audio | PyPI project/file lookup | not-published / not-published / not-published |
+| PyPI core/PDF/audio | PyPI project/file lookup | published / published / published |
 | PyPI Chronicle/video | Independent extension project/file lookup | not-published / not-published |
 | Canonical schemas | `GitHub v0.5.0 release assets` plus `brief-spec-schemas.bundle.json` | published |
 
-The recorded hosted run executed repository jobs on the exact release revision, and the release workflow reused those tested bytes unchanged for the published GitHub release. The five required local live-host gates are authorized. GitHub publication is complete; PyPI publication remains pending on the account-owned trusted-publisher registration.
+The recorded hosted run executed repository jobs on the exact release revision, and the release workflow reused those tested bytes unchanged for the published GitHub release. The five required local live-host gates are authorized. All account-owned publication gates hold.
 
 ## Harness evidence tiers
 
@@ -106,8 +106,6 @@ release workflow must reuse those hosted bytes unchanged.
 
 ## Account-owned release gates
 
-- Register PyPI Trusted Publishers for brief-spec and the PDF/audio renderers
-- Rerun the release workflow to publish the staged PyPI bytes and verify the clean install
 - Register separate publishers for Chronicle/video only when those experimental packages are promoted
 
 The repository-owned implementation may prepare these gates but cannot truthfully mark them complete.

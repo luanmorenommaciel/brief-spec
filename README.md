@@ -11,14 +11,14 @@ Brief-Spec is a type-aware, evidence-backed delivery contract for AI coding harn
 <p align="center">
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.11%2B-A56BFF?labelColor=111720" alt="Python 3.11+"></a>
   <a href="https://github.com/luanmorenommaciel/brief-spec/releases/tag/v0.5.0"><img src="https://img.shields.io/badge/public_release-v0.5.0-070A0F?labelColor=111720" alt="Public release v0.5.0"></a>
-  <a href="docs/verification.md"><img src="https://img.shields.io/badge/pypi-pending-29313A?labelColor=111720" alt="PyPI publication pending"></a>
+  <a href="https://pypi.org/project/brief-spec/"><img src="https://img.shields.io/badge/pypi-brief--spec_0.5.0-29313A?labelColor=111720" alt="PyPI brief-spec 0.5.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-29313A?labelColor=111720" alt="MIT License"></a>
 </p>
 
-**Public release v0.5.0** on GitHub · PyPI publication pending · MIT
+**Public release v0.5.0** on GitHub and PyPI · MIT
 
 - Public release: `v0.5.0` on GitHub with wheels, sdists, schemas, and signed manifests.
-- PyPI: pending trusted-publisher registration; install from the tag until `brief-spec==0.5.0` lands there.
+- PyPI: `brief-spec`, `brief-spec-renderer-pdf`, and `brief-spec-renderer-audio` 0.5.0, the same bytes as the GitHub release.
 
 [What's new](#whats-new-in-050) · [The problem](#the-problem) · [How it works](#how-it-works) · [Outcome Brief](#outcome-brief) · [Docs](#documentation) · [Skills](#why-the-skills-exist) · [Harness](#harness-support) · [CLI](#cli) · [Install](#install)
 
@@ -398,32 +398,29 @@ Brief-Spec requires **Python 3.11+**. The core package has no runtime dependenci
 
 ### 1. Install the command
 
-The recommended path is `uv`. It installs the exact v0.5.0 wheels attached to the GitHub release, the same bytes that CI tested:
+The recommended path is `uv`:
 
 ```bash
-uv tool install https://github.com/luanmorenommaciel/brief-spec/releases/download/v0.5.0/brief_spec-0.5.0-py3-none-any.whl
+uv tool install brief-spec
 ```
 
 To add the optional PDF and MP3 renderers in the same environment:
 
 ```bash
-R=https://github.com/luanmorenommaciel/brief-spec/releases/download/v0.5.0
-uv tool install "$R/brief_spec-0.5.0-py3-none-any.whl" \
-  --with "$R/brief_spec_renderer_pdf-0.5.0-py3-none-any.whl" \
-  --with "$R/brief_spec_renderer_audio-0.5.0-py3-none-any.whl"
+uv tool install brief-spec --with brief-spec-renderer-pdf --with brief-spec-renderer-audio
 ```
 
-With `pipx` or `pip`, pass the same wheel URLs:
+With `pipx` or `pip`:
 
 ```bash
-pipx install https://github.com/luanmorenommaciel/brief-spec/releases/download/v0.5.0/brief_spec-0.5.0-py3-none-any.whl
+pipx install brief-spec
 # or, inside a virtual environment
-pip install https://github.com/luanmorenommaciel/brief-spec/releases/download/v0.5.0/brief_spec-0.5.0-py3-none-any.whl
+pip install brief-spec brief-spec-renderer-pdf brief-spec-renderer-audio
 ```
 
-`uv tool install git+https://github.com/luanmorenommaciel/brief-spec.git@v0.5.0` also works. It builds from the tagged source instead of using the published wheel.
-
-`pip install brief-spec` does **not** work yet. The PyPI upload is waiting for trusted-publisher registration, and this section will switch to PyPI once `brief-spec==0.5.0` is there.
+The PyPI files are byte-identical to the wheels and sdists attached to the
+[v0.5.0 GitHub release](https://github.com/luanmorenommaciel/brief-spec/releases/tag/v0.5.0), and each
+carries a build attestation. To pin the version, use `brief-spec==0.5.0`.
 
 ### 2. Connect your harnesses
 
@@ -441,7 +438,7 @@ brief-spec doctor all --scope user --probe
 
 ```bash
 uv tool uninstall briefspec
-uv tool install https://github.com/luanmorenommaciel/brief-spec/releases/download/v0.5.0/brief_spec-0.5.0-py3-none-any.whl
+uv tool install brief-spec
 brief-spec setup all --scope user
 brief-spec doctor all --scope user --probe
 ```
@@ -536,7 +533,7 @@ Read the complete [Human Continuity architecture](docs/human-continuity.md).
 
 | Version | State | Notes |
 | --- | --- | --- |
-| v0.5.0 | Published GitHub release | Latest public release; PyPI pending trusted-publisher registration |
+| v0.5.0 | Published on GitHub and PyPI | Latest public release |
 | v0.2.0 | Published GitHub release | Historical release |
 | 0.3.0, 0.4.0 | Unpublished | Folded into 0.5.0 |
 

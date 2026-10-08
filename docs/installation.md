@@ -13,22 +13,21 @@ Brief-Spec has no runtime Python dependencies and performs no network calls from
 
 ## Published and checkout installation
 
-The current public release is `v0.5.0`, published on GitHub with wheels, sdists, schemas,
-and signed manifests. PyPI publication is staged and pending trusted-publisher
-registration, so `pip install brief-spec` does not work yet. Install the exact
-CI-tested wheels attached to the release, including the optional renderers:
+The current public release is `v0.5.0`. It is on PyPI and on GitHub, and the PyPI files are
+byte-identical to the wheels and sdists attached to the GitHub release. Install the pinned
+distributions, including the optional renderers:
 
 ```bash
-R=https://github.com/luanmorenommaciel/brief-spec/releases/download/v0.5.0
-uv tool install "$R/brief_spec-0.5.0-py3-none-any.whl" \
-  --with "$R/brief_spec_renderer_pdf-0.5.0-py3-none-any.whl" \
-  --with "$R/brief_spec_renderer_audio-0.5.0-py3-none-any.whl"
+uv tool install --force "brief-spec==0.5.0" \
+  --with "brief-spec-renderer-pdf==0.5.0" \
+  --with "brief-spec-renderer-audio==0.5.0"
 brief-spec setup all --scope user --require codex,claude,omp,grok,kimi
 brief-spec doctor all --scope user --probe --all-scopes
 ```
 
-`pip install "$R/brief_spec-0.5.0-py3-none-any.whl"` works the same way inside a virtual
-environment. To build from the tagged source instead of using the published wheel:
+`pip install brief-spec brief-spec-renderer-pdf brief-spec-renderer-audio` works the same way
+inside a virtual environment. The renderers are separate packages, not extras, so
+`brief-spec[pdf]` does not install them. To build from the tagged source instead:
 
 ```bash
 uv tool install git+https://github.com/luanmorenommaciel/brief-spec.git@v0.5.0
@@ -39,17 +38,6 @@ supported throughout `0.x`.
 
 Chronicle and video remain a separate experimental extension track until they are
 independently published.
-
-Once the PyPI trusted publishers are registered, the pinned distributions become the
-canonical install:
-
-```bash
-uv tool install --force "brief-spec==0.5.0" \
-  --with "brief-spec-renderer-pdf==0.5.0" \
-  --with "brief-spec-renderer-audio==0.5.0"
-brief-spec setup all --scope user --require codex,claude,omp,grok,kimi
-brief-spec doctor all --scope user --probe --all-scopes
-```
 
 Dogfood the complete candidate stack from its checkout. Installing Chronicle
 does not initialize or capture any project:
