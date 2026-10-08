@@ -1,9 +1,28 @@
 name: CI
 
+# Lean default:
+#   pull_request + push to main -> `check` only: one ubuntu job on Python 3.14
+#     running verify-release, ruff check, ruff format --check and the full
+#     pytest suite with coverage (~1 min).
+#   push of a v* tag, workflow_dispatch, and weekly (Mon 06:00 UTC) -> the full
+#     gate: 3-OS x 4-Python matrix, plugin-host validators, Codex project hooks,
+#     hermetic inventory, PDF/browser and macOS audio end-to-end, and the
+#     exact-SHA release candidate that release.yml requires for the tag SHA.
+# Markdown is not path-ignored: README, docs/ and SKILL.md files are release
+# surfaces checked by scripts/verify-release.py.
+
 on:
   push:
+    branches: [main]
+    tags: ["v*"]
+    paths-ignore:
+      - "assets/**"
   pull_request:
+    paths-ignore:
+      - "assets/**"
   workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1" # weekly full gate
 
 permissions:
   contents: read
@@ -13,8 +32,38 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  check:
+    name: check (ubuntu / Python 3.14)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install test and verification tools
+        run: >-
+          python -m pip install --disable-pip-version-check
+          -e .
+          "jsonschema>=4.23"
+          "pytest>=8.4"
+          "pytest-cov>=6.2"
+          "ruff>=0.12"
+      - name: Verify release surfaces
+        run: python scripts/verify-release.py
+      - name: Lint
+        run: python -m ruff check .
+      - name: Formatting
+        run: python -m ruff format --check .
+      - name: Test
+        run: python -m pytest --cov=briefspec --cov-report=term-missing
+
   python:
     name: ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.ref, 'refs/tags/v')
+    timeout-minutes: 25
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -46,6 +95,8 @@ jobs:
 
   plugin-hosts:
     name: Codex and Claude plugin validators
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.ref, 'refs/tags/v')
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -76,6 +127,8 @@ jobs:
 
   codex-project-hooks:
     name: Codex project hooks (${{ matrix.os }})
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.ref, 'refs/tags/v')
+    timeout-minutes: 15
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -98,6 +151,8 @@ jobs:
 
   hermetic-host-inventory:
     name: Hermetic host inventory (${{ matrix.inventory }})
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.ref, 'refs/tags/v')
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -119,6 +174,8 @@ jobs:
 
   pdf-renderer:
     name: PDF download end to end
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.ref, 'refs/tags/v')
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -143,6 +200,8 @@ jobs:
 
   audio-renderer:
     name: Local audio download end to end
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.ref, 'refs/tags/v')
+    timeout-minutes: 20
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -162,7 +221,9 @@ jobs:
 
   release:
     name: Build exact-SHA candidate and clean-room installation
-    needs: [python, plugin-hosts, codex-project-hooks, hermetic-host-inventory, pdf-renderer, audio-renderer]
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || startsWith(github.ref, 'refs/tags/v')
+    timeout-minutes: 20
+    needs: [check, python, plugin-hosts, codex-project-hooks, hermetic-host-inventory, pdf-renderer, audio-renderer]
     runs-on: ubuntu-latest
     permissions:
       attestations: write
