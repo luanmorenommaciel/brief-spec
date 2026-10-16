@@ -309,6 +309,23 @@ Open:
 """
 
 
+PHONE_ORIENT = """<!-- briefspec:checkpoint:v1 mode=orient -->
+Headline: Halfway through the phone work.
+Current state: The renderer is written.
+Completed:
+- Phone renderer
+Decisions:
+- None
+Proof:
+- [direct/pass kind=test] `pytest tests/test_delivery.py` passed
+Next:
+- Review the PR
+Open:
+- None
+<!-- /briefspec -->
+"""
+
+
 def test_phone_render_leads_with_answer_and_trims_the_outcome_brief() -> None:
     delivery = _delivery(PHONE_OUTCOME)
     assert validate_delivery(delivery).valid
@@ -330,6 +347,16 @@ def test_phone_render_leads_with_answer_and_trims_the_outcome_brief() -> None:
     assert "- Merge after review.\n- Tag later." in phone
     for dropped in ("Proof", "Gaps", "Open", "Rationale", "Type:", "Delivery context", "<!--"):
         assert dropped not in phone
+
+    checkpoint = render_phone(_delivery(PHONE_ORIENT))
+    assert [block for block in checkpoint.split("\n\n") if block.strip()][0] == (
+        "Halfway through the phone work."
+    )
+    assert (
+        "**Proof:**\n- [direct/pass kind=test] `pytest tests/test_delivery.py` passed" in checkpoint
+    )
+    assert not [line for line in checkpoint.splitlines() if line.lstrip().startswith("|")]
+    assert "<!--" not in checkpoint
 
 
 def test_phone_is_an_additive_core_format() -> None:

@@ -894,13 +894,15 @@ def render_phone(delivery: dict[str, Any]) -> str:
         if mode not in _CHECKPOINT_FIELDS:
             raise ValueError(f"Unsupported checkpoint mode: {mode}")
         answer = brief.get("headline")
-        fields = tuple(
-            field for field in _CHECKPOINT_FIELDS[mode] if field not in {"headline", "proof"}
-        )
+        fields = tuple(field for field in _CHECKPOINT_FIELDS[mode] if field != "headline")
     else:
         raise ValueError(f"Unsupported brief kind: {kind}")
     blocks = [str(answer).strip() or "None"]
-    blocks.extend(_phone_block(_FIELD_LABELS[field], brief.get(field)) for field in fields)
+    for field in fields:
+        value = brief.get(field)
+        if field == "proof" and isinstance(value, list):
+            value = [render_evidence(item) if isinstance(item, dict) else item for item in value]
+        blocks.append(_phone_block(_FIELD_LABELS[field], value))
     return "\n\n".join(blocks) + "\n"
 
 
