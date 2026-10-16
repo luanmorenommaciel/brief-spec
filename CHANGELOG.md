@@ -5,6 +5,12 @@ This project uses semantic versioning.
 
 ## [Unreleased]
 
+### Added
+
+- A core `phone` format for `export` and `bundle` writes `brief.phone.md`: the answer first, then
+  short stacked blocks with no tables, and an Outcome Brief trimmed to Status, Human action and
+  Next. It is opt-in; the default and required bundle formats are unchanged.
+
 ## [0.6.0] - 2026-10-08
 
 ### Added

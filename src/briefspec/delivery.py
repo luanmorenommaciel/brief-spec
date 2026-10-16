@@ -870,6 +870,40 @@ def render_markdown(delivery: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def _phone_block(label: str, value: Any) -> str:
+    if isinstance(value, list):
+        items = [str(item).strip() for item in value if str(item).strip()]
+        if items:
+            return "\n".join([f"**{label}:**", *(f"- {item}" for item in items)])
+        return f"**{label}:** None"
+    text = str(value).strip() if value is not None else ""
+    if not text:
+        return f"**{label}:** None"
+    return f"**{label}:**\n{text}" if "\n" in text else f"**{label}:** {text}"
+
+
+def render_phone(delivery: dict[str, Any]) -> str:
+    """Answer first, then short stacked blocks; never a table."""
+    brief = delivery["brief"]
+    kind = brief.get("kind")
+    if kind == "outcome-brief":
+        answer = brief.get("outcome")
+        fields = ("status", "human_action", "next")
+    elif kind == "session-checkpoint":
+        mode = str(brief.get("mode", ""))
+        if mode not in _CHECKPOINT_FIELDS:
+            raise ValueError(f"Unsupported checkpoint mode: {mode}")
+        answer = brief.get("headline")
+        fields = tuple(
+            field for field in _CHECKPOINT_FIELDS[mode] if field not in {"headline", "proof"}
+        )
+    else:
+        raise ValueError(f"Unsupported brief kind: {kind}")
+    blocks = [str(answer).strip() or "None"]
+    blocks.extend(_phone_block(_FIELD_LABELS[field], brief.get(field)) for field in fields)
+    return "\n\n".join(blocks) + "\n"
+
+
 def _html_value(value: Any) -> str:
     if isinstance(value, list):
         if not value:
@@ -1069,6 +1103,8 @@ def render_core(delivery: dict[str, Any], output_format: str) -> bytes:
         return canonical_json_bytes(delivery)
     if output_format == "html":
         return render_html(delivery).encode("utf-8")
+    if output_format == "phone":
+        return render_phone(delivery).encode("utf-8")
     if output_format == "spoken-text":
         return render_spoken_text(delivery).encode("utf-8")
     if output_format == "ssml":
@@ -1080,6 +1116,7 @@ CORE_FORMATS = {
     "markdown": ("brief.md", "text/markdown"),
     "json": ("brief.json", "application/json"),
     "html": ("brief.html", "text/html"),
+    "phone": ("brief.phone.md", "text/markdown"),
     "spoken-text": ("spoken.txt", "text/plain"),
     "ssml": ("spoken.ssml", "application/ssml+xml"),
 }

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import html
 import json
+import re
 import zipfile
 from pathlib import Path
 
@@ -10,12 +11,14 @@ import pytest
 from briefspec.bundle import build_delivery_bundle, deliver_bundle
 from briefspec.cli import main
 from briefspec.delivery import (
+    CORE_FORMATS,
     canonical_json_bytes,
     canonical_sha256,
     export_core,
     load_delivery,
     render_html,
     render_markdown,
+    render_phone,
     render_spoken_text,
     validate_delivery,
 )
@@ -287,3 +290,111 @@ def test_validate_accepts_new_path_first_form(
     source.write_text(OUTCOME, encoding="utf-8")
     assert main(["validate", str(source), "--strict"]) == 0
     assert "VALID" in capsys.readouterr().out
+
+
+PHONE_OUTCOME = """<!-- briefspec:outcome:v1 -->
+Status: REVIEW
+Outcome: The phone format is ready to read.
+Human action: Approve the format change.
+Proof:
+- [direct/pass kind=file] Contract test at `tests/test_delivery.py`
+Gaps:
+- Not tried on a real phone.
+Next:
+- Merge after review.
+- Tag later.
+Open:
+- None
+<!-- /briefspec -->
+"""
+
+
+def test_phone_render_leads_with_answer_and_trims_the_outcome_brief() -> None:
+    delivery = _delivery(PHONE_OUTCOME)
+    assert validate_delivery(delivery).valid
+    phone = render_phone(delivery)
+    blocks = [block for block in phone.split("\n\n") if block.strip()]
+
+    assert blocks[0] == "The phone format is ready to read."
+
+    table_rows = [line for line in phone.splitlines() if line.lstrip().startswith("|")]
+    assert all(line.strip("| ").count("|") + 1 <= 2 for line in table_rows)
+
+    assert re.findall(r"^\*\*(.+?):\*\*", phone, re.MULTILINE) == [
+        "Status",
+        "Human action",
+        "Next",
+    ]
+    assert "**Status:** REVIEW" in phone
+    assert "**Human action:** Approve the format change." in phone
+    assert "- Merge after review.\n- Tag later." in phone
+    for dropped in ("Proof", "Gaps", "Open", "Rationale", "Type:", "Delivery context", "<!--"):
+        assert dropped not in phone
+
+
+def test_phone_is_an_additive_core_format() -> None:
+    assert CORE_FORMATS["phone"] == ("brief.phone.md", "text/markdown")
+    assert list(CORE_FORMATS)[:3] == ["markdown", "json", "html"]
+
+
+def test_export_selects_phone_and_bundle_adds_it_to_the_required_formats(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    source = tmp_path / "outcome.md"
+    source.write_text(PHONE_OUTCOME, encoding="utf-8")
+    output_dir = tmp_path / "out"
+    assert (
+        main(
+            [
+                "export",
+                str(source),
+                "--formats",
+                "phone",
+                "--output-dir",
+                str(output_dir),
+                "--created-at",
+                "2026-08-11T12:00:00Z",
+                "--json",
+            ]
+        )
+        == 0
+    )
+    outputs = json.loads(capsys.readouterr().out)["outputs"]
+    assert [(item["format"], item["media_type"]) for item in outputs] == [
+        ("phone", "text/markdown")
+    ]
+    assert [path.name for path in output_dir.iterdir()] == ["brief.phone.md"]
+
+    bundle = tmp_path / "delivery.zip"
+    assert (
+        main(
+            [
+                "bundle",
+                str(source),
+                "--formats",
+                "markdown,json,html,phone",
+                "--output",
+                str(bundle),
+                "--created-at",
+                "2026-08-11T12:00:00Z",
+                "--json",
+            ]
+        )
+        == 0
+    )
+    capsys.readouterr()
+    with zipfile.ZipFile(bundle) as archive:
+        names = set(archive.namelist())
+        phone = archive.read("brief.phone.md").decode("utf-8")
+    assert names == {"brief.md", "brief.json", "brief.html", "brief.phone.md", "manifest.json"}
+    assert phone.startswith("The phone format is ready to read.\n")
+    assert main(["verify", str(bundle), "--level", "rendered", "--json"]) == 0
+    assert json.loads(capsys.readouterr().out)["status"] == "PASS"
+
+
+def test_default_bundle_does_not_require_phone(tmp_path: Path) -> None:
+    bundle = tmp_path / "delivery.zip"
+    build_delivery_bundle(_delivery(), bundle)
+    with zipfile.ZipFile(bundle) as archive:
+        assert "brief.phone.md" not in archive.namelist()
