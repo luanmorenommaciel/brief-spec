@@ -58,6 +58,13 @@ def _detect_runtime(payload: dict[str, Any]) -> Runtime:
         (Runtime.KIMI, payload.get("kimi_session_id")),
         (Runtime.GROK, payload.get("grok_session_id")),
         (Runtime.OMP, payload.get("omp_session_id")),
+        (
+            Runtime.ANTIGRAVITY,
+            payload.get("antigravity_session_id")
+            or payload.get("agy_session_id")
+            or os.environ.get("ANTIGRAVITY_SESSION_ID")
+            or os.environ.get("AGY_SESSION_ID"),
+        ),
     )
     for runtime, identifier in stable_ids:
         if identifier:
@@ -76,6 +83,8 @@ def _detect_runtime(payload: dict[str, Any]) -> Runtime:
         return Runtime.GROK
     if os.environ.get("PI_CODING_AGENT_DIR") or os.environ.get("OMP_PROFILE"):
         return Runtime.OMP
+    if os.environ.get("ANTIGRAVITY_HOME") or os.environ.get("AGY_HOME"):
+        return Runtime.ANTIGRAVITY
     return Runtime.CODEX
 
 

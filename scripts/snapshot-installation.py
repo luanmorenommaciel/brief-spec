@@ -136,6 +136,7 @@ def main() -> int:
                 "copilot",
                 "cursor",
                 "goose",
+                "antigravity",
             )
         ],
     ]
@@ -237,7 +238,17 @@ def main() -> int:
         restore_tool = shlex.join(restore_arguments)
     rollback = [
         f"brief-spec uninstall {runtime} --scope user"
-        for runtime in ("codex", "claude", "omp", "grok", "kimi", "copilot", "cursor", "goose")
+        for runtime in (
+            "codex",
+            "claude",
+            "omp",
+            "grok",
+            "kimi",
+            "copilot",
+            "cursor",
+            "goose",
+            "antigravity",
+        )
     ]
     rollback.extend(
         shlex.join(

@@ -312,6 +312,7 @@ Each type has an ordered explanation profile loaded by the `brief-spec` router.
 | OMP | Required | `brief-spec setup omp` | `.omp/` |
 | Grok Build | Required | `brief-spec setup grok` | `.grok/` |
 | Kimi Code | Required | `brief-spec setup kimi` | `.kimi-code/skills/` (skills only) |
+| Google Antigravity | Live-verified | `brief-spec setup antigravity` | `.agents/skills/`, `.gemini/antigravity/` |
 | Copilot | Experimental | `brief-spec setup copilot --scope project` | `.agents/skills/`, `.github/` |
 | Cursor Agent | Experimental | `brief-spec setup cursor` | `.cursor/` |
 | Goose | Experimental | `brief-spec setup goose` | `.agents/skills/`, `.goose/` |

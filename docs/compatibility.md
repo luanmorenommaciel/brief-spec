@@ -21,6 +21,7 @@ an authenticated host run.
 | Oh My Pi (OMP) | Live-verified | Yes | Yes | native skills and lifecycle extension |
 | Grok Build | Live-verified | Yes | Yes | `.grok/skills`, `.grok/hooks/brief-spec.json` with `PreToolUse` delivery |
 | Kimi Code | Live-verified | Yes | Skills only | user plugin; project lifecycle requires that user plugin |
+| Google Antigravity | Live-verified | Yes | Yes | `.gemini/antigravity/skills`, `.agents/skills`, and `hooks.json` |
 | GitHub Copilot | Experimental | Yes | Yes | portable skills, hooks, cloud bridge, first-tool delivery |
 | Cursor Agent | Experimental | Yes | Yes | portable skills and hooks |
 | Goose | Experimental | Yes | Yes | portable skills; lifecycle automation unavailable |
