@@ -287,6 +287,7 @@ jobs:
           "$smoke_env/bin/briefspec" --version
           "$smoke_env/bin/brief-spec" capabilities all --json
       - name: Create exact-SHA release authorization
+        if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v')
         env:
           CANDIDATE_SHA: ${{ github.sha }}
           WORKFLOW_RUN_ID: ${{ github.run_id }}
