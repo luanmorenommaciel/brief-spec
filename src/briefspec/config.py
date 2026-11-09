@@ -30,6 +30,11 @@ DEFAULT_CONFIG: dict[str, dict[str, Any]] = {
     "state": {
         "retention_days": 14,
     },
+    "explain": {
+        "hook": False,
+        "hook_min_files": 3,
+        "hook_min_lines": 100,
+    },
 }
 
 _ALLOWED = {
@@ -48,6 +53,9 @@ _ALLOWED = {
     ("outcome", "policy"),
     ("outcome", "one_repair"),
     ("state", "retention_days"),
+    ("explain", "hook"),
+    ("explain", "hook_min_files"),
+    ("explain", "hook_min_lines"),
 }
 
 

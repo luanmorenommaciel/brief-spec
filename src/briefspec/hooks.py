@@ -4,6 +4,7 @@ import json
 import re
 import sys
 from datetime import UTC
+from pathlib import Path
 from typing import Any
 
 from briefspec.adapters.base import _content_text
@@ -220,6 +221,25 @@ def _record_terminal_message(
     label = "Outcome Brief" if state.last_brief_kind == "outcome" else "Session Checkpoint"
     detail = "; ".join(state.last_brief_errors[:2]) or "the contract did not validate"
     return f"Brief-Spec: this {label} is not valid: {detail}."
+
+
+def _explain_stop_reason(
+    event: RuntimeEvent,
+    config: dict[str, Any],
+    diagnostics: list[str],
+) -> str | None:
+    """Opt-in explain-back gate for Claude Code and Codex; any error lets the stop through."""
+    if event.stop_hook_active or config.get("explain", {}).get("hook") is not True:
+        return None
+    try:
+        from briefspec.explain import HOOK_RUNTIMES, stop_gate
+
+        if event.runtime not in HOOK_RUNTIMES:
+            return None
+        return stop_gate(event.cwd or Path.cwd(), config)
+    except Exception as exc:
+        diagnostics.append(f"explain hook fail-open: {type(exc).__name__}: {exc}")
+        return None
 
 
 def process_event(
@@ -551,6 +571,14 @@ def process_event(
                 if requests and already_active:
                     diagnostics.append("repair guard allowed a still-invalid second stop")
                 decision = HookDecision(notice=notice)
+                explain_reason = _explain_stop_reason(event, effective, diagnostics)
+                if explain_reason:
+                    save_session(state)
+                    return HookDecision(
+                        action="block",
+                        reason=explain_reason,
+                        diagnostics=tuple(diagnostics),
+                    )
 
             save_session(state)
             return HookDecision(

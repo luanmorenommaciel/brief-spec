@@ -399,6 +399,11 @@ Exports record the current Git commit. When `verify` runs inside the same reposi
 
 `brief-spec frame request.json --output frame.md` renders a Human Frame from a `BriefSpecFrameRequest/v1` request. It writes Markdown and a receipt. It does not approve or dispatch anything.
 
+`brief-spec explain` prints an explain-back frame for the branch, built from `git diff <base>...HEAD`
+(`--base` overrides `main`; `--format phone` for a phone). The agent fills it; `brief-spec explain --check
+<file>` rejects names, files, and lines that are not in the diff. An opt-in Stop hook for Claude Code and
+Codex asks for it once per large diff; see [docs/configuration.md](docs/configuration.md#explain-back-hook).
+
 ## Notifications
 
 `brief-spec notify` posts a brief to a chat channel or a webhook. It is one-way: Brief-Spec never

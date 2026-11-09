@@ -76,6 +76,31 @@ classified. Run `brief-spec eval` to measure the classifier on the bundled label
 `brief-spec eval your-prompts.jsonl` on your own (one JSON object per line with `prompt` and
 `type`).
 
+## Explain-back hook
+
+`brief-spec explain` prints a diff-grounded explain-back frame for the current branch: the files
+from `git diff --name-only <base>...HEAD`, the changed symbols, a file tree, and room for a 3-line
+summary, one line per file, visuals, and at most three `path:line` "look here first" entries.
+`--base <ref>` overrides `main`; `--format phone` drops Mermaid and tables;
+`brief-spec explain --check <file>` validates a filled one and exits non-zero on any failure.
+
+The optional Stop hook for Claude Code and Codex asks for that explain-back. It ships off:
+
+```toml
+[explain]
+hook = false          # true turns it on
+hook_min_files = 3    # block when the branch changes at least this many files...
+hook_min_lines = 100  # ...or at least this many added plus deleted lines
+```
+
+On each stop it reads `git diff --shortstat` of the committed branch against its merge-base with
+`main`. Over either threshold, it blocks the stop once and passes the explain frame back as the
+reason; the next stop with the same diff passes. A new commit that changes the diff can ask once
+more, and running `brief-spec explain` marks the current diff as explained. Uncommitted edits are
+not counted. It never blocks when the host reports `stop_hook_active`, makes no model or network
+call, gives up after 0.9 seconds of git work, and lets the stop through on any error. Kimi has no explain hook;
+run the command there. The last explained diff is kept under `$BRIEF_SPEC_HOME/explain/`.
+
 ## Output channels
 
 `brief-spec notify` reads `[channels.<name>]` tables from the same user and project config files.
