@@ -10,6 +10,15 @@ This project uses semantic versioning.
 - A core `phone` format for `export` and `bundle` writes `brief.phone.md`: the answer first, then
   short stacked blocks with no tables, and an Outcome Brief trimmed to Status, Human action and
   Next. It is opt-in; the default and required bundle formats are unchanged.
+- `brief-spec explain` prints a read-only explain-back frame for the branch from
+  `git diff <base>...HEAD`: the exact file list, changed symbols, a file tree and fitting visuals,
+  one line per file, a 3-line summary, and up to three "look here first" lines. `--base` overrides
+  `main` and `--format phone` suits a phone. `brief-spec explain --check <file>` fails made-up
+  symbols, files or lines outside the diff, prose over 6 lines without a visual, more than three
+  look-here entries, and Mermaid that does not parse.
+- An opt-in `[explain] hook` for Claude Code and Codex blocks a stop once per large diff (3+ files
+  or 100+ lines by default) with the explain frame as the reason. It is off by default, honors
+  `stop_hook_active`, and lets the stop through on any error.
 
 ## [0.6.0] - 2026-10-08
 
