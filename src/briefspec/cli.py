@@ -17,6 +17,12 @@ from briefspec.delivery import load_delivery, validate_delivery
 from briefspec.diagnostics import doctor_all_scopes, doctor_runtime
 from briefspec.errors import BriefSpecError, InstallConflict
 from briefspec.evaluation import evaluate, load_corpus, render_report
+from briefspec.explain import (
+    build_skeleton,
+    check_explain,
+    record_explained,
+    render_explain_frame,
+)
 from briefspec.frames import render_frame
 from briefspec.freshness import git_head
 from briefspec.harnesses import detected_harnesses
@@ -191,6 +197,17 @@ def build_parser() -> argparse.ArgumentParser:
     frame.add_argument("--output", required=True, type=Path)
     frame.add_argument("--force", action="store_true")
     frame.add_argument("--json", action="store_true")
+
+    explain = commands.add_parser(
+        "explain",
+        help="print a diff-grounded explain-back frame for this branch, or --check a filled one",
+    )
+    explain.add_argument("--base", help="ref to diff against via merge-base (default: main)")
+    explain.add_argument("--format", choices=["markdown", "phone"], default="markdown")
+    explain.add_argument(
+        "--check", metavar="FILE", help="validate a filled explain-back (- for stdin)"
+    )
+    explain.add_argument("--json", action="store_true")
 
     validate = commands.add_parser("validate")
     validate.add_argument("kind_or_path", nargs="?", default="-")
@@ -549,6 +566,39 @@ def main(argv: list[str] | None = None) -> int:
                 raise ValueError(f"Human Frame request is not JSON: {exc}") from exc
             receipt = render_frame(request, output=args.output, force=args.force)
             _print_result(receipt, args.json)
+            return 0
+
+        if args.command == "explain":
+            if args.check is not None:
+                checked = check_explain(_read_text(args.check), Path.cwd(), args.base)
+                if args.json:
+                    print(json.dumps(checked.to_dict(), indent=2, sort_keys=True))
+                else:
+                    print("VALID" if checked.valid else "INVALID")
+                    for error in checked.errors:
+                        print(f"  ERROR: {error}")
+                return 0 if checked.valid else 1
+            skeleton = build_skeleton(Path.cwd(), args.base)
+            frame = render_explain_frame(skeleton, args.format)
+            if args.json:
+                print(
+                    json.dumps(
+                        {
+                            "base": skeleton.base,
+                            "merge_base": skeleton.merge_base,
+                            "head": skeleton.head,
+                            "files": skeleton.display_files,
+                            "frame": frame,
+                        },
+                        indent=2,
+                        sort_keys=True,
+                    )
+                )
+            else:
+                print(frame, end="")
+            if args.base is None:
+                with suppress(Exception):
+                    record_explained(Path.cwd(), load_config())
             return 0
 
         if args.command == "validate":
