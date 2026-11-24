@@ -43,6 +43,13 @@ def repo(tmp_path: Path, isolated_homes: dict[str, Path]) -> Path:
     return make_repo(tmp_path)
 
 
+@pytest.fixture(autouse=True)
+def generous_hook_budget(monkeypatch: pytest.MonkeyPatch) -> None:
+    # On a loaded machine git can exceed the 0.9 s hook budget and the gate fails open,
+    # which made block/allow assertions flaky. Speed is checked separately with a wall clock.
+    monkeypatch.setattr(explain, "HOOK_BUDGET_SECONDS", 10.0)
+
+
 def frame(repo: Path, *args: str, capsys: pytest.CaptureFixture[str]) -> str:
     with pytest.MonkeyPatch.context() as patch:
         patch.chdir(repo)
