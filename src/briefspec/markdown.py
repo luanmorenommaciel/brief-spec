@@ -4,7 +4,13 @@ import re
 from collections.abc import Iterable
 from typing import Any
 
-from briefspec.models import CheckpointMode, OutcomeStatus, ValidationResult
+from briefspec.models import (
+    CheckpointMode,
+    OutcomeSource,
+    OutcomeStatus,
+    SourceStatus,
+    ValidationResult,
+)
 from briefspec.work_types import PROFILE_VERSION, type_profile, validate_explanation
 
 OUTCOME_START = "<!-- briefspec:outcome:v1 -->"
@@ -54,7 +60,16 @@ _OUTCOME_SECTION_ORDER = (
 # A DONE brief with nothing left for the human may omit these fields. They are read as the
 # same explicit None values the full form carries, so the canonical object is identical.
 _COMPACT_OPTIONAL_FIELDS = ("Human action", "Gaps", "Next", "Open")
+# Optional trailing fields. A brief without them reads exactly as it did before they existed.
+_OUTCOME_OPTIONAL_SECTIONS = ("Sources",)
 _MISSING_FIELDS_PREFIX = "Missing required field(s)"
+_SOURCE_ITEM = re.compile(
+    r"^(?P<name>\S.*?)\s*:\s*(?P<status>"
+    + "|".join(status.value for status in SourceStatus)
+    + r")(?:\s*\((?P<presence>optional|required)\))?"
+    r"(?:\s*(?:—|--)\s*(?P<note>\S.*?))?\s*$",
+    re.IGNORECASE,
+)
 
 _CHECKPOINT_SECTIONS = {
     CheckpointMode.ORIENT: (
@@ -105,9 +120,12 @@ def _bounded_region(text: str, start: str | re.Pattern[str]) -> tuple[str | None
     return text[index + len(marker) : end].strip(), mode
 
 
-def _read_sections(region: str, names: Iterable[str]) -> tuple[dict[str, Any], list[str]]:
+def _read_sections(
+    region: str, names: Iterable[str], optional: Iterable[str] = ()
+) -> tuple[dict[str, Any], list[str]]:
     lines = region.splitlines()
     names = tuple(names)
+    optional = frozenset(optional)
     positions: list[tuple[int, str, str]] = []
     for index, line in enumerate(lines):
         stripped = line.strip().removeprefix("**").removesuffix("**").strip()
@@ -119,7 +137,7 @@ def _read_sections(region: str, names: Iterable[str]) -> tuple[dict[str, Any], l
 
     errors: list[str] = []
     found_names = [name for _, name, _ in positions]
-    missing = [name for name in names if name not in found_names]
+    missing = [name for name in names if name not in found_names and name not in optional]
     if missing:
         errors.append(f"Missing required field(s): {', '.join(missing)}")
 
@@ -188,11 +206,73 @@ def _validate_evidence(
             )
 
 
+def parse_source(item: str) -> OutcomeSource | None:
+    match = _SOURCE_ITEM.match(item.strip())
+    if match is None:
+        return None
+    note = match.group("note")
+    return OutcomeSource(
+        name=match.group("name").strip(),
+        status=SourceStatus(match.group("status").lower()),
+        required=(match.group("presence") or "required").lower() == "required",
+        note=note.strip() if note else None,
+    )
+
+
+def render_source(source: OutcomeSource) -> str:
+    text = f"{source.name}: {source.status.value}"
+    if not source.required:
+        text += " (optional)"
+    if source.note:
+        text += f" — {source.note}"
+    return text
+
+
+def source_gaps(sources: Iterable[OutcomeSource]) -> list[str]:
+    """Gap lines for every source that is not ``ok``, in source order."""
+    return [f"Source {render_source(source)}" for source in sources if source.is_gap]
+
+
+def _read_sources(data: dict[str, Any], errors: list[str]) -> list[OutcomeSource]:
+    sources: list[OutcomeSource] = []
+    seen: set[str] = set()
+    for index, item in enumerate(_evidence_items(data.pop("Sources", None)), start=1):
+        source = parse_source(item)
+        if source is None:
+            errors.append(
+                f"Sources item {index} must read `- name: ok|stale|missing|error`, optionally "
+                "followed by `(optional)` and `— note`"
+            )
+        elif source.name in seen:
+            errors.append(f"Sources item {index} repeats source {source.name}")
+        else:
+            seen.add(source.name)
+            sources.append(source)
+    if sources:
+        data["Sources"] = [source.to_dict() for source in sources]
+    return sources
+
+
+def _without_source_gaps(value: Any, derived: list[str]) -> Any:
+    # Rendered briefs repeat source gaps under Gaps; they are derived, not author-written.
+    if isinstance(value, list):
+        return [item for item in value if item not in derived] or "None"
+    return "None" if str(value or "").strip() in derived else value
+
+
 def validate_outcome(text: str) -> ValidationResult:
     region, _ = _bounded_region(text, OUTCOME_START)
     if region is None:
         return ValidationResult(False, "outcome-brief", ("Missing bounded outcome marker",))
-    data, errors = _read_sections(region, _OUTCOME_SECTION_ORDER)
+    data, errors = _read_sections(
+        region,
+        (*_OUTCOME_SECTION_ORDER, *_OUTCOME_OPTIONAL_SECTIONS),
+        optional=_OUTCOME_OPTIONAL_SECTIONS,
+    )
+    sources = _read_sources(data, errors)
+    pending_sources = source_gaps(sources)
+    if pending_sources and "Gaps" in data:
+        data["Gaps"] = _without_source_gaps(data["Gaps"], pending_sources)
     missing = [name for name in _OUTCOME_SECTION_ORDER if name not in data]
     compact = (
         bool(missing)
@@ -231,6 +311,13 @@ def validate_outcome(text: str) -> ValidationResult:
             errors.append("DONE cannot require human action")
         if not _empty(gaps):
             errors.append("DONE cannot contain unresolved gaps")
+        for source in sources:
+            if source.required and source.is_gap:
+                note = f": {source.note}" if source.note else ""
+                errors.append(
+                    f"DONE cannot rely on required source {source.name}, which is "
+                    f"{source.status.value}{note}; restore it or use REVIEW, BLOCKED, or FAILED"
+                )
         tags = [evidence_tag(item) for item in _evidence_items(proof)]
         if any(result == "fail" for _, result in tags):
             errors.append("DONE cannot include failing proof; use FAILED, BLOCKED, or REVIEW")
@@ -244,7 +331,7 @@ def validate_outcome(text: str) -> ValidationResult:
     ):
         errors.append(f"{status.value} requires explicit human action")
     if status in {OutcomeStatus.BLOCKED, OutcomeStatus.FAILED}:
-        if _empty(gaps):
+        if _empty(gaps) and not pending_sources:
             errors.append(f"{status.value} requires an explicit gap")
         if _empty(next_items):
             errors.append(f"{status.value} requires a next action")

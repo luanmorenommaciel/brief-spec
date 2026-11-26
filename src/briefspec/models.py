@@ -65,6 +65,13 @@ class OutcomeStatus(StrEnum):
     FAILED = "FAILED"
 
 
+class SourceStatus(StrEnum):
+    OK = "ok"
+    STALE = "stale"
+    MISSING = "missing"
+    ERROR = "error"
+
+
 class CheckpointMode(StrEnum):
     ORIENT = "orient"
     TEACH = "teach"
@@ -130,6 +137,40 @@ class SourceMetadata:
 
     def to_dict(self) -> dict[str, Any]:
         return {key: value for key, value in asdict(self).items() if value is not None}
+
+
+@dataclass(frozen=True, slots=True)
+class OutcomeSource:
+    """An input the outcome depends on. Anything but ``ok`` is a gap, never silent green."""
+
+    name: str
+    status: SourceStatus
+    required: bool = True
+    note: str | None = None
+
+    @property
+    def is_gap(self) -> bool:
+        return self.status is not SourceStatus.OK
+
+    @classmethod
+    def from_dict(cls, value: dict[str, Any]) -> OutcomeSource:
+        note = value.get("note")
+        return cls(
+            name=str(value["name"]),
+            status=SourceStatus(value["status"]),
+            required=bool(value.get("required", True)),
+            note=None if note is None else str(note),
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        value: dict[str, Any] = {
+            "name": self.name,
+            "status": self.status.value,
+            "required": self.required,
+        }
+        if self.note is not None:
+            value["note"] = self.note
+        return value
 
 
 @dataclass(frozen=True, slots=True)

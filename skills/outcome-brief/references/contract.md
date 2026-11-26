@@ -34,6 +34,24 @@ A planned file does not prove implementation. Keep these boundaries visible in `
 - Do not hide an unresolved risk in `Next`; put it in `Gaps` or `Open`.
 - Do not repeat the full narrative from the response.
 
+## Sources
+
+When the outcome depends on named inputs (tables, feeds, APIs, exports), list them in an optional
+`Sources:` field after `Open`, one per line:
+
+```markdown
+Sources:
+- warehouse.orders: ok
+- crm.accounts: missing — export job never ran
+- fx.rates: stale (optional) — last refresh 3 days ago
+```
+
+Status is `ok`, `stale`, `missing`, or `error`. Sources are required unless marked `(optional)`.
+A missing source is a gap, not green: every non-`ok` source is shown under `Gaps` (and `Not yet` on
+a phone) without being repeated by hand. `DONE` fails while any required source is not `ok`; use
+`REVIEW`, `BLOCKED`, or `FAILED` instead. Optional sources are surfaced but do not block `DONE`.
+Omit the field when nothing upstream matters.
+
 ## Compact DONE
 
 The compact form (Status, Outcome, Proof) is valid only for `DONE`. Omitted Human action, Gaps,

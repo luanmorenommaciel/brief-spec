@@ -29,6 +29,20 @@
     },
     "gaps": { "type": "array", "items": { "type": "string" } },
     "next": { "type": "array", "maxItems": 3, "items": { "type": "string" } },
-    "open": { "type": "array", "maxItems": 3, "items": { "type": "string" } }
+    "open": { "type": "array", "maxItems": 3, "items": { "type": "string" } },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "status"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "status": { "enum": ["ok", "stale", "missing", "error"] },
+          "required": { "type": "boolean", "default": true },
+          "note": { "type": ["string", "null"], "minLength": 1 }
+        }
+      }
+    }
   }
 }

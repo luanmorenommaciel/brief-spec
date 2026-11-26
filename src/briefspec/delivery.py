@@ -16,10 +16,18 @@ from briefspec.markdown import (
     detect_kind,
     extract_bounded,
     parse_typed,
+    render_source,
+    source_gaps,
     validate_checkpoint,
     validate_outcome,
 )
-from briefspec.models import AccessLevel, ValidationResult, WorkActivity
+from briefspec.models import (
+    AccessLevel,
+    OutcomeSource,
+    SourceStatus,
+    ValidationResult,
+    WorkActivity,
+)
 from briefspec.secret_scan import scan_value
 from briefspec.state import atomic_write_many
 from briefspec.work_types import (
@@ -57,6 +65,7 @@ _FIELD_LABELS = {
     "gaps": "Gaps",
     "next": "Next",
     "open": "Open",
+    "sources": "Sources",
     "headline": "Headline",
     "current_state": "Current state",
     "completed": "Completed",
@@ -222,6 +231,8 @@ def _brief_from_markdown(text: str) -> tuple[dict[str, Any], list[str]]:
             "next": _items(raw.get("Next")),
             "open": _items(raw.get("Open")),
         }
+        if raw.get("Sources"):
+            brief["sources"] = raw["Sources"]
     elif kind == "checkpoint":
         result = validate_checkpoint(text)
         raw = result.data
@@ -464,6 +475,44 @@ def _older_than(source: Any, version: tuple[int, int]) -> bool:
         return False
 
 
+def _source_errors(brief: dict[str, Any]) -> list[str]:
+    if "sources" not in brief:
+        return []
+    sources = brief["sources"]
+    if brief.get("kind") != "outcome-brief":
+        return ["Only an outcome brief may declare brief.sources"]
+    if not isinstance(sources, list):
+        return ["Delivery brief.sources must be an array"]
+    errors: list[str] = []
+    names: set[str] = set()
+    statuses = {status.value for status in SourceStatus}
+    for index, item in enumerate(sources):
+        prefix = f"brief.sources[{index}]"
+        if not isinstance(item, dict):
+            errors.append(f"{prefix} must be an object")
+            continue
+        unexpected = sorted(set(item) - {"name", "status", "required", "note"})
+        if unexpected:
+            errors.append(f"{prefix} has unsupported field(s): {', '.join(unexpected)}")
+        name = item.get("name")
+        if not isinstance(name, str) or not name.strip() or name != name.strip() or "\n" in name:
+            errors.append(f"{prefix}.name must be a non-empty single-line string")
+        elif name in names:
+            errors.append(f"{prefix}.name repeats source {name}")
+        else:
+            names.add(name)
+        if item.get("status") not in statuses:
+            errors.append(f"{prefix}.status must be one of {', '.join(sorted(statuses))}")
+        if "required" in item and not isinstance(item["required"], bool):
+            errors.append(f"{prefix}.required must be a boolean")
+        note = item.get("note")
+        if note is not None and (
+            not isinstance(note, str) or not note.strip() or note != note.strip() or "\n" in note
+        ):
+            errors.append(f"{prefix}.note must be null or a non-empty single-line string")
+    return errors
+
+
 def validate_delivery(value: dict[str, Any]) -> ValidationResult:
     errors: list[str] = []
     warnings: list[str] = []
@@ -594,7 +643,11 @@ def validate_delivery(value: dict[str, Any]) -> ValidationResult:
     if not isinstance(brief, dict):
         errors.append("Delivery brief must be an object")
     else:
+        source_errors = _source_errors(brief)
+        errors.extend(source_errors)
         try:
+            if source_errors:
+                raise ValueError("brief.sources is malformed")
             markdown = render_markdown(value)
         except (KeyError, TypeError, ValueError) as exc:
             errors.append(f"Delivery brief cannot be rendered: {exc}")
@@ -613,6 +666,10 @@ def validate_delivery(value: dict[str, Any]) -> ValidationResult:
                 else:
                     errors.append(error)
             warnings.extend(result.warnings)
+            if result.valid and brief.get("kind") == "outcome-brief":
+                declared = [source.to_dict() for source in _sources(brief)]
+                if result.data.get("Sources", []) != declared:
+                    errors.append("Delivery brief.sources does not survive Markdown rendering")
 
         proof = brief.get("proof", [])
         if not isinstance(proof, list):
@@ -734,6 +791,29 @@ def validate_delivery(value: dict[str, Any]) -> ValidationResult:
     )
 
 
+def _sources(brief: dict[str, Any]) -> list[OutcomeSource]:
+    value = brief.get("sources")
+    if not isinstance(value, list):
+        return []
+    return [OutcomeSource.from_dict(item) for item in value]
+
+
+def _outcome_fields(brief: dict[str, Any]) -> tuple[str, ...]:
+    fields = ("status", "outcome", "human_action", "proof", "gaps", "next", "open")
+    return (*fields, "sources") if _sources(brief) else fields
+
+
+def _outcome_value(brief: dict[str, Any], field: str) -> Any:
+    """Gaps carry every non-ok source; a missing source is a gap, not green."""
+    value = brief.get(field)
+    if field == "sources":
+        return [render_source(source) for source in _sources(brief)]
+    if field != "gaps" or not (pending := source_gaps(_sources(brief))):
+        return value
+    written = [item for item in _items(value) if _text(item) and item not in pending]
+    return [*written, *pending]
+
+
 def _render_field(label: str, value: Any) -> list[str]:
     if isinstance(value, list):
         if not value:
@@ -754,7 +834,7 @@ def render_markdown(delivery: dict[str, Any]) -> str:
     kind = brief.get("kind")
     if kind == "outcome-brief":
         marker = OUTCOME_START
-        fields = ("status", "outcome", "human_action", "proof", "gaps", "next", "open")
+        fields = _outcome_fields(brief)
         lead_fields = ("status", "outcome", "human_action")
         mode = None
     elif kind == "session-checkpoint":
@@ -799,7 +879,7 @@ def render_markdown(delivery: dict[str, Any]) -> str:
         label = (
             "Screen-only proof" if field == "proof" and mode == "spoken" else _FIELD_LABELS[field]
         )
-        value = brief.get(field)
+        value = _outcome_value(brief, field) if kind == "outcome-brief" else brief.get(field)
         if field == "proof" and isinstance(value, list):
             value = [
                 render_evidence(item) if isinstance(item, dict) else str(item) for item in value
@@ -910,7 +990,7 @@ def _render_phone_outcome(brief: dict[str, Any], owner: str | None) -> str:
     lines = (
         ("Now", _phone_line(brief.get("outcome"))),
         ("You", you),
-        ("Not yet", _phone_line(brief.get("gaps"))),
+        ("Not yet", _phone_line(_outcome_value(brief, "gaps"))),
         ("Done", done),
     )
     return "\n\n".join(f"**{label}:** {value}" for label, value in lines) + "\n"
@@ -986,8 +1066,9 @@ def render_html(delivery: dict[str, Any]) -> str:
     explanation = delivery["explanation"]
     digest = canonical_sha256(delivery)
     title = str(brief.get("headline") or brief.get("outcome") or "Brief-Spec delivery")
-    if brief.get("kind") == "outcome-brief":
-        fields = ("status", "outcome", "human_action", "proof", "gaps", "next", "open")
+    outcome = brief.get("kind") == "outcome-brief"
+    if outcome:
+        fields = _outcome_fields(brief)
         lead_fields = ("status", "outcome", "human_action")
     else:
         fields = _CHECKPOINT_FIELDS[str(brief["mode"])]
@@ -1023,7 +1104,7 @@ def render_html(delivery: dict[str, Any]) -> str:
             if field == "proof" and brief.get("mode") == "spoken"
             else _FIELD_LABELS[field]
         )
-        content = _html_value(brief.get(field))
+        content = _html_value(_outcome_value(brief, field) if outcome else brief.get(field))
         if field in {"proof", "gaps", "watch_outs"}:
             content = (
                 f'<details open class="evidence-detail"><summary>Show or hide '
