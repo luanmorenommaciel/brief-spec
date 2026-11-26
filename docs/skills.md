@@ -131,6 +131,22 @@ brief-spec validate outcome path/to/handoff.md --json
 brief-spec validate outcome -  # read from stdin
 ```
 
+### Phone chat form
+
+The fenced brief is the storage form. On a phone chat surface the agent sends four fence-free
+lines instead, and `brief-spec export --formats phone` renders the same lines from a stored brief:
+
+```markdown
+**Now:** The parser now accepts empty input.
+**You:** None
+**Not yet:** None
+**Done:** Agent, verified.
+```
+
+When another owner holds Done, the redirect form is `**You:** Open {Owner}.` and
+`**Done:** {Owner}.` Validate it with `brief-spec validate --format phone -`. It fails on leaked
+`<!-- briefspec` fences and leading tables.
+
 See [`schemas/`](../schemas/) for the machine-readable contracts.
 
 ---

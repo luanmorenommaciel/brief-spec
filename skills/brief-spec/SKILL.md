@@ -60,6 +60,8 @@ retain the Outcome Brief or Session Checkpoint as the shared terminal contract.
 - Do not imply that classification proves the answer.
 - End substantive terminal work with `outcome-brief`. A short DONE answer with nothing left for
   the human may use the compact Outcome form without profile sections or the typed wrapper.
+- On a phone chat surface, close with the `outcome-brief` four-line chat form (Now, You,
+  Not yet, Done) without fences or the typed wrapper. The typed region below is the storage form.
 - Use `session-checkpoint` only at an explicit or eligible lifecycle boundary.
 - Subagents contribute evidence and work state; the main task owns the user-facing brief.
 

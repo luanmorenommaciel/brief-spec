@@ -77,6 +77,32 @@ Proof: [direct/pass] `command` → observed result
 
 Use it for short answers. If anything is left for the human, write the full form.
 
+## Phone chat form and fenced storage
+
+The fenced brief above is the storage form. Files, exports, hooks, and `brief-spec validate`
+read it. A coding host with a Brief-Spec hook still needs it as the terminal message.
+
+When the reader is on a phone chat surface, send the four-line chat form instead and keep the
+fenced brief in storage. Never paste `<!-- briefspec` fences, the typed wrapper, or a leading
+table into chat.
+
+```markdown
+**Now:** What is now true (Outcome).
+**You:** The smallest human action, or None.
+**Not yet:** What is still missing (Gaps), or None.
+**Done:** Who holds Done.
+```
+
+- `Done` names who closes the work. Use `Agent, verified.` for `DONE`, `You, after review.` for
+  `REVIEW`, `You, once you decide.` for `DECIDE`, `Agent, once unblocked.` for `BLOCKED`, and
+  `Agent, after another attempt.` for `FAILED`.
+- Redirect form: when another owner holds Done, such as a tracker, a reviewer, or another hop,
+  write `**You:** Open {Owner}.` and `**Done:** {Owner}.`
+- Keep each label on one line. Join several gaps with `; `.
+- `brief-spec export --formats phone` renders this form from a stored brief.
+- If available, run `brief-spec validate --format phone -` before sending. It fails on leaked
+  fences and leading tables.
+
 ## References
 
 Read [references/contract.md](references/contract.md) when status selection or evidence strength is

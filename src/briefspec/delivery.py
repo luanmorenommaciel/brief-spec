@@ -882,14 +882,50 @@ def _phone_block(label: str, value: Any) -> str:
     return f"**{label}:**\n{text}" if "\n" in text else f"**{label}:** {text}"
 
 
-def render_phone(delivery: dict[str, Any]) -> str:
-    """Answer first, then short stacked blocks; never a table."""
+_PHONE_DONE_HOLDER = {
+    "DONE": "Agent, verified.",
+    "REVIEW": "You, after review.",
+    "DECIDE": "You, once you decide.",
+    "BLOCKED": "Agent, once unblocked.",
+    "FAILED": "Agent, after another attempt.",
+}
+
+
+def _phone_line(value: Any) -> str:
+    items = [text for item in _items(value) if (text := _text(item))]
+    return "; ".join(" ".join(item.split()) for item in items) or "None"
+
+
+def _render_phone_outcome(brief: dict[str, Any], owner: str | None) -> str:
+    status = str(brief.get("status", "")).strip().upper()
+    if status not in _PHONE_DONE_HOLDER:
+        raise ValueError(f"Unsupported outcome status: {status or 'missing'}")
+    if owner is None:
+        you, done = _phone_line(brief.get("human_action")), _PHONE_DONE_HOLDER[status]
+    else:
+        owner = " ".join(owner.split()).rstrip(".")
+        if not owner:
+            raise ValueError("owner must name who holds Done")
+        you, done = f"Open {owner}.", f"{owner}."
+    lines = (
+        ("Now", _phone_line(brief.get("outcome"))),
+        ("You", you),
+        ("Not yet", _phone_line(brief.get("gaps"))),
+        ("Done", done),
+    )
+    return "\n\n".join(f"**{label}:** {value}" for label, value in lines) + "\n"
+
+
+def render_phone(delivery: dict[str, Any], *, owner: str | None = None) -> str:
+    """Outcome Briefs use the four-line chat form; never a fence or a table.
+
+    ``owner`` redirects the reader to whoever holds Done instead of restating the action.
+    """
     brief = delivery["brief"]
     kind = brief.get("kind")
     if kind == "outcome-brief":
-        answer = brief.get("outcome")
-        fields = ("status", "human_action", "next")
-    elif kind == "session-checkpoint":
+        return _render_phone_outcome(brief, owner)
+    if kind == "session-checkpoint":
         mode = str(brief.get("mode", ""))
         if mode not in _CHECKPOINT_FIELDS:
             raise ValueError(f"Unsupported checkpoint mode: {mode}")

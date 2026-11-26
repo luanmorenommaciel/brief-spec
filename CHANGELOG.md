@@ -7,9 +7,13 @@ This project uses semantic versioning.
 
 ### Added
 
-- A core `phone` format for `export` and `bundle` writes `brief.phone.md`: the answer first, then
-  short stacked blocks with no tables, and an Outcome Brief trimmed to Status, Human action and
-  Next. It is opt-in; the default and required bundle formats are unchanged.
+- A core `phone` format for `export` and `bundle` writes `brief.phone.md` with no tables and no
+  fences. An Outcome Brief becomes the four-line chat form: `Now`, `You`, `Not yet` (from Gaps),
+  and `Done` (who holds Done), with `You: Open {Owner}.` as the redirect form. It is opt-in; the
+  default and required bundle formats are unchanged.
+- `brief-spec validate --format phone` checks a fence-free chat brief and fails on a leaked
+  `<!-- briefspec` fence or a leading markdown table. Plain `validate` still checks the fenced
+  storage brief.
 - `brief-spec explain` prints a read-only explain-back frame for the branch from
   `git diff <base>...HEAD`: the exact file list, changed symbols, a file tree and fitting visuals,
   one line per file, a 3-line summary, and up to three "look here first" lines. `--base` overrides
