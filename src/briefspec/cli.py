@@ -28,7 +28,7 @@ from briefspec.freshness import git_head
 from briefspec.harnesses import detected_harnesses
 from briefspec.hooks import emit_diagnostics, process_event, read_hook_payload, render_decision
 from briefspec.installers import install_runtime, install_runtimes, uninstall_runtime
-from briefspec.markdown import detect_kind, validate_checkpoint, validate_outcome
+from briefspec.markdown import detect_kind, validate_checkpoint, validate_outcome, validate_phone
 from briefspec.models import CheckpointMode, Runtime, VerificationLevel, WorkType
 from briefspec.notify import (
     CHANNEL_KINDS,
@@ -213,6 +213,12 @@ def build_parser() -> argparse.ArgumentParser:
     validate.add_argument("kind_or_path", nargs="?", default="-")
     validate.add_argument("path", nargs="?")
     validate.add_argument("--mode", choices=[item.value for item in CheckpointMode])
+    validate.add_argument(
+        "--format",
+        choices=["storage", "phone"],
+        default="storage",
+        help="storage: the fenced brief (default); phone: the fence-free four-line chat form",
+    )
     validate.add_argument("--strict", action="store_true")
     validate.add_argument("--json", action="store_true")
 
@@ -611,7 +617,11 @@ def main(argv: list[str] | None = None) -> int:
                 requested_kind = "auto"
                 input_path = args.kind_or_path
             text = _read_text(input_path)
-            if text.lstrip().startswith("{"):
+            if args.format == "phone":
+                if requested_kind == "checkpoint" or args.mode:
+                    raise ValueError("validate --format phone checks Outcome chat briefs only")
+                result = validate_phone(text)
+            elif text.lstrip().startswith("{"):
                 source_path = None if input_path == "-" else Path(input_path)
                 delivery, load_warnings = load_delivery(text, source_path=source_path)
                 result = validate_delivery(delivery)
@@ -631,15 +641,16 @@ def main(argv: list[str] | None = None) -> int:
                     for warning in warnings:
                         print(f"  WARN: {warning}")
                 return 0 if not errors else 1
-            kind = detect_kind(text) if requested_kind == "auto" else requested_kind
-            if kind == "outcome":
-                result = validate_outcome(text)
-            elif kind == "checkpoint":
-                mode = CheckpointMode(args.mode) if args.mode else None
-                result = validate_checkpoint(text, mode)
             else:
-                print("No Brief-Spec marker found", file=sys.stderr)
-                return 1
+                kind = detect_kind(text) if requested_kind == "auto" else requested_kind
+                if kind == "outcome":
+                    result = validate_outcome(text)
+                elif kind == "checkpoint":
+                    mode = CheckpointMode(args.mode) if args.mode else None
+                    result = validate_checkpoint(text, mode)
+                else:
+                    print("No Brief-Spec marker found", file=sys.stderr)
+                    return 1
             errors = (*result.errors, *(result.warnings if args.strict else ()))
             rendered = {
                 **result.to_dict(),

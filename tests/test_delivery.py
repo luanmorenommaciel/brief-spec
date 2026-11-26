@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import html
 import json
-import re
 import zipfile
 from pathlib import Path
 
@@ -22,6 +21,7 @@ from briefspec.delivery import (
     render_spoken_text,
     validate_delivery,
 )
+from briefspec.markdown import validate_phone
 from briefspec.models import VerificationLevel
 from briefspec.verification import verify_target
 
@@ -326,27 +326,31 @@ Open:
 """
 
 
-def test_phone_render_leads_with_answer_and_trims_the_outcome_brief() -> None:
+def test_phone_render_is_the_four_line_chat_form() -> None:
     delivery = _delivery(PHONE_OUTCOME)
     assert validate_delivery(delivery).valid
     phone = render_phone(delivery)
-    blocks = [block for block in phone.split("\n\n") if block.strip()]
 
-    assert blocks[0] == "The phone format is ready to read."
-
-    table_rows = [line for line in phone.splitlines() if line.lstrip().startswith("|")]
-    assert all(line.strip("| ").count("|") + 1 <= 2 for line in table_rows)
-
-    assert re.findall(r"^\*\*(.+?):\*\*", phone, re.MULTILINE) == [
+    assert [line for line in phone.splitlines() if line] == [
+        "**Now:** The phone format is ready to read.",
+        "**You:** Approve the format change.",
+        "**Not yet:** Not tried on a real phone.",
+        "**Done:** You, after review.",
+    ]
+    assert not phone.lstrip().startswith("|")
+    for dropped in (
+        "<!--",
         "Status",
         "Human action",
         "Next",
-    ]
-    assert "**Status:** REVIEW" in phone
-    assert "**Human action:** Approve the format change." in phone
-    assert "- Merge after review.\n- Tag later." in phone
-    for dropped in ("Proof", "Gaps", "Open", "Rationale", "Type:", "Delivery context", "<!--"):
+        "Proof",
+        "Gaps",
+        "Open",
+        "Type:",
+        "Delivery context",
+    ):
         assert dropped not in phone
+    assert validate_phone(phone).valid
 
     checkpoint = render_phone(_delivery(PHONE_ORIENT))
     assert [block for block in checkpoint.split("\n\n") if block.strip()][0] == (
@@ -362,6 +366,202 @@ def test_phone_render_leads_with_answer_and_trims_the_outcome_brief() -> None:
 def test_phone_is_an_additive_core_format() -> None:
     assert CORE_FORMATS["phone"] == ("brief.phone.md", "text/markdown")
     assert list(CORE_FORMATS)[:3] == ["markdown", "json", "html"]
+
+
+def _outcome(status: str, human_action: str, gaps: str, next_item: str, open_item: str) -> str:
+    return f"""<!-- briefspec:outcome:v1 -->
+Status: {status}
+Outcome: The phone work reached {status}.
+Human action: {human_action}
+Proof:
+- [direct/pass kind=file] Contract test at `tests/test_delivery.py`
+Gaps: {gaps}
+Next: {next_item}
+Open: {open_item}
+<!-- /briefspec -->
+"""
+
+
+@pytest.mark.parametrize(
+    ("text", "you", "not_yet", "done"),
+    [
+        (OUTCOME, "None", "None", "Agent, verified."),
+        (
+            PHONE_OUTCOME,
+            "Approve the format change.",
+            "Not tried on a real phone.",
+            "You, after review.",
+        ),
+        (
+            _outcome(
+                "DECIDE",
+                "Pick a scope.",
+                "None",
+                "Apply the choice.",
+                "Options: user; project — Recommendation: user",
+            ),
+            "Pick a scope.",
+            "None",
+            "You, once you decide.",
+        ),
+        (
+            _outcome("BLOCKED", "Grant host access.", "The host is down.", "Retry.", "None"),
+            "Grant host access.",
+            "The host is down.",
+            "Agent, once unblocked.",
+        ),
+        (
+            _outcome("FAILED", "None", "The build broke.", "Read the log.", "None"),
+            "None",
+            "The build broke.",
+            "Agent, after another attempt.",
+        ),
+    ],
+    ids=["done", "review", "decide", "blocked", "failed"],
+)
+def test_phone_done_line_names_who_holds_done(text: str, you: str, not_yet: str, done: str) -> None:
+    phone = render_phone(_delivery(text))
+    lines = [line for line in phone.splitlines() if line]
+    assert [line.split(":**", 1)[0] for line in lines] == [
+        "**Now",
+        "**You",
+        "**Not yet",
+        "**Done",
+    ]
+    assert lines[1:] == [f"**You:** {you}", f"**Not yet:** {not_yet}", f"**Done:** {done}"]
+    assert "<!--" not in phone
+    assert validate_phone(phone).valid
+
+
+def test_phone_redirect_points_the_reader_at_the_owner() -> None:
+    phone = render_phone(_delivery(PHONE_OUTCOME), owner="  TaskMesh.  ")
+    assert [line for line in phone.splitlines() if line] == [
+        "**Now:** The phone format is ready to read.",
+        "**You:** Open TaskMesh.",
+        "**Not yet:** Not tried on a real phone.",
+        "**Done:** TaskMesh.",
+    ]
+    assert validate_phone(phone).valid
+    with pytest.raises(ValueError, match="owner"):
+        render_phone(_delivery(PHONE_OUTCOME), owner=" . ")
+
+
+def test_phone_lines_stay_single_line() -> None:
+    text = PHONE_OUTCOME.replace(
+        "Gaps:\n- Not tried on a real phone.",
+        "Gaps:\n- Not tried on a real phone.\n- Not  read   aloud.",
+    )
+    phone = render_phone(_delivery(text))
+    assert "**Not yet:** Not tried on a real phone.; Not read aloud." in phone
+    assert len([line for line in phone.splitlines() if line]) == 4
+
+
+VALID_PHONE = """**Now:** The phone format is ready to read.
+**You:** Open Linear.
+**Not yet:** None
+**Done:** Linear.
+"""
+
+
+def test_validate_phone_accepts_fence_free_chat_briefs() -> None:
+    assert validate_phone(VALID_PHONE).valid
+    plain = "Now: Shipped.\n\nYou: None\n\nNot yet: None\n\nDone: Agent, verified.\n"
+    result = validate_phone(plain)
+    assert result.valid, result.errors
+    assert result.kind == "phone-brief"
+    assert result.data == {
+        "Now": "Shipped.",
+        "You": "None",
+        "Not yet": "None",
+        "Done": "Agent, verified.",
+    }
+    stray = validate_phone(VALID_PHONE + "Thanks!\n")
+    assert stray.valid
+    assert stray.warnings == ("Line(s) outside the four-line chat form: 5",)
+
+
+@pytest.mark.parametrize(
+    ("text", "error"),
+    [
+        ("<!-- briefspec:outcome:v1 -->\n" + VALID_PHONE, "storage fence"),
+        (VALID_PHONE + "<!-- /briefspec -->\n", "storage fence"),
+        (VALID_PHONE + "<!-- brief-spec:typed:v1 -->\n", "storage fence"),
+        (VALID_PHONE + "<!-- note -->\n", "HTML comment"),
+        ("| Field | Value |\n| --- | --- |\n| Now | x |\n" + VALID_PHONE, "markdown table"),
+        (OUTCOME, "storage fence"),
+        ("Intro.\n" + VALID_PHONE, "must lead with Now"),
+        (VALID_PHONE.replace("**Done:** Linear.\n", ""), "Missing required field(s): Done"),
+        (
+            VALID_PHONE.replace("**You:** Open Linear.\n", "") + "**You:** Open Linear.\n",
+            "required order",
+        ),
+        (VALID_PHONE + "**You:** Again.\n", "Duplicate field(s): You"),
+        (VALID_PHONE.replace("**Not yet:** None", "**Not yet:**"), "Not yet must not be empty"),
+        ("", "must lead with Now"),
+    ],
+    ids=[
+        "outcome-fence",
+        "end-fence",
+        "typed-fence",
+        "html-comment",
+        "leading-table",
+        "storage-brief",
+        "not-leading-now",
+        "missing",
+        "order",
+        "duplicate",
+        "empty",
+        "blank",
+    ],
+)
+def test_validate_phone_rejects_fences_tables_and_broken_forms(text: str, error: str) -> None:
+    result = validate_phone(text)
+    assert not result.valid
+    assert any(error in item for item in result.errors), result.errors
+
+
+def test_cli_validate_format_phone(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    phone = tmp_path / "brief.phone.md"
+    phone.write_text(render_phone(_delivery(PHONE_OUTCOME)), encoding="utf-8")
+    assert main(["validate", "--format", "phone", str(phone)]) == 0
+    assert "VALID" in capsys.readouterr().out
+    assert main(["validate", "outcome", str(phone), "--format", "phone", "--json"]) == 0
+    assert json.loads(capsys.readouterr().out)["kind"] == "phone-brief"
+
+    fenced = tmp_path / "fenced.md"
+    fenced.write_text(PHONE_OUTCOME, encoding="utf-8")
+    assert main(["validate", "--format", "phone", str(fenced)]) == 1
+    assert "storage fence" in capsys.readouterr().out
+    table = tmp_path / "table.md"
+    table.write_text("| a | b |\n| - | - |\n" + VALID_PHONE, encoding="utf-8")
+    assert main(["validate", "--format", "phone", str(table)]) == 1
+    assert "markdown table" in capsys.readouterr().out
+
+    stray = tmp_path / "stray.md"
+    stray.write_text(VALID_PHONE + "Thanks!\n", encoding="utf-8")
+    assert main(["validate", "--format", "phone", str(stray)]) == 0
+    assert main(["validate", "--format", "phone", str(stray), "--strict"]) == 1
+    capsys.readouterr()
+
+    assert main(["validate", "checkpoint", str(phone), "--format", "phone"]) == 1
+    assert main(["validate", str(phone), "--format", "phone", "--mode", "orient"]) == 1
+    assert "Outcome chat briefs only" in capsys.readouterr().err
+
+
+def test_cli_validate_storage_default_is_unchanged(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    fenced = tmp_path / "fenced.md"
+    fenced.write_text(PHONE_OUTCOME, encoding="utf-8")
+    phone = tmp_path / "brief.phone.md"
+    phone.write_text(VALID_PHONE, encoding="utf-8")
+    assert main(["validate", str(fenced), "--json"]) == 0
+    default = capsys.readouterr().out
+    assert main(["validate", str(fenced), "--format", "storage", "--json"]) == 0
+    assert capsys.readouterr().out == default
+    assert json.loads(default)["kind"] == "outcome-brief"
+    assert main(["validate", str(phone)]) == 1
+    assert "No Brief-Spec marker found" in capsys.readouterr().err
 
 
 def test_export_selects_phone_and_bundle_adds_it_to_the_required_formats(
@@ -415,7 +615,7 @@ def test_export_selects_phone_and_bundle_adds_it_to_the_required_formats(
         names = set(archive.namelist())
         phone = archive.read("brief.phone.md").decode("utf-8")
     assert names == {"brief.md", "brief.json", "brief.html", "brief.phone.md", "manifest.json"}
-    assert phone.startswith("The phone format is ready to read.\n")
+    assert phone.startswith("**Now:** The phone format is ready to read.\n")
     assert main(["verify", str(bundle), "--level", "rendered", "--json"]) == 0
     assert json.loads(capsys.readouterr().out)["status"] == "PASS"
 

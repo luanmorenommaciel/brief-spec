@@ -36,6 +36,12 @@ _EVIDENCE_LOCATOR = re.compile(
     re.IGNORECASE,
 )
 
+PHONE_LABELS = ("Now", "You", "Not yet", "Done")
+_PHONE_LINE = re.compile(
+    r"^(\*\*)?(?P<label>now|you|not yet|done)\s*:(?(1)\*\*)\s*(?P<value>.*)$", re.IGNORECASE
+)
+_BRIEFSPEC_FENCE = re.compile(r"<!--\s*/?\s*brief-?spec", re.IGNORECASE)
+
 _OUTCOME_SECTION_ORDER = (
     "Status",
     "Outcome",
@@ -297,6 +303,57 @@ def validate_checkpoint(text: str, expected_mode: CheckpointMode | None = None) 
         if "|" in script or "```" in script:
             errors.append("Spoken script cannot contain tables or code fences")
     return ValidationResult(not errors, "session-checkpoint", tuple(errors), tuple(warnings), data)
+
+
+def validate_phone(text: str) -> ValidationResult:
+    """Validate the fence-free four-line chat form; the fenced storage brief is not accepted."""
+    errors: list[str] = []
+    warnings: list[str] = []
+    if _BRIEFSPEC_FENCE.search(text):
+        errors.append(
+            "Phone brief contains a Brief-Spec storage fence (<!-- briefspec); "
+            "send the fence-free chat form"
+        )
+    elif "<!--" in text:
+        errors.append("Phone brief contains an HTML comment; the chat form is fence-free")
+
+    lines = [(number, line.strip()) for number, line in enumerate(text.splitlines(), start=1)]
+    content = [(number, line) for number, line in lines if line]
+    if content and content[0][1].startswith("|"):
+        errors.append("Phone brief starts with a markdown table; lead with Now")
+    elif not content or not (
+        (match := _PHONE_LINE.match(content[0][1])) and match.group("label").lower() == "now"
+    ):
+        errors.append("Phone brief must lead with Now")
+
+    canonical = {label.lower(): label for label in PHONE_LABELS}
+    data: dict[str, Any] = {}
+    found: list[str] = []
+    stray: list[str] = []
+    for number, line in content:
+        match = _PHONE_LINE.match(line)
+        if match is None:
+            stray.append(str(number))
+            continue
+        label = canonical[match.group("label").lower()]
+        found.append(label)
+        data.setdefault(label, match.group("value").strip())
+    if stray:
+        warnings.append(f"Line(s) outside the four-line chat form: {', '.join(stray)}")
+
+    missing = [label for label in PHONE_LABELS if label not in found]
+    if missing:
+        errors.append(f"{_MISSING_FIELDS_PREFIX}: {', '.join(missing)}")
+    duplicates = [label for label in PHONE_LABELS if found.count(label) > 1]
+    if duplicates:
+        errors.append(f"Duplicate field(s): {', '.join(duplicates)}")
+    first_seen = list(dict.fromkeys(found))
+    if first_seen != [label for label in PHONE_LABELS if label in first_seen]:
+        errors.append(f"Fields are not in the required order: {', '.join(PHONE_LABELS)}")
+    for label in PHONE_LABELS:
+        if label in data and not data[label]:
+            errors.append(f"{label} must not be empty; write None when nothing applies")
+    return ValidationResult(not errors, "phone-brief", tuple(errors), tuple(warnings), data)
 
 
 def detect_kind(text: str) -> str | None:
