@@ -23,6 +23,11 @@ This project uses semantic versioning.
 - An opt-in `[explain] hook` for Claude Code and Codex blocks a stop once per large diff (3+ files
   or 100+ lines by default) with the explain frame as the reason. It is off by default, honors
   `stop_hook_active`, and lets the stop through on any error.
+- An Outcome Brief may end with an optional `Sources:` list (`- name: ok|stale|missing|error`,
+  optionally `(optional)` and `— note`; JSON `brief.sources`). A missing source is a gap, not
+  green: every non-`ok` source is listed under `Gaps` in Markdown and HTML and under `Not yet` in
+  the phone format, and a required non-`ok` source fails `DONE` validation by name and status.
+  Optional sources surface without blocking `DONE`. Briefs without `Sources` are unchanged.
 
 ## [0.6.0] - 2026-10-08
 

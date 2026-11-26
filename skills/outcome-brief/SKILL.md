@@ -59,6 +59,10 @@ reported. `REVIEW`, `DECIDE`, and `BLOCKED` require human action. `BLOCKED` and 
 gap and a next action. `DECIDE` requires an open decision; write it as a decision card:
 `Options: A; B — Recommendation: A — Reversible: yes — Needed by: <date>`.
 
+When the result depends on named inputs, you may end with an optional `Sources:` list
+(`- name: ok|stale|missing|error`, plus `(optional)` or `— note`). Every non-`ok` source counts as a
+gap, and a required one blocks `DONE`; see [references/contract.md](references/contract.md).
+
 ## Compact form
 
 A `DONE` result with no human action, gaps, next steps, or open items may use the compact form.
